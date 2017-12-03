@@ -407,6 +407,10 @@ namespace OverParse
             else { Datetime.Visibility = Visibility.Collapsed; }
         }
 
+        private void Discord_Click(object sender, RoutedEventArgs e) => Process.Start("https://discord.gg/pTCq443");
+
+        private void Github_Click(object sender, RoutedEventArgs e) => Process.Start("https://github.com/Remon-7L/OverParse");
+
         private void ResetLogFolder_Click(object sender, RoutedEventArgs e)
         {
             Properties.Settings.Default.Path = "A://BROKEN/FILE/PATH";

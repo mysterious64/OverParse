@@ -49,7 +49,7 @@ namespace OverParse.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("4")]
+        [global::System.Configuration.DefaultSettingValueAttribute("-1")]
         public int InstalledPluginVersion {
             get {
                 return ((int)(this["InstalledPluginVersion"]));

@@ -137,6 +137,9 @@
                     <MenuItem Header="GPU描画を無効にする" Click="CPUdraw_Click" x:Name="CPUdraw" IsCheckable="True" IsChecked="False" Style="{StaticResource submenu}" />
                     <MenuItem Header="画面更新時のPC時刻を表示" Click="Clock_Click" x:Name="Clock" IsCheckable="True" IsChecked="False" Style="{StaticResource submenu}" />
                     <Separator />
+                    <MenuItem Header="join Discord" Click="Discord_Click" Style="{StaticResource submenu}" />
+                    <MenuItem Header="Open github" Click="Github_Click" Style="{StaticResource submenu}" />
+                    <Separator />
                     <MenuItem Style="{StaticResource submenu}" Header="Reselect pso2bin..." x:Name="ResetLogFolder" Click="ResetLogFolder_Click"/>
                     <MenuItem Style="{StaticResource submenu}" Header="Force plugin update..." x:Name="PluginUpdate" Click="UpdatePlugin_Click"/>
                     <MenuItem Style="{StaticResource submenu}" Header="Reset OverParse..." x:Name="Reset" Click="ResetOverParse"/>

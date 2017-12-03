@@ -9,7 +9,7 @@
       <Value Profile="(Default)">Unknown</Value>
     </Setting>
     <Setting Name="InstalledPluginVersion" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">4</Value>
+      <Value Profile="(Default)">-1</Value>
     </Setting>
     <Setting Name="EncounterTimeout" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">60</Value>
