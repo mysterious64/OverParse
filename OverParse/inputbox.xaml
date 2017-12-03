@@ -1,0 +1,18 @@
+﻿<Window x:Class="OverParse.Inputbox"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:OverParse"
+        mc:Ignorable="d"
+        WindowStyle="ToolWindow"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize"
+        Title="InputBox" Height="120" Width="400">
+    <Grid>
+        <Label x:Name="Description" HorizontalAlignment="Left" Height="Auto" Padding="0" Margin="10,10,0,0" VerticalAlignment="Top" Width="250" />
+        <TextBox x:Name="InputBox" HorizontalAlignment="Left" Height="Auto" Padding="0" Margin="10,0,0,10" TextWrapping="Wrap" VerticalAlignment="Bottom" Width="250" KeyDown="InputBox_KeyDown" />
+        <Button x:Name="OK_button" Content="OK" HorizontalAlignment="Right" Margin="0,10,10,0" VerticalAlignment="Top" Width="75" Click="OK_button_Click"/>
+        <Button x:Name="Cancel_button" Content="Cancel" HorizontalAlignment="Right" Margin="0,35,10,0" VerticalAlignment="Top" Width="75" IsCancel="True"/>
+    </Grid>
+</Window>
