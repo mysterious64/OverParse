@@ -145,6 +145,18 @@ namespace OverParse
             UpdateForm(null, null);
         }
 
+        private void SeparateMag_Click(object sender, RoutedEventArgs e)
+        {
+            Properties.Settings.Default.SeparateMag = SeparateMag.IsChecked;
+            UpdateForm(null, null);
+        }
+
+        private void SeparatePB_Click(object sender, RoutedEventArgs e)
+        {
+            Properties.Settings.Default.SeparatePB = SeparatePB.IsChecked;
+            UpdateForm(null, null);
+        }
+
         private void SeparateAIS_Click(object sender, RoutedEventArgs e)
         {
             Properties.Settings.Default.SeparateAIS = SeparateAIS.IsChecked;
@@ -201,6 +213,18 @@ namespace OverParse
         private void AnonymizeNames_Click(object sender, RoutedEventArgs e)
         {
             Properties.Settings.Default.AnonymizeNames = AnonymizeNames.IsChecked;
+            UpdateForm(null, null);
+        }
+
+        private void DPSFormat_Click(object sender, RoutedEventArgs e)
+        {
+            Properties.Settings.Default.DPSformat = DPSFormat.IsChecked;
+            UpdateForm(null, null);
+        }
+
+        private void Nodecimal_Click(object sender, RoutedEventArgs e)
+        {
+            Properties.Settings.Default.Nodecimal = Nodecimal.IsChecked;
             UpdateForm(null, null);
         }
 

@@ -85,9 +85,13 @@
                 </MenuItem>
                 <MenuItem Style="{StaticResource topmenu}" Header="Parsing">
                     <MenuItem Style="{StaticResource submenu}" Header="エネミー/NPCを隠す" IsCheckable="True" IsChecked="True" x:Name="FilterPlayers" Click="FilterPlayers_Click"/>
-                    <MenuItem Style="{StaticResource submenu}" Header="ザンバースを分けて表示" x:Name="SeparateZanverse" IsCheckable="True" IsChecked="False" Click="SeparateZanverse_Click"/>
-                    <MenuItem Style="{StaticResource submenu}" Header="HTFを分けて表示" x:Name="SeparateFinish" IsCheckable="True" IsChecked="False" Click="SeparateFinish_Click"/>
-                    <MenuItem Style="{StaticResource submenu}" Header="Photon Attackを分けて表示" x:Name="SeparatePunisher" IsCheckable="True" IsChecked="False" Click="SeparatePunisher_Click" />
+                    <MenuItem Style="{StaticResource submenu}" Header="分割オプション">
+                        <MenuItem Style="{StaticResource submenu}" Header="ザンバースを分けて表示" x:Name="SeparateZanverse" IsCheckable="True" IsChecked="False" Click="SeparateZanverse_Click"/>
+                        <MenuItem Style="{StaticResource submenu}" Header="HTFを分けて表示" x:Name="SeparateFinish" IsCheckable="True" IsChecked="False" Click="SeparateFinish_Click"/>
+                        <MenuItem Style="{StaticResource submenu}" Header="Photon Attackを分けて表示" x:Name="SeparatePunisher" IsCheckable="True" IsChecked="False" Click="SeparatePunisher_Click" />
+                        <MenuItem Style="{StaticResource submenu}" Header="マグの攻撃を分けて表示" x:Name="SeparateMag" IsCheckable="True" IsChecked="False" Click="SeparateMag_Click" />
+                        <MenuItem Style="{StaticResource submenu}" Header="Photon Blastを分けて表示" x:Name="SeparatePB" IsCheckable="True" IsChecked="False" Click="SeparatePB_Click" />
+                    </MenuItem>
                     <MenuItem Style="{StaticResource submenu}" Header="A.I.S. / DB / Ride オプション">
                         <MenuItem Style="{StaticResource submenu}" Header="A.I.S.のダメージを分けて表示" x:Name="SeparateAIS" IsCheckable="True" IsChecked="False" Click="SeparateAIS_Click"/>
                         <MenuItem Style="{StaticResource submenu}" Header="DarkBlastのダメージを分けて表示" x:Name="SeparateDB" IsCheckable="True" IsChecked="False" Click="SeparateDB_Click"/>
@@ -100,6 +104,8 @@
                     </MenuItem>
                     <Separator />
                     <MenuItem Style="{StaticResource submenu}" Header="他人の匿名化" IsCheckable="True" IsChecked="False" x:Name="AnonymizeNames" Click="AnonymizeNames_Click"/>
+                    <MenuItem Style="{StaticResource submenu}" Header="DPS表示形式を変更" IsCheckable="True" IsChecked="False" x:Name="DPSFormat" Click="DPSFormat_Click" />
+                    <MenuItem Style="{StaticResource submenu}" Header="JA / Criticalの小数点以下を削除" IsCheckable="True" IsChecked="False" x:Name="Nodecimal" Click="Nodecimal_Click" />
                 </MenuItem>
                 <MenuItem Style="{StaticResource topmenu}" Header="Window">
                     <MenuItem Style="{StaticResource submenu}" Header="デフォルトサイズに戻す" InputGestureText="Ctrl+Shift+D" Click="DefaultWindowSize_Click"/>
@@ -162,7 +168,7 @@
                                     <Setter.Value>
                                         <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
                                             <GradientStop Offset="0.0" Color="#000A0A0A" />
-                                            <GradientStop Offset="1.0" Color="#000000FF" />
+                                            <GradientStop Offset="1.0" Color="#0000FFFF" />
                                         </LinearGradientBrush>
                                     </Setter.Value>
                                 </Setter>
@@ -200,7 +206,7 @@
                         <GridViewColumn Header="DPS" x:Name="DPSColumn" Width="{Binding ElementName=DPSH, Path=ActualWidth}">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock Text="{Binding ReadDPS}" TextAlignment="Right" Margin="-5,-1,-5,-1" Padding="0" />
+                                    <TextBlock Text="{Binding FDPSReadout}" TextAlignment="Right" Margin="-5,-1,-5,-1" Padding="0" />
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>

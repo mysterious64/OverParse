@@ -478,5 +478,53 @@ namespace OverParse.Properties {
                 this["Clock"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool SeparateMag {
+            get {
+                return ((bool)(this["SeparateMag"]));
+            }
+            set {
+                this["SeparateMag"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool SeparatePB {
+            get {
+                return ((bool)(this["SeparatePB"]));
+            }
+            set {
+                this["SeparatePB"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool DPSformat {
+            get {
+                return ((bool)(this["DPSformat"]));
+            }
+            set {
+                this["DPSformat"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool Nodecimal {
+            get {
+                return ((bool)(this["Nodecimal"]));
+            }
+            set {
+                this["Nodecimal"] = value;
+            }
+        }
     }
 }

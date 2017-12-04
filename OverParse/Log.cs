@@ -287,12 +287,11 @@ namespace OverParse
                 {
                     try
                     {
-                        if (c.IsAlly || c.IsZanverse || c.IsPunisher || c.IsFinish)
+                        if (c.IsAlly || c.IsZanverse || c.IsPunisher || c.IsFinish || c.IsMag || c.IsPB)
                             log += $"{c.Name} | {c.PercentReadDPSReadout}% | {c.ReadDamage.ToString("N0")} dmg | {c.DPS} DPS | JA : {c.JAPercent}% | Critical : {c.CRIPercent}% | Max:{c.MaxHitdmg} ({c.MaxHit})" + Environment.NewLine;
                     }
                     catch
                     {
-                            log += $"データの取得、または計算に失敗しました。(1)";
                     }
                 }
 
@@ -319,7 +318,7 @@ namespace OverParse
                             foreach (string s in attackNames)
                             {
                                 Combatant targetCombatant = backupCombatants.First(x => x.ID == s);
-                                List<int> matchingAttacks = targetCombatant.Attacks.Where(a => a.ID == "2106601422" || Combatant.PhotonAttackIDs.Contains(a.ID) || Combatant.FinishAttackIDs.Contains(a.ID)).Select(a => a.Damage).ToList();
+                                List<int> matchingAttacks = targetCombatant.Attacks.Where(a => a.ID == "2106601422" || Combatant.PhotonAttackIDs.Contains(a.ID) || Combatant.FinishAttackIDs.Contains(a.ID) || Combatant.MagAttackIDs.Contains(a.ID) || Combatant.PBAttackIDs.Contains(a.ID)).Select(a => a.Damage).ToList();
                                 //List<int> jaPercents = c.Attacks.Where(a => a.ID == s).Select(a => a.JA).ToList();
                                 //List<int> criPercents = c.Attacks.Where(a => a.ID == s).Select(a => a.Cri).ToList();
                                 attackData.Add(new Tuple<string, List<int>>(targetCombatant.Name, matchingAttacks));
