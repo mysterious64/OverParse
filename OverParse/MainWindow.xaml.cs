@@ -401,79 +401,13 @@ namespace OverParse
             if (stealActiveTimeDummy != null)
                 elapsed = stealActiveTimeDummy.ActiveTime;
 
-            // create and sort dummy AIS combatants
-            if (Properties.Settings.Default.SeparateAIS)
-            {
-                List<Combatant> pendingCombatants = new List<Combatant>();
-
-                foreach (Combatant c in workingList)
-                {
-                    if (!c.IsAlly)
-                        continue;
-                    if (c.AISDamage > 0)
-                    {
-                        Combatant AISHolder = new Combatant(c.ID, "AIS|" + c.Name, "AIS");
-                        List<Attack> targetAttacks = c.Attacks.Where(a => Combatant.AISAttackIDs.Contains(a.ID)).ToList();
-                        c.Attacks = c.Attacks.Except(targetAttacks).ToList();
-                        AISHolder.Attacks.AddRange(targetAttacks);
-                        AISHolder.ActiveTime = elapsed;
-                        pendingCombatants.Add(AISHolder);
-                    }
-                }
-                workingList.AddRange(pendingCombatants);
-            }
-
-            if (Properties.Settings.Default.SeparateDB)
-            {
-                List<Combatant> pendingDBCombatants = new List<Combatant>();
-
-                foreach (Combatant c in workingList)
-                {
-                    if (!c.IsAlly)
-                        continue;
-                    if (c.DBDamage > 0)
-                    {
-                        Combatant DBHolder = new Combatant(c.ID, "DB|" + c.Name, "DB");
-                        List<Attack> targetAttacks = c.Attacks.Where(a => Combatant.DBAttackIDs.Contains(a.ID)).ToList();
-                        c.Attacks = c.Attacks.Except(targetAttacks).ToList();
-                        DBHolder.Attacks.AddRange(targetAttacks);
-                        DBHolder.ActiveTime = elapsed;
-                        pendingDBCombatants.Add(DBHolder);
-                    }
-                }
-                workingList.AddRange(pendingDBCombatants);
-            }
-
-            if (Properties.Settings.Default.SeparateRide)
-            {
-                List<Combatant> pendingRideCombatants = new List<Combatant>();
-
-                foreach (Combatant c in workingList)
-                {
-                    if (!c.IsAlly)
-                        continue;
-                    if (c.RideDamage > 0)
-                        {
-                        Combatant RideHolder = new Combatant(c.ID, "Ride|" + c.Name, "Ride");
-                        List<Attack> targetAttacks = c.Attacks.Where(a => Combatant.RideAttackIDs.Contains(a.ID)).ToList();
-                        c.Attacks = c.Attacks.Except(targetAttacks).ToList();
-                        RideHolder.Attacks.AddRange(targetAttacks);
-                        RideHolder.ActiveTime = elapsed;
-                        pendingRideCombatants.Add(RideHolder);
-                    }
-                }
-                workingList.AddRange(pendingRideCombatants);
-            }
-
-            // force resort here to neatly shuffle AIS parses back into place
-            workingList.Sort((x, y) => y.ReadDamage.CompareTo(x.ReadDamage));
-
             // make dummy zanverse combatant if necessary
             int totalZanverse = workingList.Where(c => c.IsAlly == true).Sum(x => x.GetZanverseDamage);
             int totalFinish = workingList.Where(c => c.IsAlly == true).Sum(x => x.GetFinishDamage);
             int totalPunisher = workingList.Where(c => c.IsAlly == true).Sum(x => x.GetPhotonDamage);
             int totalMag = workingList.Where(c => c.IsAlly == true).Sum(x => x.GetMagDamage);
             int totalPB = workingList.Where(c => c.IsAlly == true).Sum(x => x.GetPBDamage);
+
 
             if (Properties.Settings.Default.SeparateFinish)
             {
@@ -565,6 +499,74 @@ namespace OverParse
             }
 
 
+            // create and sort dummy AIS combatants
+            if (Properties.Settings.Default.SeparateAIS)
+            {
+                List<Combatant> pendingCombatants = new List<Combatant>();
+
+                foreach (Combatant c in workingList)
+                {
+                    if (!c.IsAlly)
+                        continue;
+                    if (c.AISDamage > 0)
+                    {
+                        Combatant AISHolder = new Combatant(c.ID, "AIS|" + c.Name, "AIS");
+                        List<Attack> targetAttacks = c.Attacks.Where(a => Combatant.AISAttackIDs.Contains(a.ID)).ToList();
+                        c.Attacks = c.Attacks.Except(targetAttacks).ToList();
+                        AISHolder.Attacks.AddRange(targetAttacks);
+                        AISHolder.ActiveTime = elapsed;
+                        pendingCombatants.Add(AISHolder);
+                    }
+                }
+                workingList.AddRange(pendingCombatants);
+            }
+
+            if (Properties.Settings.Default.SeparateDB)
+            {
+                List<Combatant> pendingDBCombatants = new List<Combatant>();
+
+                foreach (Combatant c in workingList)
+                {
+                    if (!c.IsAlly)
+                        continue;
+                    if (c.DBDamage > 0)
+                    {
+                        Combatant DBHolder = new Combatant(c.ID, "DB|" + c.Name, "DB");
+                        List<Attack> targetAttacks = c.Attacks.Where(a => Combatant.DBAttackIDs.Contains(a.ID)).ToList();
+                        c.Attacks = c.Attacks.Except(targetAttacks).ToList();
+                        DBHolder.Attacks.AddRange(targetAttacks);
+                        DBHolder.ActiveTime = elapsed;
+                        pendingDBCombatants.Add(DBHolder);
+                    }
+                }
+                workingList.AddRange(pendingDBCombatants);
+            }
+
+            if (Properties.Settings.Default.SeparateRide)
+            {
+                List<Combatant> pendingRideCombatants = new List<Combatant>();
+
+                foreach (Combatant c in workingList)
+                {
+                    if (!c.IsAlly)
+                        continue;
+                    if (c.RideDamage > 0)
+                        {
+                        Combatant RideHolder = new Combatant(c.ID, "Ride|" + c.Name, "Ride");
+                        List<Attack> targetAttacks = c.Attacks.Where(a => Combatant.RideAttackIDs.Contains(a.ID)).ToList();
+                        c.Attacks = c.Attacks.Except(targetAttacks).ToList();
+                        RideHolder.Attacks.AddRange(targetAttacks);
+                        RideHolder.ActiveTime = elapsed;
+                        pendingRideCombatants.Add(RideHolder);
+                    }
+                }
+                workingList.AddRange(pendingRideCombatants);
+            }
+
+            // force resort here to neatly shuffle AIS parses back into place
+            workingList.Sort((x, y) => y.ReadDamage.CompareTo(x.ReadDamage));
+
+
             // get group damage totals
             int totalReadDamage = workingList.Where(c => (c.IsAlly || c.IsZanverse || c.IsPunisher || c.IsFinish || c.IsMag || c.IsPB)).Sum(x => x.ReadDamage);
 
@@ -590,7 +592,7 @@ namespace OverParse
                     Combatant.maxShare = c.ReadDamage;
 
                 bool filtered = true;
-                if (Properties.Settings.Default.SeparateAIS || Properties.Settings.Default.SeparateDB)
+                if (Properties.Settings.Default.SeparateAIS || Properties.Settings.Default.SeparateDB || Properties.Settings.Default.SeparateRide)
                 {
                     if (c.IsAlly && c.isTemporary == "no" && !HidePlayers.IsChecked)
                         filtered = false;
@@ -603,6 +605,12 @@ namespace OverParse
                     if (c.IsZanverse)
                         filtered = false;
                     if (c.IsPunisher)
+                        filtered = false;
+                    if (c.IsFinish)
+                        filtered = false;
+                    if (c.IsMag)
+                        filtered = false;
+                    if (c.IsPB)
                         filtered = false;
                 }
                 else
@@ -733,7 +741,9 @@ namespace OverParse
 
         private void ListViewItem_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            Detalis f = new Detalis("datatype", "value") { Owner = this };
+            ListViewItem targetItem = (ListViewItem)sender;
+            string data = targetItem.ToString();
+            Detalis f = new Detalis(data, "value") { Owner = this };
             f.Show();
         }
     }

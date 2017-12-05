@@ -20,7 +20,7 @@
             <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="BorderThickness" Value="0,0,0,0" />
-            <EventSetter Event="MouseDoubleClick" Handler="ListViewItem_MouseDoubleClick" />
+            <EventSetter Event="MouseDoubleClick" Handler="ListViewItem_MouseDoubleClick" />            <EventSetter Event="MouseDoubleClick" Handler="ListViewItem_MouseDoubleClick" />
             <Style.Triggers>
                 <Trigger Property="ItemsControl.AlternationIndex" Value="0">
                     <Setter Property="Background" Value="{Binding Brush}"/>
@@ -168,7 +168,7 @@
                                     <Setter.Value>
                                         <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
                                             <GradientStop Offset="0.0" Color="#000A0A0A" />
-                                            <GradientStop Offset="1.0" Color="#0000FFFF" />
+                                            <GradientStop Offset="1.0" Color="#8800FFFF" />
                                         </LinearGradientBrush>
                                     </Setter.Value>
                                 </Setter>
