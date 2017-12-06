@@ -30,7 +30,7 @@ namespace OverParse
 
         public int GetZanverseDamage => Attacks.Where(a => a.ID == "2106601422").Sum(x => x.Damage);
 
-        public int GetPhotonDamage => Attacks.Where(a => PhotonAttackIDs.Contains(a.ID)).Sum(x => x.Damage);
+        public int PwpDamage => Attacks.Where(a => PhotonAttackIDs.Contains(a.ID)).Sum(x => x.Damage);
 
         public int GetFinishDamage => Attacks.Where(a => FinishAttackIDs.Contains(a.ID)).Sum(x => x.Damage);
 
@@ -43,6 +43,10 @@ namespace OverParse
         public int RideDamage => Attacks.Where(a => RideAttackIDs.Contains(a.ID)).Sum(x => x.Damage);
 
         public int DBDamage => Attacks.Where(a => DBAttackIDs.Contains(a.ID)).Sum(x => x.Damage);
+
+        public string WJAPercent => ((Attacks.Average(a => a.JA)) * 100).ToString("N0");
+
+        public string WCRIPercent => ((Attacks.Average(a => a.Cri)) * 100).ToString("N2");
 
         public double DPS => Damage / ActiveTime;
 
@@ -60,7 +64,7 @@ namespace OverParse
 
         public bool IsPB => (isTemporary == "PB Attacks");
 
-        public bool IsPunisher => (isTemporary == "Photon Attacks");
+        public bool IsPwp => (isTemporary == "Pwp");
 
         public bool IsFinish => (isTemporary == "HTF Attacks");
 
@@ -127,7 +131,7 @@ namespace OverParse
         {
             get
             {
-                if (IsZanverse || IsFinish || IsAIS || IsPunisher || IsDB || IsRide || IsMag || IsPB)
+                if (IsZanverse || IsFinish || IsAIS || IsPwp || IsDB || IsRide || IsMag || IsPB)
                     return Damage;
 
                 int temp = Damage;
@@ -135,8 +139,8 @@ namespace OverParse
                     temp -= GetZanverseDamage;
                 if (Properties.Settings.Default.SeparateFinish)
                     temp -= GetFinishDamage;
-                if (Properties.Settings.Default.SeparatePunisher)
-                    temp -= GetPhotonDamage;
+                if (Properties.Settings.Default.SeparatePwp)
+                    temp -= PwpDamage;
                 if (Properties.Settings.Default.SeparateMag)
                     temp -= GetMagDamage;
                 if (Properties.Settings.Default.SeparatePB)
@@ -202,7 +206,7 @@ namespace OverParse
         {
             get
             {
-                if (Properties.Settings.Default.ShowDamageGraph && (IsAlly && !IsZanverse && !IsPunisher))
+                if (Properties.Settings.Default.ShowDamageGraph && (IsAlly && !IsZanverse && !IsPwp))
                 {
                     return GenerateBarBrush(Color.FromArgb(128, 0, 64, 64), Color.FromArgb(0, 0, 0, 0));
                 } else {
@@ -238,7 +242,7 @@ namespace OverParse
         {
             get
             {
-                if (int.Parse(ID) >= 10000000 && !IsZanverse && !IsPunisher && !IsFinish && !IsMag && !IsPB)
+                if (int.Parse(ID) >= 10000000 && !IsZanverse && !IsFinish && !IsMag && !IsPB)
                     return true;
                 return false;
             }
@@ -309,6 +313,7 @@ namespace OverParse
     static class Hacks
     {
         public static string currentPlayerID;
+        public static string currentPlayerName;
         public static bool DontAsk = false;
         public static string targetID = "";
     }

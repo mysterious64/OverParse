@@ -20,7 +20,7 @@
             <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="BorderThickness" Value="0,0,0,0" />
-            <EventSetter Event="MouseDoubleClick" Handler="ListViewItem_MouseDoubleClick" />            <EventSetter Event="MouseDoubleClick" Handler="ListViewItem_MouseDoubleClick" />
+            <EventSetter Event="MouseDoubleClick" Handler="ListViewItem_MouseDoubleClick" />
             <Style.Triggers>
                 <Trigger Property="ItemsControl.AlternationIndex" Value="0">
                     <Setter Property="Background" Value="{Binding Brush}"/>
@@ -88,7 +88,6 @@
                     <MenuItem Style="{StaticResource submenu}" Header="分割オプション">
                         <MenuItem Style="{StaticResource submenu}" Header="ザンバースを分けて表示" x:Name="SeparateZanverse" IsCheckable="True" IsChecked="False" Click="SeparateZanverse_Click"/>
                         <MenuItem Style="{StaticResource submenu}" Header="HTFを分けて表示" x:Name="SeparateFinish" IsCheckable="True" IsChecked="False" Click="SeparateFinish_Click"/>
-                        <MenuItem Style="{StaticResource submenu}" Header="Photon Attackを分けて表示" x:Name="SeparatePunisher" IsCheckable="True" IsChecked="False" Click="SeparatePunisher_Click" />
                         <MenuItem Style="{StaticResource submenu}" Header="マグの攻撃を分けて表示" x:Name="SeparateMag" IsCheckable="True" IsChecked="False" Click="SeparateMag_Click" />
                         <MenuItem Style="{StaticResource submenu}" Header="Photon Blastを分けて表示" x:Name="SeparatePB" IsCheckable="True" IsChecked="False" Click="SeparatePB_Click" />
                     </MenuItem>
@@ -96,11 +95,13 @@
                         <MenuItem Style="{StaticResource submenu}" Header="A.I.S.のダメージを分けて表示" x:Name="SeparateAIS" IsCheckable="True" IsChecked="False" Click="SeparateAIS_Click"/>
                         <MenuItem Style="{StaticResource submenu}" Header="DarkBlastのダメージを分けて表示" x:Name="SeparateDB" IsCheckable="True" IsChecked="False" Click="SeparateDB_Click"/>
                         <MenuItem Style="{StaticResource submenu}" Header="Ridroidのダメージを分けて表示" x:Name="SeparateRide" IsCheckable="True" IsChecked="False" Click="SeparateRide_Click" />
+                        <MenuItem Style="{StaticResource submenu}" Header="Photon weaponのダメージを分けて表示" x:Name="SeparatePwp" IsCheckable="True" IsChecked="False" Click="SeparatePwp_Click" />
                         <Separator />
                         <MenuItem Style="{StaticResource submenu}" Header="プレイヤーを隠す" x:Name="HidePlayers" IsCheckable="True" IsChecked="False" Click="HidePlayers_Click"/>
                         <MenuItem Style="{StaticResource submenu}" Header="A.I.S.を隠す" x:Name="HideAIS" IsCheckable="True" IsChecked="False" Click="HideAIS_Click"/>
                         <MenuItem Style="{StaticResource submenu}" Header="DarkBlastを隠す" x:Name="HideDB" IsCheckable="True" IsChecked="False" Click="HideDB_Click"/>
                         <MenuItem Style="{StaticResource submenu}" Header="Ridroidを隠す" x:Name="HideRide" IsCheckable="True" IsChecked="False" Click="HideRide_Click" />
+                        <MenuItem Style="{StaticResource submenu}" Header="Photon weaponを隠す" x:Name="HidePwp" IsCheckable="True" IsChecked="False" Click="HidePwp_Click" />
                     </MenuItem>
                     <Separator />
                     <MenuItem Style="{StaticResource submenu}" Header="他人の匿名化" IsCheckable="True" IsChecked="False" x:Name="AnonymizeNames" Click="AnonymizeNames_Click"/>
@@ -146,6 +147,7 @@
                     <MenuItem Header="join Discord" Click="Discord_Click" Style="{StaticResource submenu}" />
                     <MenuItem Header="Open github" Click="Github_Click" Style="{StaticResource submenu}" />
                     <Separator />
+                    <MenuItem Style="{StaticResource submenu}" Header="dllの更新をスキップ" x:Name="Skipdll" Click="SkipPlugin_Click" />
                     <MenuItem Style="{StaticResource submenu}" Header="Reselect pso2bin..." x:Name="ResetLogFolder" Click="ResetLogFolder_Click"/>
                     <MenuItem Style="{StaticResource submenu}" Header="Force plugin update..." x:Name="PluginUpdate" Click="UpdatePlugin_Click"/>
                     <MenuItem Style="{StaticResource submenu}" Header="Reset OverParse..." x:Name="Reset" Click="ResetOverParse"/>
@@ -168,7 +170,7 @@
                                     <Setter.Value>
                                         <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
                                             <GradientStop Offset="0.0" Color="#000A0A0A" />
-                                            <GradientStop Offset="1.0" Color="#8800FFFF" />
+                                            <GradientStop Offset="1.0" Color="#0000FFFF" />
                                         </LinearGradientBrush>
                                     </Setter.Value>
                                 </Setter>

@@ -95,7 +95,7 @@
     <Setting Name="JAcfg" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
-    <Setting Name="SeparatePunisher" Type="System.Boolean" Scope="User">
+    <Setting Name="SeparatePwp" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="SeparateDB" Type="System.Boolean" Scope="User">

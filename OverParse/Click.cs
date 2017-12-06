@@ -133,12 +133,6 @@ namespace OverParse
             UpdateForm(null, null);
         }
 
-        private void SeparatePunisher_Click(object sender, RoutedEventArgs e)
-        {
-            Properties.Settings.Default.SeparatePunisher = SeparatePunisher.IsChecked;
-            UpdateForm(null, null);
-        }
-
         private void SeparateFinish_Click(object sender, RoutedEventArgs e)
         {
             Properties.Settings.Default.SeparateFinish = SeparateFinish.IsChecked;
@@ -161,7 +155,7 @@ namespace OverParse
         {
             Properties.Settings.Default.SeparateAIS = SeparateAIS.IsChecked;
             HideAIS.IsEnabled = SeparateAIS.IsChecked;
-            HidePlayers.IsEnabled = (SeparateAIS.IsChecked || SeparateDB.IsChecked || SeparateRide.IsChecked);
+            HidePlayers.IsEnabled = (SeparateAIS.IsChecked || SeparateDB.IsChecked || SeparateRide.IsChecked || SeparatePwp.IsChecked);
             UpdateForm(null, null);
         }
 
@@ -169,7 +163,7 @@ namespace OverParse
         {
             Properties.Settings.Default.SeparateDB = SeparateDB.IsChecked;
             HideDB.IsEnabled = SeparateDB.IsChecked;
-            HidePlayers.IsEnabled = (SeparateAIS.IsChecked || SeparateDB.IsChecked || SeparateRide.IsChecked);
+            HidePlayers.IsEnabled = (SeparateAIS.IsChecked || SeparateDB.IsChecked || SeparateRide.IsChecked || SeparatePwp.IsChecked);
             UpdateForm(null, null);
         }
 
@@ -177,7 +171,15 @@ namespace OverParse
         {
             Properties.Settings.Default.SeparateRide = SeparateRide.IsChecked;
             HideRide.IsEnabled = SeparateRide.IsChecked;
-            HidePlayers.IsEnabled = (SeparateAIS.IsChecked || SeparateDB.IsChecked || SeparateRide.IsChecked);
+            HidePlayers.IsEnabled = (SeparateAIS.IsChecked || SeparateDB.IsChecked || SeparateRide.IsChecked || SeparatePwp.IsChecked);
+            UpdateForm(null, null);
+        }
+
+        private void SeparatePwp_Click(object sender, RoutedEventArgs e)
+        {
+            Properties.Settings.Default.SeparatePwp = SeparatePwp.IsChecked;
+            HidePwp.IsEnabled = SeparatePwp.IsChecked;
+            HidePlayers.IsEnabled = (SeparateAIS.IsChecked || SeparateDB.IsChecked || SeparateRide.IsChecked || SeparatePwp.IsChecked);
             UpdateForm(null, null);
         }
 
@@ -188,6 +190,7 @@ namespace OverParse
                 HideAIS.IsChecked = false;
                 HideDB.IsChecked = false;
                 HideRide.IsChecked = false;
+                HidePwp.IsChecked = false;
             }
             UpdateForm(null, null);
         }
@@ -207,6 +210,12 @@ namespace OverParse
         private void HideRide_Click(object sender, RoutedEventArgs e)
         {
             if (HideRide.IsChecked) { HidePlayers.IsChecked = false; }
+            UpdateForm(null, null);
+        }
+
+        private void HidePwp_Click(object sender, RoutedEventArgs e)
+        {
+            if (HidePwp.IsChecked) { HidePlayers.IsChecked = false; }
             UpdateForm(null, null);
         }
 
@@ -434,6 +443,8 @@ namespace OverParse
         private void Discord_Click(object sender, RoutedEventArgs e) => Process.Start("https://discord.gg/pTCq443");
 
         private void Github_Click(object sender, RoutedEventArgs e) => Process.Start("https://github.com/Remon-7L/OverParse");
+
+        private void SkipPlugin_Click(object sender, RoutedEventArgs e) => Properties.Settings.Default.InstalledPluginVersion = 4;
 
         private void ResetLogFolder_Click(object sender, RoutedEventArgs e)
         {

@@ -100,12 +100,12 @@ namespace OverParse
             SetEncounterTimeout.IsEnabled = AutoEndEncounters.IsChecked;
             SeparateZanverse.IsChecked = Properties.Settings.Default.SeparateZanverse;
             SeparateFinish.IsChecked = Properties.Settings.Default.SeparateFinish;
-            SeparatePunisher.IsChecked = Properties.Settings.Default.SeparatePunisher;
             SeparateMag.IsChecked = Properties.Settings.Default.SeparateMag;
             SeparatePB.IsChecked = Properties.Settings.Default.SeparatePB;
             SeparateAIS.IsChecked = Properties.Settings.Default.SeparateAIS;
             SeparateDB.IsChecked = Properties.Settings.Default.SeparateDB;
             SeparateRide.IsChecked = Properties.Settings.Default.SeparateRide;
+            SeparatePwp.IsChecked = Properties.Settings.Default.SeparatePwp;
             DPSFormat.IsChecked = Properties.Settings.Default.DPSformat;
             Nodecimal.IsChecked = Properties.Settings.Default.Nodecimal;
             ClickthroughMode.IsChecked = Properties.Settings.Default.ClickthroughEnabled;
@@ -124,6 +124,7 @@ namespace OverParse
             HandleWindowOpacity(); HandleListOpacity(); SeparateAIS_Click(null, null);
             HandleWindowOpacity(); HandleListOpacity(); SeparateDB_Click(null, null);
             HandleWindowOpacity(); HandleListOpacity(); SeparateRide_Click(null, null);
+            HandleWindowOpacity(); HandleListOpacity(); SeparatePwp_Click(null, null);
 
             //Console.WriteLine($"Launch method: {Properties.Settings.Default.LaunchMethod}");
 
@@ -372,7 +373,9 @@ namespace OverParse
             if (Properties.Settings.Default.Clock) { Datetime.Content = DateTime.Now.ToString("HH:mm:ss.ff"); }
 
             if (encounterlog == null)
+            {
                 return;
+            }
 
             encounterlog.UpdateLog(this, null);
             EncounterStatus.Content = encounterlog.LogStatus();
@@ -400,104 +403,6 @@ namespace OverParse
             Combatant stealActiveTimeDummy = workingList.FirstOrDefault();
             if (stealActiveTimeDummy != null)
                 elapsed = stealActiveTimeDummy.ActiveTime;
-
-            // make dummy zanverse combatant if necessary
-            int totalZanverse = workingList.Where(c => c.IsAlly == true).Sum(x => x.GetZanverseDamage);
-            int totalFinish = workingList.Where(c => c.IsAlly == true).Sum(x => x.GetFinishDamage);
-            int totalPunisher = workingList.Where(c => c.IsAlly == true).Sum(x => x.GetPhotonDamage);
-            int totalMag = workingList.Where(c => c.IsAlly == true).Sum(x => x.GetMagDamage);
-            int totalPB = workingList.Where(c => c.IsAlly == true).Sum(x => x.GetPBDamage);
-
-
-            if (Properties.Settings.Default.SeparateFinish)
-            {
-                if (totalFinish > 0)
-                {
-                    Combatant finishHolder = new Combatant("99999995", "HTF Attacks", "HTF Attacks");
-                    foreach (Combatant c in workingList)
-                    {
-                        if (c.IsAlly)
-                        {
-                            List<Attack> targetAttacks = c.Attacks.Where(a => Combatant.FinishAttackIDs.Contains(a.ID)).ToList();
-                            finishHolder.Attacks.AddRange(targetAttacks);
-                            c.Attacks = c.Attacks.Except(targetAttacks).ToList();
-                        }
-                    }
-                    finishHolder.ActiveTime = elapsed;
-                    workingList.Add(finishHolder);
-                }
-            }
-
-            if (Properties.Settings.Default.SeparatePunisher)
-            {
-                if (totalPunisher > 0)
-                {
-                    Combatant punisherHolder = new Combatant("99999996", "Photon Attacks", "Photon Attacks");
-                    foreach (Combatant c in workingList)
-                    {
-                        if (c.IsAlly)
-                        {
-                            List<Attack> targetAttacks = c.Attacks.Where(a => Combatant.PhotonAttackIDs.Contains(a.ID)).ToList();
-                            punisherHolder.Attacks.AddRange(targetAttacks);
-                            c.Attacks = c.Attacks.Except(targetAttacks).ToList();
-                        }
-                    }
-                    punisherHolder.ActiveTime = elapsed;
-                    workingList.Add(punisherHolder);
-                }
-            }
-
-            if (Properties.Settings.Default.SeparateZanverse)
-            {
-                if (totalZanverse > 0)
-                {
-                    Combatant zanverseHolder = new Combatant("99999997", "Zanverse", "Zanverse");
-                    foreach (Combatant c in workingList)
-                    {
-                        if (c.IsAlly)
-                        {
-                            List<Attack> targetAttacks = c.Attacks.Where(a => a.ID == "2106601422").ToList();
-                            zanverseHolder.Attacks.AddRange(targetAttacks);
-                            c.Attacks = c.Attacks.Except(targetAttacks).ToList();
-                        }
-                    }
-                    zanverseHolder.ActiveTime = elapsed;
-                    workingList.Add(zanverseHolder);
-                }
-            }
-
-            if (Properties.Settings.Default.SeparateMag)
-            {
-                Combatant magHolder = new Combatant("99999998", "Mag Attacks", "Mag Attacks");
-                foreach (Combatant c in workingList)
-                {
-                    if (c.IsAlly)
-                    {
-                        List<Attack> targetAttacks = c.Attacks.Where(a => Combatant.MagAttackIDs.Contains(a.ID)).ToList();
-                        magHolder.Attacks.AddRange(targetAttacks);
-                        c.Attacks = c.Attacks.Except(targetAttacks).ToList();
-                    }
-                }
-                magHolder.ActiveTime = elapsed;
-                workingList.Add(magHolder);
-            }
-
-            if (Properties.Settings.Default.SeparatePB)
-            {
-                Combatant pbHolder = new Combatant("99999999", "PB Attacks", "PB Attacks");
-                foreach (Combatant c in workingList)
-                {
-                    if (c.IsAlly)
-                    {
-                        List<Attack> targetAttacks = c.Attacks.Where(a => Combatant.PBAttackIDs.Contains(a.ID)).ToList();
-                        pbHolder.Attacks.AddRange(targetAttacks);
-                        c.Attacks = c.Attacks.Except(targetAttacks).ToList();
-                    }
-                }
-                pbHolder.ActiveTime = elapsed;
-                workingList.Add(pbHolder);
-            }
-
 
             // create and sort dummy AIS combatants
             if (Properties.Settings.Default.SeparateAIS)
@@ -563,17 +468,115 @@ namespace OverParse
                 workingList.AddRange(pendingRideCombatants);
             }
 
+            if (Properties.Settings.Default.SeparatePwp)
+            {
+                List<Combatant> pendingPwpCombatants = new List<Combatant>();
+
+                foreach (Combatant c in workingList)
+                {
+                    if (!c.IsAlly)
+                        continue;
+                    if (c.PwpDamage > 0)
+                    {
+                        Combatant PhotonHolder = new Combatant(c.ID, "Pwp|" + c.Name, "Pwp");
+                        List<Attack> targetAttacks = c.Attacks.Where(a => Combatant.PhotonAttackIDs.Contains(a.ID)).ToList();
+                        c.Attacks = c.Attacks.Except(targetAttacks).ToList();
+                        PhotonHolder.Attacks.AddRange(targetAttacks);
+                        PhotonHolder.ActiveTime = elapsed;
+                        pendingPwpCombatants.Add(PhotonHolder);
+                    }
+                }
+                workingList.AddRange(pendingPwpCombatants);
+            }
+
             // force resort here to neatly shuffle AIS parses back into place
             workingList.Sort((x, y) => y.ReadDamage.CompareTo(x.ReadDamage));
 
 
+            // make dummy zanverse combatant if necessary
+            int totalZanverse = workingList.Where(c => c.IsAlly == true).Sum(x => x.GetZanverseDamage);
+            int totalFinish = workingList.Where(c => c.IsAlly == true).Sum(x => x.GetFinishDamage);
+            int totalMag = workingList.Where(c => c.IsAlly == true).Sum(x => x.GetMagDamage);
+            int totalPB = workingList.Where(c => c.IsAlly == true).Sum(x => x.GetPBDamage);
+
+            if (Properties.Settings.Default.SeparateFinish)
+            {
+                if (totalFinish > 0)
+                {
+                    Combatant finishHolder = new Combatant("99999995", "HTF Attacks", "HTF Attacks");
+                    foreach (Combatant c in workingList)
+                    {
+                        if (c.IsAlly)
+                        {
+                            List<Attack> targetAttacks = c.Attacks.Where(a => Combatant.FinishAttackIDs.Contains(a.ID)).ToList();
+                            finishHolder.Attacks.AddRange(targetAttacks);
+                            c.Attacks = c.Attacks.Except(targetAttacks).ToList();
+                        }
+                    }
+                    finishHolder.ActiveTime = elapsed;
+                    workingList.Add(finishHolder);
+                }
+            }
+
+            if (Properties.Settings.Default.SeparateZanverse)
+            {
+                if (totalZanverse > 0)
+                {
+                    Combatant zanverseHolder = new Combatant("99999997", "Zanverse", "Zanverse");
+                    foreach (Combatant c in workingList)
+                    {
+                        if (c.IsAlly)
+                        {
+                            List<Attack> targetAttacks = c.Attacks.Where(a => a.ID == "2106601422").ToList();
+                            zanverseHolder.Attacks.AddRange(targetAttacks);
+                            c.Attacks = c.Attacks.Except(targetAttacks).ToList();
+                        }
+                    }
+                    zanverseHolder.ActiveTime = elapsed;
+                    workingList.Add(zanverseHolder);
+                }
+            }
+
+            if (Properties.Settings.Default.SeparateMag)
+            {
+                Combatant magHolder = new Combatant("99999998", "Mag Attacks", "Mag Attacks");
+                foreach (Combatant c in workingList)
+                {
+                    if (c.IsAlly)
+                    {
+                        List<Attack> targetAttacks = c.Attacks.Where(a => Combatant.MagAttackIDs.Contains(a.ID)).ToList();
+                        magHolder.Attacks.AddRange(targetAttacks);
+                        c.Attacks = c.Attacks.Except(targetAttacks).ToList();
+                    }
+                }
+                magHolder.ActiveTime = elapsed;
+                workingList.Add(magHolder);
+            }
+
+            if (Properties.Settings.Default.SeparatePB)
+            {
+                Combatant pbHolder = new Combatant("99999999", "PB Attacks", "PB Attacks");
+                foreach (Combatant c in workingList)
+                {
+                    if (c.IsAlly)
+                    {
+                        List<Attack> targetAttacks = c.Attacks.Where(a => Combatant.PBAttackIDs.Contains(a.ID)).ToList();
+                        pbHolder.Attacks.AddRange(targetAttacks);
+                        c.Attacks = c.Attacks.Except(targetAttacks).ToList();
+                    }
+                }
+                pbHolder.ActiveTime = elapsed;
+                workingList.Add(pbHolder);
+            }
+
+
             // get group damage totals
-            int totalReadDamage = workingList.Where(c => (c.IsAlly || c.IsZanverse || c.IsPunisher || c.IsFinish || c.IsMag || c.IsPB)).Sum(x => x.ReadDamage);
+            int totalReadDamage = workingList.Where(c => (c.IsAlly || c.IsZanverse || c.IsFinish || c.IsMag || c.IsPB)).Sum(x => x.ReadDamage);
 
             // dps calcs!
             foreach (Combatant c in workingList)
             {
-                if (c.IsAlly || c.IsZanverse || c.IsPunisher || c.IsFinish || c.IsMag || c.IsPB)
+                if (c.IsAlly || c.IsZanverse || c.IsFinish || c.IsMag || c.IsPB)
                 {
                     c.PercentReadDPS = c.ReadDamage / (float)totalReadDamage * 100;
                 }
@@ -592,7 +595,7 @@ namespace OverParse
                     Combatant.maxShare = c.ReadDamage;
 
                 bool filtered = true;
-                if (Properties.Settings.Default.SeparateAIS || Properties.Settings.Default.SeparateDB || Properties.Settings.Default.SeparateRide)
+                if (Properties.Settings.Default.SeparateAIS || Properties.Settings.Default.SeparateDB || Properties.Settings.Default.SeparateRide || Properties.Settings.Default.SeparatePwp)
                 {
                     if (c.IsAlly && c.isTemporary == "no" && !HidePlayers.IsChecked)
                         filtered = false;
@@ -602,9 +605,9 @@ namespace OverParse
                         filtered = false;
                     if (c.IsAlly && c.isTemporary == "Ride" && !HideRide.IsChecked)
                         filtered = false;
-                    if (c.IsZanverse)
+                    if (c.IsAlly && c.isTemporary == "Pwp" && !HidePwp.IsChecked)
                         filtered = false;
-                    if (c.IsPunisher)
+                    if (c.IsZanverse)
                         filtered = false;
                     if (c.IsFinish)
                         filtered = false;
@@ -615,7 +618,7 @@ namespace OverParse
                 }
                 else
                 {
-                    if ((c.IsAlly || c.IsZanverse || c.IsPunisher || c.IsFinish || c.IsMag || c.IsPB || !FilterPlayers.IsChecked) && (c.Damage > 0))
+                    if ((c.IsAlly || c.IsZanverse || c.IsFinish || c.IsMag || c.IsPB || !FilterPlayers.IsChecked) && (c.Damage > 0))
                         filtered = false;
                 }
 

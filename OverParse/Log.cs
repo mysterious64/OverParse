@@ -287,8 +287,8 @@ namespace OverParse
                 {
                     try
                     {
-                        if (c.IsAlly || c.IsZanverse || c.IsPunisher || c.IsFinish || c.IsMag || c.IsPB)
-                            log += $"{c.Name} | {c.PercentReadDPSReadout}% | {c.ReadDamage.ToString("N0")} dmg | {c.DPS} DPS | JA : {c.JAPercent}% | Critical : {c.CRIPercent}% | Max:{c.MaxHitdmg} ({c.MaxHit})" + Environment.NewLine;
+                        if (c.IsAlly || c.IsZanverse || c.IsFinish || c.IsMag || c.IsPB)
+                            log += $"{c.Name} | {c.PercentReadDPSReadout}% | {c.ReadDamage.ToString("N0")} dmg | {c.DPS} DPS | JA : {c.WJAPercent}% | Critical : {c.WCRIPercent}% | Max:{c.MaxHitdmg} ({c.MaxHit})" + Environment.NewLine;
                     }
                     catch
                     {
@@ -299,7 +299,7 @@ namespace OverParse
 
                 foreach (Combatant c in combatants)
                 {
-                    if (c.IsAlly || c.IsZanverse || c.IsPunisher || c.IsFinish)
+                    if (c.IsAlly || c.IsZanverse)
                     {
                         string header = $"[ {c.Name} - {c.PercentReadDPSReadout}% - {c.ReadDamage.ToString("N0")} dmg ]";
                         log += header + Environment.NewLine + Environment.NewLine;
@@ -307,18 +307,18 @@ namespace OverParse
                         List<string> attackNames = new List<string>();
                         List<Tuple<string, List<int>>> attackData = new List<Tuple<string, List<int>>>();
 
-                        if ((c.IsZanverse && Properties.Settings.Default.SeparateZanverse) || (c.IsPunisher && Properties.Settings.Default.SeparatePunisher) || (c.IsFinish && Properties.Settings.Default.SeparateFinish))
+                        if (c.IsZanverse && Properties.Settings.Default.SeparateZanverse)
                         {
                             foreach (Combatant c2 in backupCombatants)
                             {
-                                if (c2.GetZanverseDamage > 0 || c2.GetPhotonDamage > 0 || c2.GetFinishDamage > 0)
+                                if (c2.GetZanverseDamage > 0)
                                     attackNames.Add(c2.ID);
                             }
 
                             foreach (string s in attackNames)
                             {
                                 Combatant targetCombatant = backupCombatants.First(x => x.ID == s);
-                                List<int> matchingAttacks = targetCombatant.Attacks.Where(a => a.ID == "2106601422" || Combatant.PhotonAttackIDs.Contains(a.ID) || Combatant.FinishAttackIDs.Contains(a.ID) || Combatant.MagAttackIDs.Contains(a.ID) || Combatant.PBAttackIDs.Contains(a.ID)).Select(a => a.Damage).ToList();
+                                List<int> matchingAttacks = targetCombatant.Attacks.Where(a => a.ID == "2106601422").Select(a => a.Damage).ToList();
                                 //List<int> jaPercents = c.Attacks.Where(a => a.ID == s).Select(a => a.JA).ToList();
                                 //List<int> criPercents = c.Attacks.Where(a => a.ID == s).Select(a => a.Cri).ToList();
                                 attackData.Add(new Tuple<string, List<int>>(targetCombatant.Name, matchingAttacks));
@@ -437,6 +437,12 @@ namespace OverParse
                         if (lineTimestamp == 0 && sourceName == "YOU")
                         {
                             Hacks.currentPlayerID = parts[2];
+                            continue;
+                        }
+
+                        if (sourceID == Hacks.currentPlayerID && !Properties.Settings.Default.Ended)
+                        {
+                            Hacks.currentPlayerName = parts[3];
                             continue;
                         }
 

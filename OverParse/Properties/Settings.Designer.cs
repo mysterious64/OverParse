@@ -398,12 +398,12 @@ namespace OverParse.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool SeparatePunisher {
+        public bool SeparatePwp {
             get {
-                return ((bool)(this["SeparatePunisher"]));
+                return ((bool)(this["SeparatePwp"]));
             }
             set {
-                this["SeparatePunisher"] = value;
+                this["SeparatePwp"] = value;
             }
         }
         
