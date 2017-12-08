@@ -225,6 +225,12 @@ namespace OverParse
             UpdateForm(null, null);
         }
 
+        private void Onlyme_Click(object sender, RoutedEventArgs e)
+        {
+            Properties.Settings.Default.Onlyme = Onlyme.IsChecked;
+            UpdateForm(null, null);
+        }
+
         private void DPSFormat_Click(object sender, RoutedEventArgs e)
         {
             Properties.Settings.Default.DPSformat = DPSFormat.IsChecked;
@@ -247,6 +253,33 @@ namespace OverParse
         {
             Height = 275;
             Width = 620;
+        }
+
+        private void ChangeFont_Click(object sender, RoutedEventArgs e)
+        {
+            var dlg = new emanual.Wpf.Dialogs.FontDialogEx() { Owner = this };
+
+            var font = new emanual.Wpf.Dialogs.ToolFont();
+            font.FontFamily = CombatantData.FontFamily;
+            font.FontSize = CombatantData.FontSize;
+            font.FontWeight = CombatantData.FontWeight;
+            font.FontStyle = CombatantData.FontStyle;
+            font.FontStretch = CombatantData.FontStretch;
+
+            // 言語情報を保存するため、textBox1 の Tag プロパティに設定した
+            if (CombatantData.Tag == null)
+                font.FontLanguage = "ja-jp";
+            else
+                font.FontLanguage = (string)CombatantData.Tag;
+
+            dlg.Font = font;
+            dlg.SampleText = "Sample サンプル\nPSO2\nOverParse";
+
+            if (dlg.ShowDialog().Value)
+            {
+                dlg.SetPropertyToTargetObject(CombatantData);
+                CombatantData.Tag = dlg.Font.FontLanguage;
+            }
         }
 
         private void JA_Click(object sender, RoutedEventArgs e)

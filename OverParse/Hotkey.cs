@@ -7,7 +7,7 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Interop;
 
-
+//sourcecode from
 //https://gist.github.com/EmissaryFromSunday/1308531
 
 namespace HotKeyFrame

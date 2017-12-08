@@ -8,12 +8,12 @@ using System.Windows;
 // アセンブリに関連付けられている情報を変更するには、
 // これらの属性値を変更してください。
 [assembly: AssemblyTitle("OverParse")]
-[assembly: AssemblyDescription("View Damage")]
+[assembly: AssemblyDescription("OverParse - View PSO2 Damage")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Remon_7L")]
 [assembly: AssemblyProduct("OverParse")]
-[assembly: AssemblyCopyright("")]
-[assembly: AssemblyTrademark("")]
+[assembly: AssemblyCopyright("Remon_7L")]
+[assembly: AssemblyTrademark("OverParse")]
 [assembly: AssemblyCulture("")]
 
 // ComVisible を false に設定すると、このアセンブリ内の型は COM コンポーネントから

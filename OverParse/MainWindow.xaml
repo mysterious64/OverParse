@@ -37,7 +37,7 @@
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="Padding" Value="0,0,0,0"/>
             <Setter Property="Margin" Value="0,0,0,0"/>
-            <Setter Property="FontFamily" Value="Hiragino Kaku Gothic Pro W3" />
+            <Setter Property="FontFamily" Value="Noto Sans CJK JP DemiLight" />
         </Style>
 
         <Style x:Key="submenu" TargetType="MenuItem">
@@ -91,11 +91,12 @@
                         <MenuItem Style="{StaticResource submenu}" Header="マグの攻撃を分けて表示" x:Name="SeparateMag" IsCheckable="True" IsChecked="False" Click="SeparateMag_Click" />
                         <MenuItem Style="{StaticResource submenu}" Header="Photon Blastを分けて表示" x:Name="SeparatePB" IsCheckable="True" IsChecked="False" Click="SeparatePB_Click" />
                     </MenuItem>
-                    <MenuItem Style="{StaticResource submenu}" Header="A.I.S. / DB / Ride オプション">
+                    <MenuItem Style="{StaticResource submenu}" Header="個人別分割オプション">
                         <MenuItem Style="{StaticResource submenu}" Header="A.I.S.のダメージを分けて表示" x:Name="SeparateAIS" IsCheckable="True" IsChecked="False" Click="SeparateAIS_Click"/>
                         <MenuItem Style="{StaticResource submenu}" Header="DarkBlastのダメージを分けて表示" x:Name="SeparateDB" IsCheckable="True" IsChecked="False" Click="SeparateDB_Click"/>
                         <MenuItem Style="{StaticResource submenu}" Header="Ridroidのダメージを分けて表示" x:Name="SeparateRide" IsCheckable="True" IsChecked="False" Click="SeparateRide_Click" />
                         <MenuItem Style="{StaticResource submenu}" Header="Photon weaponのダメージを分けて表示" x:Name="SeparatePwp" IsCheckable="True" IsChecked="False" Click="SeparatePwp_Click" />
+                        <MenuItem Style="{StaticResource submenu}" Header="ラコニウムソードのダメージを分けて表示" x:Name="SeparateSw" IsCheckable="True" IsChecked="False" IsEnabled="False" />
                         <Separator />
                         <MenuItem Style="{StaticResource submenu}" Header="プレイヤーを隠す" x:Name="HidePlayers" IsCheckable="True" IsChecked="False" Click="HidePlayers_Click"/>
                         <MenuItem Style="{StaticResource submenu}" Header="A.I.S.を隠す" x:Name="HideAIS" IsCheckable="True" IsChecked="False" Click="HideAIS_Click"/>
@@ -105,16 +106,12 @@
                     </MenuItem>
                     <Separator />
                     <MenuItem Style="{StaticResource submenu}" Header="他人の匿名化" IsCheckable="True" IsChecked="False" x:Name="AnonymizeNames" Click="AnonymizeNames_Click"/>
+                    <MenuItem Style="{StaticResource submenu}" Header="自分以外全て無視" IsCheckable="True" IsChecked="False" x:Name="Onlyme" Click="Onlyme_Click" />
                     <MenuItem Style="{StaticResource submenu}" Header="DPS表示形式を変更" IsCheckable="True" IsChecked="False" x:Name="DPSFormat" Click="DPSFormat_Click" />
                     <MenuItem Style="{StaticResource submenu}" Header="JA / Criticalの小数点以下を削除" IsCheckable="True" IsChecked="False" x:Name="Nodecimal" Click="Nodecimal_Click" />
                 </MenuItem>
                 <MenuItem Style="{StaticResource topmenu}" Header="Window">
                     <MenuItem Style="{StaticResource submenu}" Header="デフォルトサイズに戻す" InputGestureText="Ctrl+Shift+D" Click="DefaultWindowSize_Click"/>
-                    <MenuItem Style="{StaticResource submenu}" Header="JAを隠す" Click="JA_Click" x:Name="JAcfg" IsCheckable="True" IsChecked="False"/>
-                    <MenuItem Style="{StaticResource submenu}" Header="Criticalを隠す" Click="Critical_Click" x:Name="Cricfg" IsCheckable="True" IsChecked="False"/>
-                    <MenuItem Style="{StaticResource submenu}" Header="Attack Nameを隠す" IsCheckable="True" IsChecked="False" x:Name="CompactMode" Click="CompactMode_Click"/>
-                    <MenuItem Style="{StaticResource submenu}" Header="ダメージグラフを表示" IsCheckable="True" IsChecked="False" x:Name="ShowDamageGraph" Click="ShowDamageGraph_Click"/>
-                    <MenuItem Style="{StaticResource submenu}" Header="自分をハイライト" IsCheckable="True" IsChecked="True" x:Name="HighlightYourDamage" Click="HighlightYourDamage_Click"/>
                     <MenuItem Style="{StaticResource submenu}" Header="ウィンドゥ透過度">
                         <MenuItem Style="{StaticResource submenu}" x:Name="WinOpacity_0" Visibility="Collapsed" IsCheckable="True" IsChecked="False" Header="Transparent" Click="WindowOpacity_0_Click" />
                         <MenuItem Style="{StaticResource submenu}" x:Name="WinOpacity_25" IsCheckable="True" IsChecked="False" Header="25%" Click="WindowOpacity_25_Click" />
@@ -132,7 +129,15 @@
                     <Separator />
                     <MenuItem Style="{StaticResource submenu}" IsCheckable="True" IsChecked="True" Header="常に前面に表示" x:Name="AlwaysOnTop" Click="AlwaysOnTop_Click"/>
                     <MenuItem Style="{StaticResource submenu}" IsCheckable="True" IsChecked="False" Header="自動でウィンドゥを隠す" x:Name="AutoHideWindow" Click="AutoHideWindow_Click"/>
-                    <MenuItem Style="{StaticResource submenu}" IsCheckable="True" IsChecked="False" Header="非アクティブ時にクリックを無効化" x:Name="ClickthroughMode" Click="ClickthroughToggle"/>
+                    <MenuItem Style="{StaticResource submenu}" IsCheckable="True" IsChecked="False" Header="クリックを無効化" x:Name="ClickthroughMode" Click="ClickthroughToggle"/>
+                </MenuItem>
+                <MenuItem Style="{StaticResource topmenu}" Header="List">
+                    <MenuItem Style="{StaticResource submenu}" Header="フォントを変更(試験中)" Click="ChangeFont_Click" />
+                    <MenuItem Style="{StaticResource submenu}" Header="JAを隠す" Click="JA_Click" x:Name="JAcfg" IsCheckable="True" IsChecked="False"/>
+                    <MenuItem Style="{StaticResource submenu}" Header="Criticalを隠す" Click="Critical_Click" x:Name="Cricfg" IsCheckable="True" IsChecked="False"/>
+                    <MenuItem Style="{StaticResource submenu}" Header="Attack Nameを隠す" IsCheckable="True" IsChecked="False" x:Name="CompactMode" Click="CompactMode_Click"/>
+                    <MenuItem Style="{StaticResource submenu}" Header="ダメージグラフを表示" IsCheckable="True" IsChecked="False" x:Name="ShowDamageGraph" Click="ShowDamageGraph_Click"/>
+                    <MenuItem Style="{StaticResource submenu}" Header="自分をハイライト" IsCheckable="True" IsChecked="True" x:Name="HighlightYourDamage" Click="HighlightYourDamage_Click"/>
                 </MenuItem>
                 <!--<MenuItem Style="{StaticResource topmenu}" x:Name="DebugMenu" Background="Transparent" Header="Debug">-->
                 <!--<MenuItem Style="{StaticResource submenu}" Header="Window stats" x:Name="WindowStats" Click="WindowStats_Click"/>-->
@@ -257,7 +262,7 @@
                     <ColumnDefinition x:Name="JAHC" Width="45"/>
                     <ColumnDefinition x:Name="CriHC" Width="45"/>
                     <ColumnDefinition x:Name="MdmgHC" Width="80"/>
-                    <ColumnDefinition x:Name="AtkHC" Width="1.5*"/>
+                    <ColumnDefinition x:Name="AtkHC" Width="1.25*"/>
                 </Grid.ColumnDefinitions>
                 <Grid Grid.Column="0" x:Name="NameH" />
                 <Grid Grid.Column="1" x:Name="PercentH" />
@@ -269,8 +274,8 @@
                 <Grid Grid.Column="7" x:Name="AtkH" />
             </Grid>
 
-            <Rectangle x:Name="EncounterIndicator" Grid.Row="2" Height="2" VerticalAlignment="Top" />
-            <Label x:Name="EncounterStatus" Grid.Row="2" MinHeight="10" Foreground="White" Padding="2,0,0,0" FontSize="12" FontFamily="Hiragino Kaku Gothic Pro W3" />
+            <Rectangle x:Name="EncounterIndicator" Grid.Row="2" Height="2" VerticalAlignment="Top"  Fill="White"/>
+            <Label x:Name="EncounterStatus" Grid.Row="2" MinHeight="10" Foreground="White" Padding="2,0,0,0" FontSize="12" FontFamily="Noto Sans CJK JP Light"/>
         </Grid>
     </Border>
 </Window>

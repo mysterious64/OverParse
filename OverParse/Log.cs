@@ -423,8 +423,8 @@ namespace OverParse
                         int instanceID = int.Parse(parts[1]);
                         string sourceID = parts[2];
                         string sourceName = parts[3];
-                        //int targetID = int.Parse(parts[4]);
-                        //string targetName = parts[5];
+                        string targetID = parts[4];
+                        string targetName = parts[5];
                         string attackID = parts[6];
                         int hitDamage = int.Parse(parts[7]);
                         int justAttack =int.Parse(parts[8]);
@@ -434,15 +434,14 @@ namespace OverParse
                         //string isMisc2 = parts[12];
                         int index = -1;
 
-                        if (lineTimestamp == 0 && sourceName == "YOU")
+                        if (lineTimestamp == 0 && parts[3] == "YOU")
                         {
                             Hacks.currentPlayerID = parts[2];
                             continue;
                         }
 
-                        if (sourceID == Hacks.currentPlayerID && !Properties.Settings.Default.Ended)
+                        if (sourceID != Hacks.currentPlayerID && Properties.Settings.Default.Onlyme)
                         {
-                            Hacks.currentPlayerName = parts[3];
                             continue;
                         }
 

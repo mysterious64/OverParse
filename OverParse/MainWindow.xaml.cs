@@ -106,6 +106,7 @@ namespace OverParse
             SeparateDB.IsChecked = Properties.Settings.Default.SeparateDB;
             SeparateRide.IsChecked = Properties.Settings.Default.SeparateRide;
             SeparatePwp.IsChecked = Properties.Settings.Default.SeparatePwp;
+            Onlyme.IsChecked = Properties.Settings.Default.Onlyme;
             DPSFormat.IsChecked = Properties.Settings.Default.DPSformat;
             Nodecimal.IsChecked = Properties.Settings.Default.Nodecimal;
             ClickthroughMode.IsChecked = Properties.Settings.Default.ClickthroughEnabled;
@@ -745,7 +746,7 @@ namespace OverParse
         private void ListViewItem_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             ListViewItem targetItem = (ListViewItem)sender;
-            string data = targetItem.ToString();
+            string data = targetItem.Name.ToString();
             Detalis f = new Detalis(data, "value") { Owner = this };
             f.Show();
         }

@@ -44,9 +44,9 @@ namespace OverParse
 
         public int DBDamage => Attacks.Where(a => DBAttackIDs.Contains(a.ID)).Sum(x => x.Damage);
 
-        public string WJAPercent => ((Attacks.Average(a => a.JA)) * 100).ToString("N0");
+        public string WJAPercent => ((Attacks.Average(a => a.JA)) * 100).ToString("00.00");
 
-        public string WCRIPercent => ((Attacks.Average(a => a.Cri)) * 100).ToString("N2");
+        public string WCRIPercent => ((Attacks.Average(a => a.Cri)) * 100).ToString("00.00");
 
         public double DPS => Damage / ActiveTime;
 
@@ -313,7 +313,6 @@ namespace OverParse
     static class Hacks
     {
         public static string currentPlayerID;
-        public static string currentPlayerName;
         public static bool DontAsk = false;
         public static string targetID = "";
     }

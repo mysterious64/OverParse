@@ -526,5 +526,17 @@ namespace OverParse.Properties {
                 this["Nodecimal"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool Onlyme {
+            get {
+                return ((bool)(this["Onlyme"]));
+            }
+            set {
+                this["Onlyme"] = value;
+            }
+        }
     }
 }

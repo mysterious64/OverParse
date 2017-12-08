@@ -1,0 +1,63 @@
+﻿<Window x:Class="emanual.Wpf.Dialogs.FontDialogEx"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Title="フォントの選択" SizeToContent="WidthAndHeight" ShowInTaskbar="False" FontFamily="Meiryo"
+        ResizeMode="NoResize"
+        Loaded="Window_Loaded"
+        WindowStartupLocation="CenterOwner">
+
+    <StackPanel Orientation="Vertical">
+        <StackPanel Orientation="Horizontal" Margin="5">
+            
+            <StackPanel Orientation="Vertical" Width="250">
+                <Label Height="25" Target="{Binding ElementName=txtFamilyName}" Content="Font" />
+                <TextBox Name="txtFamilyName" Height="25" FontWeight="Bold" />
+                <ListBox Name="FirstFamilyName" Height="310" SelectionChanged="FirstFamilyName_SelectionChanged">
+                    <ListBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <VirtualizingStackPanel />
+                        </ItemsPanelTemplate>
+                    </ListBox.ItemsPanel>
+
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock VerticalAlignment="Center" Margin="0" Padding="0" Text="{Binding}" FontFamily="{Binding}" FontSize="14" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </StackPanel>
+
+            <StackPanel Orientation="Vertical" Margin="6,0,0,0">
+                <StackPanel Orientation="Horizontal">
+                    <StackPanel Orientation="Vertical" Width="150">
+                        <Label Height="25" Target="{Binding ElementName=txtTypeface}" Content="スタイル" />
+                        <TextBox Name="txtTypeface" Height="25" FontWeight="Bold" />
+                        <ListBox Name="FirstTypeface" Height="150" SelectionChanged="FirstTypeface_SelectionChanged" />
+                    </StackPanel>
+
+                    <StackPanel Orientation="Vertical" Margin="6,0,0,0">
+                        <Label Height="25" Target="{Binding ElementName=txtFontSize}" Content="サイズ" />
+                        <TextBox Name="txtFontSize" Width="90" Height="25" HorizontalAlignment="Left" FontWeight="Bold" />
+                        <ListBox Name="FirstFontSize" Width="90" Height="150" HorizontalAlignment="Left" SelectionChanged="FirstFontSize_SelectionChanged" />
+                    </StackPanel>
+                </StackPanel>
+
+                <StackPanel Name="PART_SamplePanel" Orientation="Vertical">
+                    <Label Content="サンプル" Target="{Binding ElementName=txtSample}" Margin="0,4,0,0" />
+                    <TextBox Name="txtSample" Width="{Binding ElementName=PART_SamplePanel, Path=ActualWidth}" Height="70"
+                     HorizontalAlignment="Left" AcceptsReturn="True" TextWrapping="Wrap" />
+                    <Label Height="25" Content="言語" Target="{Binding ElementName=cmbLanguage}" />
+                    <ComboBox Name="cmbLanguage" Width="{Binding ElementName=PART_SamplePanel, Path=ActualWidth}"
+                      Height="25" Margin="0,0,0,4" HorizontalAlignment="Left" SelectionChanged="CmbLanguage_SelectionChanged" />
+                </StackPanel>
+            </StackPanel>
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal" Height="40" HorizontalAlignment="Right" VerticalAlignment="Center">
+            <Button Name="btnOK" Width="80" Height="25" Margin="0" IsDefault="True" Content="OK" Click="BtnOK_Click" TabIndex="0" />
+            <Button Name="btnCancel" Width="80" Height="25" Margin="4,0,20,0" IsCancel="True" Content="キャンセル" TabIndex="1" />
+        </StackPanel>
+    </StackPanel>
+</Window>
