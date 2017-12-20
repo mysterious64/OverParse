@@ -18,6 +18,7 @@ namespace OverParse
         private Log encounterlog;
         private List<Combatant> lastCombatants = new List<Combatant>();
         public static Dictionary<string, string> skillDict = new Dictionary<string, string>();
+        public static string[] ignoreskill;
         private List<string> sessionLogFilenames = new List<string>();
         private string lastStatus = "";
         private HotKey hotkey1;
@@ -40,6 +41,7 @@ namespace OverParse
             InitializeComponent();
 
             Dispatcher.UnhandledException += Panic;
+            Abouttext.Text = "OverParse v3.0.0";
             LowResources.IsChecked = Properties.Settings.Default.LowResources;
             CPUdraw.IsChecked = Properties.Settings.Default.CPUdraw;
             if (Properties.Settings.Default.LowResources) { thisProcess.PriorityClass = ProcessPriorityClass.Idle; }
@@ -100,12 +102,12 @@ namespace OverParse
             SetEncounterTimeout.IsEnabled = AutoEndEncounters.IsChecked;
             SeparateZanverse.IsChecked = Properties.Settings.Default.SeparateZanverse;
             SeparateFinish.IsChecked = Properties.Settings.Default.SeparateFinish;
-            SeparateMag.IsChecked = Properties.Settings.Default.SeparateMag;
-            SeparatePB.IsChecked = Properties.Settings.Default.SeparatePB;
             SeparateAIS.IsChecked = Properties.Settings.Default.SeparateAIS;
             SeparateDB.IsChecked = Properties.Settings.Default.SeparateDB;
             SeparateRide.IsChecked = Properties.Settings.Default.SeparateRide;
             SeparatePwp.IsChecked = Properties.Settings.Default.SeparatePwp;
+            SeparateLsw.IsChecked = Properties.Settings.Default.SeparateLsw;
+            //NoMyName.IsChecked = Properties.Settings.Default.NomyName;
             Onlyme.IsChecked = Properties.Settings.Default.Onlyme;
             DPSFormat.IsChecked = Properties.Settings.Default.DPSformat;
             Nodecimal.IsChecked = Properties.Settings.Default.Nodecimal;
@@ -113,7 +115,6 @@ namespace OverParse
             LogToClipboard.IsChecked = Properties.Settings.Default.LogToClipboard;
             AlwaysOnTop.IsChecked = Properties.Settings.Default.AlwaysOnTop;
             AutoHideWindow.IsChecked = Properties.Settings.Default.AutoHideWindow;
-            //Console.WriteLine("Finished applying settings");
 
             ShowDamageGraph.IsChecked = Properties.Settings.Default.ShowDamageGraph; ShowDamageGraph_Click(null, null);
             JAcfg.IsChecked = Properties.Settings.Default.JAcfg; JA_Click(null, null);
@@ -142,10 +143,6 @@ namespace OverParse
                 hotkey1.Regist(ModifierKeys.Control | ModifierKeys.Shift, Key.E, new EventHandler(EndEncounter_Key),0x0071);
                 hotkey2.Regist(ModifierKeys.Control | ModifierKeys.Shift, Key.R, new EventHandler(EndEncounterNoLog_Key),0x0072);
                 hotkey3.Regist(ModifierKeys.Control | ModifierKeys.Shift, Key.D, new EventHandler(DefaultWindowSize_Key),0x0073);
-                //HotkeyManager.Current.AddOrReplace("End Encounter", Key.E, ModifierKeys.Control | ModifierKeys.Shift, EndEncounter_Key);
-                //HotkeyManager.Current.AddOrReplace("End Encounter (No log)", Key.R, ModifierKeys.Control | ModifierKeys.Shift, EndEncounterNoLog_Key);
-                //HotkeyManager.Current.AddOrReplace("DefaultWinSize", Key.D, ModifierKeys.Control | ModifierKeys.Shift, DefaultWindowSize_Key);
-                //HotkeyManager.Current.AddOrReplace("Always On Top", Key.A, ModifierKeys.Control | ModifierKeys.Shift, AlwaysOnTop_Key);
             } catch {
                 MessageBox.Show("OverParseはホットキーを初期化出来ませんでした。　多重起動していないか確認して下さい！\nプログラムは引き続き使用できますが、ホットキーは反応しません。", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Information);
             }
@@ -169,6 +166,15 @@ namespace OverParse
                 }
             }
 
+            try
+            {
+                string ignore = "";
+                ignoreskill = ignore.Split('\n');
+                ignoreskill = File.ReadAllLines("ignoreskills.csv");
+            } catch {
+                MessageBox.Show("ignoreskills.csvが存在しません。");
+            }
+
             foreach (string s in tmp)
             {
                 string[] split = s.Split(',');
@@ -186,7 +192,7 @@ namespace OverParse
             //Initializing damageTimer
             System.Windows.Threading.DispatcherTimer damageTimer = new System.Windows.Threading.DispatcherTimer();
             damageTimer.Tick += new EventHandler(UpdateForm);
-            damageTimer.Interval = new TimeSpan(0, 0, 0, 0, 500);
+            damageTimer.Interval = new TimeSpan(0, 0, 0, 0, 100);
             damageTimer.Start();
 
             //Initializing inactiveTimer
@@ -256,23 +262,6 @@ namespace OverParse
             File.WriteAllText(filename, elog);
         }
 
-
-        //private void AlwaysOnTop_Key(object sender, HotkeyEventArgs e)
-        //{
-        //Always-on-top hotkey pressed"
-        //AlwaysOnTop.IsChecked = !AlwaysOnTop.IsChecked;
-        //IntPtr wasActive = WindowsServices.GetForegroundWindow();
-
-        // hack for activating overparse window
-        //this.WindowState = WindowState.Minimized;
-        //this.Show();
-        //this.WindowState = WindowState.Normal;
-
-        //this.Topmost = AlwaysOnTop.IsChecked;
-        //AlwaysOnTop_Click(null, null);
-        //WindowsServices.SetForegroundWindow(wasActive);
-        //e.Handled = true;
-        //}
 
         public void HandleWindowOpacity()
         {
@@ -349,14 +338,6 @@ namespace OverParse
             }
         }
 
-        private void Window_StateChanged(object sender, EventArgs e)
-        {
-            if (WindowState == WindowState.Maximized)
-            {
-                WindowState = WindowState.Normal;
-            }
-        }
-
         private void Window_Activated(object sender, EventArgs e)
         {
             HandleWindowOpacity();
@@ -369,10 +350,17 @@ namespace OverParse
             }
         }
 
+        private void Window_StateChanged(object sender, EventArgs e)
+        {
+            if (WindowState == WindowState.Maximized)
+            {
+                WindowState = WindowState.Normal;
+            }
+        }
+
         public void UpdateForm(object sender, EventArgs e)
         {
             if (Properties.Settings.Default.Clock) { Datetime.Content = DateTime.Now.ToString("HH:mm:ss.ff"); }
-
             if (encounterlog == null)
             {
                 return;
@@ -390,13 +378,19 @@ namespace OverParse
             {
                 Combatant temp = new Combatant(c.ID, c.Name, c.isTemporary);
                 foreach (Attack a in c.Attacks)
-                    temp.Attacks.Add(new Attack(a.ID, a.Damage, a.Timestamp,a.JA,a.Cri));
+                    temp.Attacks.Add(new Attack(a.ID, a.Damage, a.Timestamp,a.JA,a.Cri,a.Dmgd));
                 temp.ActiveTime = c.ActiveTime;
                 workingList.Add(temp);
             }
 
             // clear out the list
             CombatantData.Items.Clear();
+            AllyData.Items.Clear();
+            DBData.Items.Clear();
+            LswData.Items.Clear();
+            PwpData.Items.Clear();
+            AisData.Items.Clear();
+            RideData.Items.Clear();
             //workingList.RemoveAll(c => c.isTemporary != "no");
 
             // for zanverse dummy and status bar because WHAT IS GOOD STRUCTURE
@@ -414,7 +408,7 @@ namespace OverParse
                 {
                     if (!c.IsAlly)
                         continue;
-                    if (c.AISDamage > 0)
+                    if (c.AisDamage > 0)
                     {
                         Combatant AISHolder = new Combatant(c.ID, "AIS|" + c.Name, "AIS");
                         List<Attack> targetAttacks = c.Attacks.Where(a => Combatant.AISAttackIDs.Contains(a.ID)).ToList();
@@ -490,15 +484,33 @@ namespace OverParse
                 workingList.AddRange(pendingPwpCombatants);
             }
 
+            if (Properties.Settings.Default.SeparateLsw)
+            {
+                List<Combatant> pendingLswCombatants = new List<Combatant>();
+
+                foreach (Combatant c in workingList)
+                {
+                    if (!c.IsAlly)
+                        continue;
+                    if (c.LswDamage > 0)
+                    {
+                        Combatant LswHolder = new Combatant(c.ID, "Lsw|" + c.Name, "Lsw");
+                        List<Attack> targetAttacks = c.Attacks.Where(a => Combatant.LaconiumAttackIDs.Contains(a.ID)).ToList();
+                        c.Attacks = c.Attacks.Except(targetAttacks).ToList();
+                        LswHolder.Attacks.AddRange(targetAttacks);
+                        LswHolder.ActiveTime = elapsed;
+                        pendingLswCombatants.Add(LswHolder);
+                    }
+                }
+                workingList.AddRange(pendingLswCombatants);
+            }
+
             // force resort here to neatly shuffle AIS parses back into place
             workingList.Sort((x, y) => y.ReadDamage.CompareTo(x.ReadDamage));
-
 
             // make dummy zanverse combatant if necessary
             int totalZanverse = workingList.Where(c => c.IsAlly == true).Sum(x => x.GetZanverseDamage);
             int totalFinish = workingList.Where(c => c.IsAlly == true).Sum(x => x.GetFinishDamage);
-            int totalMag = workingList.Where(c => c.IsAlly == true).Sum(x => x.GetMagDamage);
-            int totalPB = workingList.Where(c => c.IsAlly == true).Sum(x => x.GetPBDamage);
 
             if (Properties.Settings.Default.SeparateFinish)
             {
@@ -538,55 +550,34 @@ namespace OverParse
                 }
             }
 
-            if (Properties.Settings.Default.SeparateMag)
-            {
-                Combatant magHolder = new Combatant("99999998", "Mag Attacks", "Mag Attacks");
-                foreach (Combatant c in workingList)
-                {
-                    if (c.IsAlly)
-                    {
-                        List<Attack> targetAttacks = c.Attacks.Where(a => Combatant.MagAttackIDs.Contains(a.ID)).ToList();
-                        magHolder.Attacks.AddRange(targetAttacks);
-                        c.Attacks = c.Attacks.Except(targetAttacks).ToList();
-                    }
-                }
-                magHolder.ActiveTime = elapsed;
-                workingList.Add(magHolder);
-            }
-
-            if (Properties.Settings.Default.SeparatePB)
-            {
-                Combatant pbHolder = new Combatant("99999999", "PB Attacks", "PB Attacks");
-                foreach (Combatant c in workingList)
-                {
-                    if (c.IsAlly)
-                    {
-                        List<Attack> targetAttacks = c.Attacks.Where(a => Combatant.PBAttackIDs.Contains(a.ID)).ToList();
-                        pbHolder.Attacks.AddRange(targetAttacks);
-                        c.Attacks = c.Attacks.Except(targetAttacks).ToList();
-                    }
-                }
-                pbHolder.ActiveTime = elapsed;
-                workingList.Add(pbHolder);
-            }
-
 
             // get group damage totals
-            int totalReadDamage = workingList.Where(c => (c.IsAlly || c.IsZanverse || c.IsFinish || c.IsMag || c.IsPB)).Sum(x => x.ReadDamage);
+            int totalReadDamage = workingList.Where(c => (c.IsAlly || c.IsZanverse || c.IsFinish || c.IsAIS || c.IsPwp || c.IsDB || c.IsRide)).Sum(x => x.ReadDamage);
 
             // dps calcs!
             foreach (Combatant c in workingList)
             {
-                if (c.IsAlly || c.IsZanverse || c.IsFinish || c.IsMag || c.IsPB)
+                if (c.IsAlly || c.IsZanverse || c.IsFinish)
                 {
                     c.PercentReadDPS = c.ReadDamage / (float)totalReadDamage * 100;
-                }
-                else
-                {
+                    c.AllyPct = c.AllyDamage / (float)totalReadDamage * 100;
+                    c.DBPct = c.DBDamage / (float)totalReadDamage * 100;
+                    c.LswPct = c.LswDamage / (float)totalReadDamage * 100;
+                    c.PwpPct = c.PwpDamage / (float)totalReadDamage * 100;
+                    c.AisPct = c.AisDamage / (float)totalReadDamage * 100;
+                    c.RidePct = c.RideDamage / (float)totalReadDamage * 100;
+                } else {
                     c.PercentDPS = -1;
                     c.PercentReadDPS = -1;
+                    c.AllyPct = -1;
+                    c.DBPct = -1;
+                    c.LswPct = -1;
+                    c.PwpPct = -1;
+                    c.AisPct = -1;
+                    c.RidePct = -1;
                 }
             }
+
 
             // damage graph stuff
             Combatant.maxShare = 0;
@@ -596,7 +587,7 @@ namespace OverParse
                     Combatant.maxShare = c.ReadDamage;
 
                 bool filtered = true;
-                if (Properties.Settings.Default.SeparateAIS || Properties.Settings.Default.SeparateDB || Properties.Settings.Default.SeparateRide || Properties.Settings.Default.SeparatePwp)
+                if (Properties.Settings.Default.SeparateAIS || Properties.Settings.Default.SeparateDB || Properties.Settings.Default.SeparateRide || Properties.Settings.Default.SeparatePwp || Properties.Settings.Default.SeparateLsw)
                 {
                     if (c.IsAlly && c.isTemporary == "no" && !HidePlayers.IsChecked)
                         filtered = false;
@@ -608,24 +599,33 @@ namespace OverParse
                         filtered = false;
                     if (c.IsAlly && c.isTemporary == "Pwp" && !HidePwp.IsChecked)
                         filtered = false;
+                    if (c.IsAlly && c.isTemporary == "Lsw" && !HideLsw.IsChecked)
+                        filtered = false;
                     if (c.IsZanverse)
                         filtered = false;
                     if (c.IsFinish)
                         filtered = false;
-                    if (c.IsMag)
-                        filtered = false;
-                    if (c.IsPB)
-                        filtered = false;
                 }
                 else
                 {
-                    if ((c.IsAlly || c.IsZanverse || c.IsFinish || c.IsMag || c.IsPB || !FilterPlayers.IsChecked) && (c.Damage > 0))
+                    if ((c.IsAlly || c.IsZanverse || c.IsFinish || !FilterPlayers.IsChecked) && (c.Damage > 0))
                         filtered = false;
                 }
 
                 if (!filtered && c.Damage > 0)
+                {
                     CombatantData.Items.Add(c);
+                    AllyData.Items.Add(c);
+                }
+
+                if (c.DBDamage > 0) { workingList.Sort((x, y) => y.DBDamage.CompareTo(x.DBDamage)); DBData.Items.Add(c); }
+                if (c.LswDamage > 0) { workingList.Sort((x, y) => y.LswDamage.CompareTo(x.LswDamage)); LswData.Items.Add(c); }
+                if (c.PwpDamage > 0) { workingList.Sort((x, y) => y.PwpDamage.CompareTo(x.PwpDamage)); PwpData.Items.Add(c); }
+                if(c.AisDamage > 0) { workingList.Sort((x, y) => y.AisDamage.CompareTo(x.AisDamage)); AisData.Items.Add(c); }
+                if (c.RideDamage > 0) { workingList.Sort((x, y) => y.RideDamage.CompareTo(x.RideDamage)); RideData.Items.Add(c); }
+                workingList.Sort((x, y) => y.ReadDamage.CompareTo(x.ReadDamage));
             }
+
 
             // status pane updates
             EncounterIndicator.Fill = new SolidColorBrush(Color.FromArgb(192, 255, 128, 128));
@@ -639,6 +639,12 @@ namespace OverParse
                     EncounterStatus.Content = "Waiting... - " + encounterlog.filename;
 
                 CombatantData.Items.Refresh();
+                AllyData.Items.Refresh();
+                DBData.Items.Refresh();
+                LswData.Items.Refresh();
+                PwpData.Items.Refresh();
+                AisData.Items.Refresh();
+                RideData.Items.Refresh();
             }
 
             if (encounterlog.running)
@@ -717,23 +723,28 @@ namespace OverParse
             Process.Start(Directory.GetCurrentDirectory() + "\\" + filename);
         }
 
+        private void Minimize_Click(object sender, RoutedEventArgs e) => WindowState = WindowState.Minimized;
+
         private void Exit_Click(object sender, RoutedEventArgs e)
         {
             Properties.Settings.Default.Save();
             Application.Current.Shutdown();
         }
 
-        //private void WindowStats_Click(object sender, RoutedEventArgs e)
-        //{
-            //string result = "";
-            //result += $"menu bar: {MenuBar.Width.ToString()} width {MenuBar.Height.ToString()} height\n";
-            //result += $"menu bar: {MenuBar.Padding} padding {MenuBar.Margin} margin\n";
-            //result += $"menu item: {MenuSystem.Width.ToString()} width {MenuSystem.Height.ToString()} height\n";
-            //result += $"menu item: {MenuSystem.Padding} padding {MenuSystem.Margin} margin\n";
-            //result += $"menu item: {AutoEndEncounters.Foreground} fg {AutoEndEncounters.Background} bg\n";
-            //result += $"menu item: {MenuSystem.FontFamily} {MenuSystem.FontSize} {MenuSystem.FontWeight} {MenuSystem.FontStyle}\n";
-            //MessageBox.Show(result);
-        //}
+        /*private void WindowStats_Click(object sender, RoutedEventArgs e)
+        {
+            AisData.Items.Add(workingList);
+            string result = "";
+            result += $"Name: {AisNameColumn.Width.ToString()}  Percent: {AisPercentColumn.Width.ToString()}";
+            result += $"Name: {DmgHC.ActualWidth.ToString()}  Percent: {DPSHC.ActualWidth.ToString()}";
+            result += $"Name: {JAHC.ActualWidth.ToString()}  Percent: {CriHC.ActualWidth.ToString()}";
+            result += $"maxdmg: {MdmgHC.ActualWidth.ToString()}  Atk: {AtkHC.ActualWidth.ToString()}";
+            result += $"Tab: {TabHC.ActualWidth.ToString()}  Percent: {PercentHC.ActualWidth.ToString()}";
+            result += $"menu bar: {MenuBar.Width.ToString()} width {MenuBar.Height.ToString()} height\n";
+            result += $"menu bar: {MenuBar.Padding} padding {MenuBar.Margin} margin\n";
+            result += $"menu item: {AutoEndEncounters.Foreground} fg {AutoEndEncounters.Background} bg\n";
+            MessageBox.Show(result);
+        }*/
 
         private void Window_MouseDown(object sender, MouseButtonEventArgs e)
         {
@@ -746,7 +757,7 @@ namespace OverParse
         private void ListViewItem_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             ListViewItem targetItem = (ListViewItem)sender;
-            string data = targetItem.Name.ToString();
+            string data = targetItem.Content.ToString();
             Detalis f = new Detalis(data, "value") { Owner = this };
             f.Show();
         }

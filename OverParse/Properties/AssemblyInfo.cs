@@ -10,7 +10,7 @@ using System.Windows;
 [assembly: AssemblyTitle("OverParse")]
 [assembly: AssemblyDescription("OverParse - View PSO2 Damage")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Remon_7L")]
+[assembly: AssemblyCompany("OverParse")]
 [assembly: AssemblyProduct("OverParse")]
 [assembly: AssemblyCopyright("Remon_7L")]
 [assembly: AssemblyTrademark("OverParse")]
@@ -51,5 +51,5 @@ using System.Windows;
 // すべての値を指定するか、次を使用してビルド番号とリビジョン番号を既定に設定できます
 // 既定値にすることができます:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("2.3.4.0")]
-[assembly: AssemblyFileVersion("2.3.4.0")]
+[assembly: AssemblyVersion("3.0.0.0")]
+[assembly: AssemblyFileVersion("3.0.0.0")]

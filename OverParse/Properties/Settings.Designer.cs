@@ -482,30 +482,6 @@ namespace OverParse.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool SeparateMag {
-            get {
-                return ((bool)(this["SeparateMag"]));
-            }
-            set {
-                this["SeparateMag"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool SeparatePB {
-            get {
-                return ((bool)(this["SeparatePB"]));
-            }
-            set {
-                this["SeparatePB"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
         public bool DPSformat {
             get {
                 return ((bool)(this["DPSformat"]));
@@ -536,6 +512,54 @@ namespace OverParse.Properties {
             }
             set {
                 this["Onlyme"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool NomyName {
+            get {
+                return ((bool)(this["NomyName"]));
+            }
+            set {
+                this["NomyName"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool SeparateLsw {
+            get {
+                return ((bool)(this["SeparateLsw"]));
+            }
+            set {
+                this["SeparateLsw"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool End3 {
+            get {
+                return ((bool)(this["End3"]));
+            }
+            set {
+                this["End3"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool HideLsw {
+            get {
+                return ((bool)(this["HideLsw"]));
+            }
+            set {
+                this["HideLsw"] = value;
             }
         }
     }

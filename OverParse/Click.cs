@@ -32,7 +32,7 @@ namespace OverParse
             {
                 Combatant temp2 = new Combatant(c.ID, c.Name, c.isTemporary);
                 foreach (Attack a in c.Attacks)
-                    temp2.Attacks.Add(new Attack(a.ID, a.Damage, a.Timestamp, a.JA, a.Cri));
+                    temp2.Attacks.Add(new Attack(a.ID, a.Damage, a.Timestamp, a.JA, a.Cri, a.Dmgd));
                 temp2.ActiveTime = c.ActiveTime;
                 temp2.PercentReadDPS = c.PercentReadDPS;
                 workingListCopy.Add(temp2);
@@ -88,6 +88,12 @@ namespace OverParse
             EndEncounterNoLog_Click(null, null);
         }
 
+        private void Questcheck_Click(object sender, RoutedEventArgs e)
+        {
+            QuestName quest = new QuestName();
+            quest.Show();
+        }
+
         private void AutoEndEncounters_Click(object sender, RoutedEventArgs e)
         {
             Properties.Settings.Default.AutoEndEncounters = AutoEndEncounters.IsChecked;
@@ -139,23 +145,11 @@ namespace OverParse
             UpdateForm(null, null);
         }
 
-        private void SeparateMag_Click(object sender, RoutedEventArgs e)
-        {
-            Properties.Settings.Default.SeparateMag = SeparateMag.IsChecked;
-            UpdateForm(null, null);
-        }
-
-        private void SeparatePB_Click(object sender, RoutedEventArgs e)
-        {
-            Properties.Settings.Default.SeparatePB = SeparatePB.IsChecked;
-            UpdateForm(null, null);
-        }
-
         private void SeparateAIS_Click(object sender, RoutedEventArgs e)
         {
             Properties.Settings.Default.SeparateAIS = SeparateAIS.IsChecked;
             HideAIS.IsEnabled = SeparateAIS.IsChecked;
-            HidePlayers.IsEnabled = (SeparateAIS.IsChecked || SeparateDB.IsChecked || SeparateRide.IsChecked || SeparatePwp.IsChecked);
+            HidePlayers.IsEnabled = (SeparateAIS.IsChecked || SeparateDB.IsChecked || SeparateRide.IsChecked || SeparatePwp.IsChecked || SeparateLsw.IsChecked);
             UpdateForm(null, null);
         }
 
@@ -163,7 +157,7 @@ namespace OverParse
         {
             Properties.Settings.Default.SeparateDB = SeparateDB.IsChecked;
             HideDB.IsEnabled = SeparateDB.IsChecked;
-            HidePlayers.IsEnabled = (SeparateAIS.IsChecked || SeparateDB.IsChecked || SeparateRide.IsChecked || SeparatePwp.IsChecked);
+            HidePlayers.IsEnabled = (SeparateAIS.IsChecked || SeparateDB.IsChecked || SeparateRide.IsChecked || SeparatePwp.IsChecked || SeparateLsw.IsChecked);
             UpdateForm(null, null);
         }
 
@@ -171,7 +165,7 @@ namespace OverParse
         {
             Properties.Settings.Default.SeparateRide = SeparateRide.IsChecked;
             HideRide.IsEnabled = SeparateRide.IsChecked;
-            HidePlayers.IsEnabled = (SeparateAIS.IsChecked || SeparateDB.IsChecked || SeparateRide.IsChecked || SeparatePwp.IsChecked);
+            HidePlayers.IsEnabled = (SeparateAIS.IsChecked || SeparateDB.IsChecked || SeparateRide.IsChecked || SeparatePwp.IsChecked || SeparateLsw.IsChecked);
             UpdateForm(null, null);
         }
 
@@ -179,7 +173,15 @@ namespace OverParse
         {
             Properties.Settings.Default.SeparatePwp = SeparatePwp.IsChecked;
             HidePwp.IsEnabled = SeparatePwp.IsChecked;
-            HidePlayers.IsEnabled = (SeparateAIS.IsChecked || SeparateDB.IsChecked || SeparateRide.IsChecked || SeparatePwp.IsChecked);
+            HidePlayers.IsEnabled = (SeparateAIS.IsChecked || SeparateDB.IsChecked || SeparateRide.IsChecked || SeparatePwp.IsChecked || SeparateLsw.IsChecked);
+            UpdateForm(null, null);
+        }
+
+        private void SeparateLsw_Click(object sender, RoutedEventArgs e)
+        {
+            Properties.Settings.Default.SeparateLsw = SeparateLsw.IsChecked;
+            HideLsw.IsEnabled = SeparateLsw.IsChecked;
+            HidePlayers.IsEnabled = (SeparateAIS.IsChecked || SeparateDB.IsChecked || SeparateRide.IsChecked || SeparatePwp.IsChecked || SeparateLsw.IsChecked);
             UpdateForm(null, null);
         }
 
@@ -219,6 +221,12 @@ namespace OverParse
             UpdateForm(null, null);
         }
 
+        private void HideLsw_Click(object sender, RoutedEventArgs e)
+        {
+            if (HideLsw.IsChecked) { HidePlayers.IsChecked = false; }
+            UpdateForm(null, null);
+        }
+
         private void AnonymizeNames_Click(object sender, RoutedEventArgs e)
         {
             Properties.Settings.Default.AnonymizeNames = AnonymizeNames.IsChecked;
@@ -246,25 +254,27 @@ namespace OverParse
         private void DefaultWindowSize_Click(object sender, RoutedEventArgs e)
         {
             Height = 275;
-            Width = 620;
+            Width = 670;
         }
 
         private void DefaultWindowSize_Key(object sender, EventArgs e)
         {
             Height = 275;
-            Width = 620;
+            Width = 670;
         }
 
         private void ChangeFont_Click(object sender, RoutedEventArgs e)
         {
             var dlg = new emanual.Wpf.Dialogs.FontDialogEx() { Owner = this };
 
-            var font = new emanual.Wpf.Dialogs.ToolFont();
-            font.FontFamily = CombatantData.FontFamily;
-            font.FontSize = CombatantData.FontSize;
-            font.FontWeight = CombatantData.FontWeight;
-            font.FontStyle = CombatantData.FontStyle;
-            font.FontStretch = CombatantData.FontStretch;
+            var font = new emanual.Wpf.Dialogs.ToolFont
+            {
+                FontFamily = CombatantData.FontFamily,
+                FontSize = CombatantData.FontSize,
+                FontWeight = CombatantData.FontWeight,
+                FontStyle = CombatantData.FontStyle,
+                FontStretch = CombatantData.FontStretch
+            };
 
             // 言語情報を保存するため、textBox1 の Tag プロパティに設定した
             if (CombatantData.Tag == null)
@@ -341,6 +351,16 @@ namespace OverParse
                 AtkHC.Width = new GridLength(1.5, GridUnitType.Star);
             }
             UpdateForm(null, null);
+        }
+
+        private void VariableColumn_Click(object sender, RoutedEventArgs e)
+        {
+            PercentHC.Width = new GridLength(0.4, GridUnitType.Star);
+            DmgHC.Width = new GridLength(0.8, GridUnitType.Star);
+            DPSHC.Width = new GridLength(0.6, GridUnitType.Star);
+            JAHC.Width = new GridLength(0.4, GridUnitType.Star);
+            CriHC.Width = new GridLength(0.4, GridUnitType.Star);
+            MdmgHC.Width = new GridLength(0.6, GridUnitType.Star);
         }
 
         private void ShowDamageGraph_Click(object sender, RoutedEventArgs e)
@@ -439,7 +459,7 @@ namespace OverParse
         private void About_Click(object sender, RoutedEventArgs e)
         {
             var version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
-            MessageBox.Show($"OverParse v{version}\n簡易的な自己監視ツール。\n\nShoutouts to WaifuDfnseForce.\nAdditional shoutouts to Variant, AIDA, and everyone else who makes the Tweaker plugin possible.\n\nPlease use damage information responsibly.", "OverParse");
+            MessageBox.Show($"OverParse v{version} Debug\n簡易的な自己監視ツール。\n\nShoutouts to WaifuDfnseForce.\nAdditional shoutouts to Variant, AIDA, and everyone else who makes the Tweaker plugin possible.\n\nPlease use damage information responsibly.", "OverParse");
         }
 
         private void LowResources_Click(object sender, RoutedEventArgs e)

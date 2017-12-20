@@ -1,0 +1,19 @@
+﻿<Window x:Class="OverParse.QuestName"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:OverParse"
+        mc:Ignorable="d"
+        Title="QuestName" Height="300" Width="300">
+    <Grid>
+        <TextBlock Text="クエスト名を選択して下さい"/>
+        <RadioButton Content="氷上のメリークリスマス2017" Height="20" Margin="0,30,0,0" VerticalAlignment="Top"/>
+        <RadioButton Content="魔神城戦：不断の闘志" Height="20" Margin="0,60,0,0" VerticalAlignment="Top"/>
+        <RadioButton Content="新世を成す幻創の造神" Height="20" Margin="0,90,0,0" VerticalAlignment="Top"/>
+        <RadioButton Content="月駆ける幻創の母" Height="20" Margin="0,120,0,0" VerticalAlignment="Top"/>
+        <RadioButton Content="威風堂々たる鋼鉄の進撃" Height="20" Margin="0,150,0,0" VerticalAlignment="Top"/>
+        <RadioButton Content="なんとかなんとか" Height="20" Margin="0,180,0,0" VerticalAlignment="Top"/>
+        <RadioButton Content="やっためう！　すごいめう！" Height="20" Margin="0,210,0,0" VerticalAlignment="Top"/>
+    </Grid>
+</Window>
