@@ -176,18 +176,7 @@ namespace OverParse
             }
 
             Console.WriteLine("Parsing skills.csv");
-
-            foreach (string s in tmp)
-            {
-                string[] split = s.Split(',');
-                if (split.Length > 1)
-                {
-                    skillDict.Add(split[1], split[0]);
-                    //Console.WriteLine(s);
-                    //Console.WriteLine(split[1] + " " + split[0]);
-                }
-            }
-
+            
             foreach (string s in tmp)
             {
                 string[] split = s.Split(',');
