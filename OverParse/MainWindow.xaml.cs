@@ -148,31 +148,44 @@ namespace OverParse
             }
 
             //skills.csv
+            Console.WriteLine("Updating skills.csv");
             string[] tmp;
             try
             {
-                string content = "";
+                WebClient client = new WebClient();
+                Stream stream = client.OpenRead("https://raw.githubusercontent.com/VariantXYZ/PSO2ACT/master/PSO2ACT/skills.csv");
+                StreamReader webreader = new StreamReader(stream);
+                String content = webreader.ReadToEnd();
+
                 tmp = content.Split('\n');
-                tmp = File.ReadAllLines("skills.csv");
-            } catch {
-                //Console.WriteLine($"skills.csv update failed: {ex.ToString()}");
+                File.WriteAllText("skills.csv", content);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"skills.csv update failed: {ex.ToString()}");
                 if (File.Exists("skills.csv"))
                 {
-                    MessageBox.Show("OverParseはスキル名の更新に失敗しました。", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Information);
+                    MessageBox.Show("OverParse failed to update its skill mappings. This usually means your connection hiccuped for a moment.\n\nA local copy will be used instead. If you'd like to try and update again, just relaunch OverParse.", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Information);
                     tmp = File.ReadAllLines("skills.csv");
-                } else {
-                    MessageBox.Show("OverParseはスキル名の取得に失敗しました。\n全ての最大ダメージはUnknownとなります。", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                else
+                {
+                    MessageBox.Show("OverParse failed to update its skill mappings. This usually means your connection hiccuped for a moment.\n\nSince you have no skill mappings downloaded, all attacks will be marked as \"Unknown\". If you'd like to try and update again, please relaunch OverParse.", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Information);
                     tmp = new string[0];
                 }
             }
 
-            try
+            Console.WriteLine("Parsing skills.csv");
+
+            foreach (string s in tmp)
             {
-                string ignore = "";
-                ignoreskill = ignore.Split('\n');
-                ignoreskill = File.ReadAllLines("ignoreskills.csv");
-            } catch {
-                MessageBox.Show("ignoreskills.csvが存在しません。");
+                string[] split = s.Split(',');
+                if (split.Length > 1)
+                {
+                    skillDict.Add(split[1], split[0]);
+                    //Console.WriteLine(s);
+                    //Console.WriteLine(split[1] + " " + split[0]);
+                }
             }
 
             foreach (string s in tmp)
