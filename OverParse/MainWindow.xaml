@@ -119,16 +119,16 @@
                 </MenuItem>
                 <MenuItem Style="{StaticResource topmenu}" Header="Parsing">
                     <MenuItem Style="{StaticResource submenu}" Header="Hide Enemies/NPCs" IsCheckable="True" IsChecked="True" x:Name="FilterPlayers" Click="FilterPlayers_Click"/>
-                    <MenuItem Style="{StaticResource submenu}" Header="Damage Seperation">
-                        <MenuItem Style="{StaticResource submenu}" Header="Seperate Zanverse" x:Name="SeparateZanverse" IsCheckable="True" IsChecked="False" Click="SeparateZanverse_Click"/>
-                        <MenuItem Style="{StaticResource submenu}" Header="Seperate Hero Time Finish" x:Name="SeparateFinish" IsCheckable="True" IsChecked="False" Click="SeparateFinish_Click"/>
+                    <MenuItem Style="{StaticResource submenu}" Header="Damage Separation">
+                        <MenuItem Style="{StaticResource submenu}" Header="Separate Zanverse" x:Name="SeparateZanverse" IsCheckable="True" IsChecked="False" Click="SeparateZanverse_Click"/>
+                        <MenuItem Style="{StaticResource submenu}" Header="Separate Hero Time Finish" x:Name="SeparateFinish" IsCheckable="True" IsChecked="False" Click="SeparateFinish_Click"/>
                     </MenuItem>
-                    <MenuItem Style="{StaticResource submenu}" Header="Vehicle Seperation">
-                        <MenuItem Style="{StaticResource submenu}" Header="Seperate A.I.S." x:Name="SeparateAIS" IsCheckable="True" IsChecked="False" Click="SeparateAIS_Click"/>
-                        <MenuItem Style="{StaticResource submenu}" Header="Seperate Dark Blast" x:Name="SeparateDB" IsCheckable="True" IsChecked="False" Click="SeparateDB_Click"/>
-                        <MenuItem Style="{StaticResource submenu}" Header="Seperate Rideroid" x:Name="SeparateRide" IsCheckable="True" IsChecked="False" Click="SeparateRide_Click" />
-                        <MenuItem Style="{StaticResource submenu}" Header="Seperate Photon Weapons" x:Name="SeparatePwp" IsCheckable="True" IsChecked="False" Click="SeparatePwp_Click" />
-                        <MenuItem Style="{StaticResource submenu}" Header="Seperate Laconium Sword" x:Name="SeparateLsw" IsCheckable="True" IsChecked="False" Click="SeparateLsw_Click" />
+                    <MenuItem Style="{StaticResource submenu}" Header="Vehicle Separation">
+                        <MenuItem Style="{StaticResource submenu}" Header="Separate A.I.S." x:Name="SeparateAIS" IsCheckable="True" IsChecked="False" Click="SeparateAIS_Click"/>
+                        <MenuItem Style="{StaticResource submenu}" Header="Separate Dark Blast" x:Name="SeparateDB" IsCheckable="True" IsChecked="False" Click="SeparateDB_Click"/>
+                        <MenuItem Style="{StaticResource submenu}" Header="Separate Rideroid" x:Name="SeparateRide" IsCheckable="True" IsChecked="False" Click="SeparateRide_Click" />
+                        <MenuItem Style="{StaticResource submenu}" Header="Separate Photon Weapons" x:Name="SeparatePwp" IsCheckable="True" IsChecked="False" Click="SeparatePwp_Click" />
+                        <MenuItem Style="{StaticResource submenu}" Header="Separate Laconium Sword" x:Name="SeparateLsw" IsCheckable="True" IsChecked="False" Click="SeparateLsw_Click" />
                         <Separator />
                         <MenuItem Style="{StaticResource submenu}" Header="Hide Players" x:Name="HidePlayers" IsCheckable="True" IsChecked="False" Click="HidePlayers_Click"/>
                         <MenuItem Style="{StaticResource submenu}" Header="Hide A.I.S." x:Name="HideAIS" IsCheckable="True" IsChecked="False" Click="HideAIS_Click"/>
@@ -145,7 +145,7 @@
                 </MenuItem>
                 <MenuItem Style="{StaticResource topmenu}" Header="Window">
                     <MenuItem Style="{StaticResource submenu}" Header="Reset Window Size" InputGestureText="Ctrl+Shift+D" Click="DefaultWindowSize_Click"/>
-                    <MenuItem Style="{StaticResource submenu}" Header=" Window Transparency">
+                    <MenuItem Style="{StaticResource submenu}" Header="Window Transparency">
                         <MenuItem Style="{StaticResource submenu}" x:Name="WinOpacity_0" Visibility="Collapsed" IsCheckable="True" IsChecked="False" Header="Transparent" Click="WindowOpacity_0_Click" />
                         <MenuItem Style="{StaticResource submenu}" x:Name="WinOpacity_25" IsCheckable="True" IsChecked="False" Header="25%" Click="WindowOpacity_25_Click" />
                         <MenuItem Style="{StaticResource submenu}" x:Name="Winopacity_50" IsCheckable="True" IsChecked="False" Header="50%" Click="WindowOpacity_50_Click" />
@@ -909,13 +909,13 @@
             <Grid Visibility="Hidden" Grid.Row="1" Margin="0" Grid.RowSpan="2">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition x:Name="NameHC" Width="1*"/>
-                    <ColumnDefinition x:Name="PercentHC" Width="39"/>
+                    <ColumnDefinition x:Name="PercentHC" Width="0"/>
                     <ColumnDefinition x:Name="DmgHC" Width="78"/>
-                    <ColumnDefinition x:Name="DmgDHC" Width="56" />
-                    <ColumnDefinition x:Name="DPSHC" Width="56"/>
-                    <ColumnDefinition x:Name="JAHC" Width="39"/>
-                    <ColumnDefinition x:Name="CriHC" Width="39"/>
-                    <ColumnDefinition x:Name="MdmgHC" Width="62"/>
+                    <ColumnDefinition x:Name="DmgDHC" Width="50" />
+                    <ColumnDefinition x:Name="DPSHC" Width="50"/>
+                    <ColumnDefinition x:Name="JAHC" Width="32"/>
+                    <ColumnDefinition x:Name="CriHC" Width="32"/>
+                    <ColumnDefinition x:Name="MdmgHC" Width="60"/>
                     <ColumnDefinition x:Name="AtkHC" Width="1.7*"/>
                     <ColumnDefinition x:Name="TabHC" Width="30" />
                 </Grid.ColumnDefinitions>
