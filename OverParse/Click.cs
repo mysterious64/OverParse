@@ -87,13 +87,13 @@ namespace OverParse
             //Encounter hotkey (no log) pressed
             EndEncounterNoLog_Click(null, null);
         }
-
+/* Unneeded Method?
         private void Questcheck_Click(object sender, RoutedEventArgs e)
         {
             QuestName quest = new QuestName();
             quest.Show();
         }
-
+*/
         private void AutoEndEncounters_Click(object sender, RoutedEventArgs e)
         {
             Properties.Settings.Default.AutoEndEncounters = AutoEndEncounters.IsChecked;
