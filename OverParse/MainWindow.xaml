@@ -16,11 +16,6 @@
     </Window.Background>
 
     <Window.Resources>
-
-        <ContextMenu x:Key="Tabmenu">
-            <MenuItem Header="test" />
-        </ContextMenu>
-
         <Style TargetType="ListViewItem">
             <Setter Property="Height" Value="Auto"/>
             <Setter Property="FontSize" Value="12"/>
