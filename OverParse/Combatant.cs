@@ -5,31 +5,26 @@ using System.Windows.Media;
 
 namespace OverParse
 {
+    // Handles the combat data assignments
     public class Combatant
     {
+        // General Variables
         private const float maxBGopacity = 0.6f;
-        public string ID;
-        public string Name { get; set; }
-        public float PercentDPS;
-        public float PercentReadDPS;
-        public float AllyPct;
-        public float DBPct;
-        public float LswPct;
-        public float PwpPct;
-        public float AisPct;
-        public float RidePct;
-        public int ActiveTime;
-        public string isTemporary;
-        public static string Log;
         public List<Attack> Attacks;
+        public string ID, isTemporary;
+        public string Name { get; set; }
+        public int ActiveTime;
+        public float PercentDPS, PercentReadDPS, AllyPct, DBPct, LswPct, PwpPct, AisPct, RidePct;        
+
+        // Static Variables
+        public static float maxShare = 0;
+        public static string Log;
         public static string[] FinishAttackIDs = new string[] { "2268332858", "170999070", "2268332813", "1266101764", "11556353", "1233721870", "1233722348", "3480338695" };
         public static string[] PhotonAttackIDs = new string[] { "2414748436", "1954812953", "2822784832", "3339644659", "2676260123", "224805109" };
-        public static string[] LaconiumAttackIDs = { "1913897098", "2235773608", "2235773610", "2235773611", "2235773818", "2235773926", "2235773927", "2235773944", "2618804663", "2619614461", "3607718359" };
+        public static string[] LaconiumAttackIDs = new string[] { "1913897098", "2235773608", "2235773610", "2235773611", "2235773818", "2235773926", "2235773927", "2235773944", "2618804663", "2619614461", "3607718359" };
         public static string[] AISAttackIDs = new string[] { "119505187", "79965782", "79965783", "79965784", "80047171", "434705298", "79964675", "1460054769", "4081218683", "3298256598", "2826401717" };
         public static string[] DBAttackIDs = new string[] { "267911699", "262346668", "265285249", "264996390" , "311089933" , "3988916155" , "265781051" , "3141577094" , "2289473436" , "517914866" , "517914869" , "1117313539" , "1611279117" , "3283361988" , "1117313602" , "395090797" , "2429416220" , "1697271546" , "1117313924" };
         public static string[] RideAttackIDs = new string[] { "3491866260", "2056025809", "2534881408", "2600476838", "1247666429", "3750571080", "3642240295", "651750924", "2452463220", "1732461796", "3809261131", "1876785244", "3765765641", "3642969286", "1258041436" };
-
-        public static float maxShare = 0;
 
         public int Damage => Attacks.Sum(x => x.Damage);
 
