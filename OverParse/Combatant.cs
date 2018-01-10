@@ -124,7 +124,11 @@ namespace OverParse
         public int DBDamage => Attacks.Where(a => DBAttackIDs.Contains(a.ID)).Sum(x => x.Damage);
         public string DBReadDamage => DBDamage.ToString("N0");
         public string DBDPS => Math.Round(DBDamage / (double)ActiveTime).ToString("N0");
-        public string DBJAPct => (Attacks.Where(a => DBAttackIDs.Contains(a.ID)).Average(x => x.JA) * 100).ToString("N2");
+
+        public string DBJAPct => AverageJACrit(GetAttackID, "DBAttackIDs", "JA");
+
+
+        // public string DBJAPct => (Attacks.Where(a => DBAttackIDs.Contains(a.ID)).Average(x => x.JA) * 100).ToString("N2");
         public string DBCriPct => (Attacks.Where(a => DBAttackIDs.Contains(a.ID)).Average(x => x.Cri) * 100).ToString("N2");
         public string DBMaxHitdmg => DBMaxHit.Damage.ToString("N0");
         public string DBAtkName
@@ -185,7 +189,7 @@ namespace OverParse
             }
         }
 
-        //PhotonWeapon Data
+        //PhotonWeapon Data Properties
         public string PwpReadPct => PwpPct.ToString("N2");
         public int PwpDamage => Attacks.Where(a => PhotonAttackIDs.Contains(a.ID)).Sum(x => x.Damage);
         public string PwpReadDamage => PwpDamage.ToString("N0");
@@ -488,6 +492,20 @@ namespace OverParse
             }
         }
 
+        // Fetch the attack ID
+        private string GetAttackID (string attackID) 
+        {
+            return Attacks.Where(a => attackID.Contains(a.ID));
+        }
+
+        // Use after [ GetAttackID ] function
+        private string AverageJACrit (Func<string, string> func, string attackID, string criJA = "Cri") 
+        {
+            string data = func(attackID);
+            return (data.Average(x => x.criJA) * 100).ToString("N2");
+        }
+
+        // Constructor #1
         public Combatant(string id, string name)
         {
             ID = id;
@@ -499,6 +517,7 @@ namespace OverParse
             ActiveTime = 0;
         }
 
+        // Constructor #2
         public Combatant(string id, string name, string temp)
         {
             ID = id;
@@ -509,7 +528,6 @@ namespace OverParse
             PercentReadDPS = 0;
             ActiveTime = 0;
         }
-
     }
 
     static class Hacks
@@ -538,6 +556,4 @@ namespace OverParse
             Dmgd = damaged;
         }
     }
-
-
 }

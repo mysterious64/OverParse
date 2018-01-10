@@ -7,6 +7,9 @@ using System.Windows;
 
 namespace OverParse
 {
+    /* Handles the logging section of the parser.
+     * TODO: Fix the weird spacing noticed in the log files.
+     */
     public class Log
     {
         private int startTimestamp = 0;
@@ -34,7 +37,7 @@ namespace OverParse
 
             if (Properties.Settings.Default.BanWarning)
             {
-                MessageBoxResult panicResult = MessageBox.Show("OverParseは、PSO2の規約を破る外部ツールです。\nSEGAは公式に解析ツールを使用した事が確認されたアカウントを停止する可能性があると発表しました。\n\nアカウントの安全性を保つ場合にはOverParseを使用しないで下さい。\nこのツールの使用は自己責任です。\n\nセットアップを続けますか？", "OverParse Setup", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                MessageBoxResult panicResult = MessageBox.Show("OverParse is a 3rd-party tool that breaks PSO2's Terms and Conditions. SEGA has confirmed in an official announcement that accounts found using parsing tools may be banned.\n\nIf account safety is your first priority, do NOT use OverParse. You use this tool entirely at your own risk.\n\nWould you like to continue with setup?", "OverParse Setup", MessageBoxButton.YesNo, MessageBoxImage.Question);
                 if (panicResult == MessageBoxResult.No)
                 {
                     Environment.Exit(-1);
@@ -44,27 +47,28 @@ namespace OverParse
 
             while (!File.Exists($"{attemptDirectory}\\pso2.exe"))
             {
-                //Console.WriteLine("pso2_binディレクトリが無効です。");
+                // Console.WriteLine("Invalid pso2_bin directory, prompting for new one...");
 
                 if (nagMe)
                 {
-                    MessageBox.Show("これは有効なpso2_binディレクトリではありません。\npso2.exeが見つかりません。", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    MessageBox.Show("That doesn't appear to be a valid pso2_bin directory.\n\nIf you installed the game using default settings, it will probably be in C:\\PHANTASYSTARONLINE2\\pso2_bin\\. Otherwise, find the location you installed to.", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Warning);
                 }
                 else
                 {
-                    MessageBox.Show("pso2_binディレクトリを選択して下さい。\nOverParseはダメージログを読み込みます。\n\nTweakerを設定しているときにフォルダを選択した場合は、そのフォルダを選択します。\nその他の場合にはPSO2のインストールフォルダを選択します。", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Information);
+                    MessageBox.Show("Please select your pso2_bin directory. OverParse uses this to read your damage logs.\n\nIf you picked a folder while setting up the Tweaker, choose that. Otherwise, it will be in your PSO2 installation folder.", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Information);
                     nagMe = true;
                 }
 
-                //WINAPI FILE DIALOGS DON'T SHOW UP FOR PEOPLE SOMETIMES AND I HAVE NO IDEA WHY, *** S I C K  M E M E ***
-                //VistaFolderBrowserDialog oDialog = new VistaFolderBrowserDialog();
-                //oDialog.Description = "Select your pso2_bin folder...";
-                //oDialog.UseDescriptionForTitle = true;
+                // WINAPI FILE DIALOGS DON'T SHOW UP FOR PEOPLE SOMETIMES AND I HAVE NO IDEA WHY, *** S I C K  M E M E ***
+                // VistaFolderBrowserDialog oDialog = new VistaFolderBrowserDialog();
+                // oDialog.Description = "Select your pso2_bin folder...";
+                // oDialog.UseDescriptionForTitle = true;
 
                 System.Windows.Forms.FolderBrowserDialog dialog = new System.Windows.Forms.FolderBrowserDialog
                 {
-                    Description = "pso2_binフォルダを選択して下さい。\n大抵の場合はPSO2をインストールしたフォルダにあります。"
+                    Description = "Select your pso2_bin folder. This will be inside the folder you installed PSO2 to."
                 };
+
                 System.Windows.Forms.DialogResult picked = dialog.ShowDialog();
                 if (picked == System.Windows.Forms.DialogResult.OK)
                 {
@@ -75,7 +79,7 @@ namespace OverParse
                 else
                 {
                     //Console.WriteLine("Canceled out of directory picker");
-                    MessageBox.Show("必要なインストールが設定されませんでした。\nアプリケーションを終了します。", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Information);
+                    MessageBox.Show("OverParse needs a valid PSO2 installation to function.\nThe application will now close.", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Information);
                     Environment.Exit(-1); // ABORT ABORT ABORT
                     break;
                 }
@@ -90,7 +94,7 @@ namespace OverParse
 
             if (Properties.Settings.Default.LaunchMethod == "Unknown")
             {
-                MessageBoxResult tweakerResult = MessageBox.Show("PSO2 Tweakerを使用していますか?", "OverParse Setup", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                MessageBoxResult tweakerResult = MessageBox.Show("Do you use the PSO2 Tweaker?", "OverParse Setup", MessageBoxButton.YesNo, MessageBoxImage.Question);
                 Properties.Settings.Default.LaunchMethod = (tweakerResult == MessageBoxResult.Yes) ? "Tweaker" : "Manual";
             }
 
@@ -107,7 +111,7 @@ namespace OverParse
 
                 if (warn && Hacks.DontAsk)
                 {
-                    MessageBox.Show("あなたのPSO2フォルダにはダメージログが含まれていません。\nこれはエラーではなく、復旧するだけです！\nPSO2 TweakerでDamage Parserプラグインをオンにして下さい。\nOverParseはこれを機能させる為に必要です。", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Information);
+                    MessageBox.Show("Your PSO2 folder doesn't contain any damagelogs. This is not an error, just a reminder!\n\nPlease turn on the Damage Parser plugin in PSO2 Tweaker (orb menu > Plugins). OverParse needs this to function. You may also want to update the plugins while you're there.", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Information);
                     Hacks.DontAsk = true;
                     Properties.Settings.Default.FirstRun = false;
                     Properties.Settings.Default.Save();
@@ -128,25 +132,25 @@ namespace OverParse
 
                     if (pluginsExist)
                     {
-                        //Console.WriteLine("Prompting for plugin update");
-                        selfdestructResult = MessageBox.Show("このOverParseのバージョンには、dllプラグインの新しいバージョンが含まれています。\n今すぐ更新しますか？", "OverParse Setup", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                        // Console.WriteLine("Prompting for plugin update");
+                        selfdestructResult = MessageBox.Show("This release of OverParse includes a new version of the parsing plugin. Would you like to update now?\n\nOverParse may behave unpredictably if you use a different version than it expects.", "OverParse Setup", MessageBoxButton.YesNo, MessageBoxImage.Question);
                     }
                     else
                     {
-                        //Console.WriteLine("初期プラグインのinstall prompt");
-                        selfdestructResult = MessageBox.Show("OverParseには、ダメージ情報を受け取るためのTweakerプラグインが必要です。\nプラグインはTweaker無しでもインストールできますが、自動的に更新される事はありません。\ndllを手動でインストールしてみて下さい。", "OverParse Setup", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                        // Console.WriteLine("Prompting for initial plugin install");
+                        selfdestructResult = MessageBox.Show("OverParse needs a Tweaker plugin to recieve its damage information.\n\nThe plugin can be installed without the Tweaker, but it won't be automatically updated, and I can't provide support for this method.\n\nDo you want to try to manually install the Damage Parser plugin?", "OverParse Setup", MessageBoxButton.YesNo, MessageBoxImage.Question);
                     }
 
                     if (selfdestructResult == MessageBoxResult.No && !pluginsExist)
                     {
-                        //Console.WriteLine("Denied plugin install");
-                        MessageBox.Show("OverParseにはdllプラグインが必要です。\nアプリケーションを終了します。", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Information);
+                        // Console.WriteLine("Denied plugin install");
+                        MessageBox.Show("OverParse needs the Damage Parser plugin to function.\n\nThe application will now close.", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Information);
                         Environment.Exit(-1);
                         return;
                     }
                     else if (selfdestructResult == MessageBoxResult.Yes)
                     {
-                        //Console.WriteLine("Accepted plugin install");
+                        // Console.WriteLine("Accepted plugin install");
                         bool success = UpdatePlugin(attemptDirectory);
                         if (!pluginsExist && !success)
                             Environment.Exit(-1);
@@ -163,15 +167,15 @@ namespace OverParse
 
             notEmpty = true;
 
-            FileInfo log = logDirectory.GetFiles().Where(f => Regex.IsMatch(f.Name, @"\d+\.")).OrderByDescending(f => f.Name).First();
-            //Console.WriteLine($"Reading from {log.DirectoryName}\\{log.Name}");
+            FileInfo log = logDirectory.GetFiles().Where(f => Regex.IsMatch(f.Name, @"\d+\.csv")).OrderByDescending(f => f.Name).First();
+            // Console.WriteLine($"Reading from {log.DirectoryName}\\{log.Name}");
             filename = log.Name;
             FileStream fileStream = File.Open(log.DirectoryName + "\\" + log.Name, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
             fileStream.Seek(0, SeekOrigin.Begin);
             logReader = new StreamReader(fileStream);
 
-                string existingLines = logReader.ReadToEnd(); // gotta get the dummy line for current player name
-                string[] result = existingLines.Split('\n');
+            string existingLines = logReader.ReadToEnd(); // gotta get the dummy line for current player name
+            string[] result = existingLines.Split('\n');
             foreach (string s in result)
             {
                 if (s == "")
@@ -195,14 +199,14 @@ namespace OverParse
                 File.Copy(Directory.GetCurrentDirectory() + "\\resources\\PSO2DamageDump.dll", attemptDirectory + "\\plugins" + "\\PSO2DamageDump.dll", true);
                 File.Copy(Directory.GetCurrentDirectory() + "\\resources\\PSO2DamageDump.cfg", attemptDirectory + "\\plugins" + "\\PSO2DamageDump.cfg", true);
                 Properties.Settings.Default.InstalledPluginVersion = pluginVersion;
-                MessageBox.Show("セットアップ完了！\ndllプラグインがpso2_binフォルダにコピーされています。\nPSO2が既に実行されている場合は再起動する必要があります。", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Information);
-                //Console.WriteLine("Plugin install successful");
+                MessageBox.Show("etup complete! A few files have been copied to your pso2_bin folder.\n\nIf PSO2 is running right now, you'll need to close it before the changes can take effect.", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Information);
+                // Console.WriteLine("Plugin install successful");
                 return true;
             }
             catch
             {
-                MessageBox.Show("インストールで何か問題が発生しました。\nこれは通常、ファイルが既に使用中である事を意味します。\nPSO2を閉じた状態でもう一度やり直してみて下さい。\nもしくは、管理者としてOverParseを実行する必要があります。", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Error);
-                //Console.WriteLine($"PLUGIN INSTALL FAILED: {ex.ToString()}");
+                MessageBox.Show("Something went wrong with manual installation. This usually means that the files are already in use: try again with PSO2 closed.\n\nIf you've recieved this message even after closing PSO2, you may need to run OverParse as administrator.", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Error);
+                // Console.WriteLine($"PLUGIN INSTALL FAILED: {ex.ToString()}");
                 return false;
             }
         }
@@ -357,10 +361,10 @@ namespace OverParse
                             string avg = i.Item2.Average().ToString("N0");
                             //string ja = (i.Item3.Average() * 100).ToString("N2") ?? "null";
                             //string cri = (i.Item4.Average() * 100).ToString("N2") ?? "null" ;
-                            log += $"{paddedPercent}%	| {i.Item1} - {sum} dmg";
+                            log += $"{paddedPercent}%   | {i.Item1} - {sum} dmg";
                             //log += $" - JA : {ja}% - Critical : {cri}%";
                             log += Environment.NewLine;
-                            log += $"	|   {hits} hits - {min} min, {avg} avg, {max} max" + Environment.NewLine;
+                            log += $"   |   {hits} hits - {min} min, {avg} avg, {max} max" + Environment.NewLine;
                         }
 
                         log += Environment.NewLine;
