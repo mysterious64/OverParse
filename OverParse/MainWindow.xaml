@@ -328,13 +328,13 @@
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
 
-                                <GridViewColumn Header="%" x:Name="AllyPercentColumn" Width="{Binding ElementName=PercentH, Path=ActualWidth}">
+                                <!--GridViewColumn Header="%" x:Name="AllyPercentColumn" Width="{Binding ElementName=PercentH, Path=ActualWidth}">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <TextBlock Text="{Binding AllyReadPct}" TextAlignment="Right" Margin="-5,-1,-5,-1" Padding="0" />
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
-                                </GridViewColumn>
+                                </GridViewColumn-->
 
                                 <GridViewColumn Header="Damage" x:Name="AllyDamageColumn" Width="{Binding ElementName=DmgH, Path=ActualWidth}">
                                     <GridViewColumn.CellTemplate>
@@ -428,13 +428,13 @@
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
 
-                                <GridViewColumn Header="%" x:Name="DBPercentColumn" Width="{Binding ElementName=PercentH, Path=ActualWidth}">
+                                <!--GridViewColumn Header="%" x:Name="DBPercentColumn" Width="{Binding ElementName=PercentH, Path=ActualWidth}">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <TextBlock Text="{Binding DBReadPct}" TextAlignment="Right" Margin="-5,-1,-5,-1" Padding="0" />
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
-                                </GridViewColumn>
+                                </GridViewColumn-->
 
                                 <GridViewColumn Header="Damage" x:Name="DBDamageColumn" Width="{Binding ElementName=DmgH, Path=ActualWidth}">
                                     <GridViewColumn.CellTemplate>
@@ -527,13 +527,13 @@
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
 
-                                <GridViewColumn Header="%" x:Name="LswPercentColumn" Width="{Binding ElementName=PercentH, Path=ActualWidth}">
+                                <!--GridViewColumn Header="%" x:Name="LswPercentColumn" Width="{Binding ElementName=PercentH, Path=ActualWidth}">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <TextBlock Text="{Binding LswReadPct}" TextAlignment="Right" Margin="-5,-1,-5,-1" Padding="0" />
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
-                                </GridViewColumn>
+                                </GridViewColumn-->
 
                                 <GridViewColumn Header="Damage" x:Name="LswDamageColumn" Width="{Binding ElementName=DmgH, Path=ActualWidth}">
                                     <GridViewColumn.CellTemplate>
@@ -626,13 +626,13 @@
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
 
-                                <GridViewColumn Header="%" x:Name="PwpPercentColumn" Width="{Binding ElementName=PercentH, Path=ActualWidth}">
+                                <!--GridViewColumn Header="%" x:Name="PwpPercentColumn" Width="{Binding ElementName=PercentH, Path=ActualWidth}">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <TextBlock Text="{Binding PwpReadPct}" TextAlignment="Right" Margin="-5,-1,-5,-1" Padding="0" />
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
-                                </GridViewColumn>
+                                </GridViewColumn-->
 
                                 <GridViewColumn Header="Damage" x:Name="PwpDamageColumn" Width="{Binding ElementName=DmgH, Path=ActualWidth}">
                                     <GridViewColumn.CellTemplate>
@@ -725,13 +725,13 @@
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
 
-                                <GridViewColumn Header="%" x:Name="AisPercentColumn" Width="{Binding ElementName=PercentH, Path=ActualWidth}">
+                                <!--GridViewColumn Header="%" x:Name="AisPercentColumn" Width="{Binding ElementName=PercentH, Path=ActualWidth}">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <TextBlock Text="{Binding AisReadPct}" TextAlignment="Right" Margin="-5,-1,-5,-1" Padding="0" />
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
-                                </GridViewColumn>
+                                </GridViewColumn-->
 
                                 <GridViewColumn Header="Damage" x:Name="AisDamageColumn" Width="{Binding ElementName=DmgH, Path=ActualWidth}">
                                     <GridViewColumn.CellTemplate>
@@ -825,13 +825,13 @@
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
 
-                                <GridViewColumn Header="%" x:Name="RidePercentColumn" Width="{Binding ElementName=PercentH, Path=ActualWidth}">
+                                <!--GridViewColumn Header="%" x:Name="RidePercentColumn" Width="{Binding ElementName=PercentH, Path=ActualWidth}">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <TextBlock Text="{Binding RideReadPct}" TextAlignment="Right" Margin="-5,-1,-5,-1" Padding="0" />
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
-                                </GridViewColumn>
+                                </GridViewColumn-->
 
                                 <GridViewColumn Header="Damage" x:Name="RideDamageColumn" Width="{Binding ElementName=DmgH, Path=ActualWidth}">
                                     <GridViewColumn.CellTemplate>
@@ -908,16 +908,16 @@
 
             <Grid Visibility="Hidden" Grid.Row="1" Margin="0" Grid.RowSpan="2">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition x:Name="NameHC" Width="1*"/>
-                    <ColumnDefinition x:Name="PercentHC" Width="0"/>
-                    <ColumnDefinition x:Name="DmgHC" Width="78"/>
-                    <ColumnDefinition x:Name="DmgDHC" Width="50" />
-                    <ColumnDefinition x:Name="DPSHC" Width="50"/>
-                    <ColumnDefinition x:Name="JAHC" Width="32"/>
-                    <ColumnDefinition x:Name="CriHC" Width="32"/>
-                    <ColumnDefinition x:Name="MdmgHC" Width="60"/>
-                    <ColumnDefinition x:Name="AtkHC" Width="1.7*"/>
-                    <ColumnDefinition x:Name="TabHC" Width="30" />
+                    <ColumnDefinition x:Name="NameHC" Width="1.5*"/>
+                    <ColumnDefinition x:Name="PercentHC" Width="25"/>
+                    <ColumnDefinition x:Name="DmgHC" Width="72"/>
+                    <ColumnDefinition x:Name="DmgDHC" Width="46" />
+                    <ColumnDefinition x:Name="DPSHC" Width="44"/>
+                    <ColumnDefinition x:Name="JAHC" Width="28"/>
+                    <ColumnDefinition x:Name="CriHC" Width="28"/>
+                    <ColumnDefinition x:Name="MdmgHC" Width="50"/>
+                    <ColumnDefinition x:Name="AtkHC" Width="1.5*"/>
+                    <ColumnDefinition x:Name="TabHC" Width="25" />
                 </Grid.ColumnDefinitions>
                 <Grid Grid.Column="0" x:Name="NameH" />
                 <Grid Grid.Column="1" x:Name="PercentH" />
