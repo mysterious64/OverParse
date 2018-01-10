@@ -305,7 +305,7 @@ namespace OverParse
                 {
                     if (Properties.Settings.Default.Nodecimal)
                     {
-                        return ((Attacks.Average(a => a.JA)) * 100).ToString("N0");
+                        return ((Attacks.Where(a => !MainWindow.ignoreskill.Contains(a.ID)).Average(x => x.JA)) * 100).ToString("N0");
                     } else {
                         return ((Attacks.Where(a => !MainWindow.ignoreskill.Contains(a.ID)).Average(x => x.JA)) * 100).ToString("N2");
                     }
