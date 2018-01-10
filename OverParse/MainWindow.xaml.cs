@@ -175,6 +175,12 @@ namespace OverParse
                     tmp = new string[0];
                 }
             }
+            try {
+                ignoreskill = File.ReadAllLines("ignoreskills.csv");
+            } catch (Exception e) {
+                MessageBox.Show(e.ToString());
+                ignoreskill = new string[] { "12345678900" }; //Placeholder Value
+            }
 
             Console.WriteLine("Parsing skills.csv");
             
