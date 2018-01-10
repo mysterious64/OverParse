@@ -895,10 +895,10 @@
                 </TabItem>
                 <TabItem Header="Lap3" Width="{Binding ElementName=TabH, Path=ActualWidth}" Padding="0" Margin="0">
 
-                </TabItem>
+                </TabItem-->
                 <TabItem Header="Info" Width="{Binding ElementName=TabH, Path=ActualWidth}" Padding="0" Margin="0">
                     <TextBox x:Name="Abouttext" Background="Transparent" Foreground="White" FontSize="16" FontFamily="Noto Sans CJK JP DemiLight" IsHitTestVisible="False" BorderThickness="0" />
-                </TabItem-->
+                </TabItem>
             </TabControl>
 
             <Grid Visibility="Hidden" Grid.Row="1" Margin="0" Grid.RowSpan="2">
