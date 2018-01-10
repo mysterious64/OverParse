@@ -887,7 +887,7 @@
                         </ListView.View>
                     </ListView>
                 </TabItem>
-                <TabItem Header="Lap1" Width="{Binding ElementName=TabH, Path=ActualWidth}" Padding="0" Margin="0">
+                <!--TabItem Header="Lap1" Width="{Binding ElementName=TabH, Path=ActualWidth}" Padding="0" Margin="0">
 
                 </TabItem>
                 <TabItem Header="Lap2" Width="{Binding ElementName=TabH, Path=ActualWidth}" Padding="0" Margin="0">
@@ -898,15 +898,15 @@
                 </TabItem>
                 <TabItem Header="Info" Width="{Binding ElementName=TabH, Path=ActualWidth}" Padding="0" Margin="0">
                     <TextBox x:Name="Abouttext" Background="Transparent" Foreground="White" FontSize="16" FontFamily="Noto Sans CJK JP DemiLight" IsHitTestVisible="False" BorderThickness="0" />
-                </TabItem>
+                </TabItem-->
             </TabControl>
 
             <Grid Visibility="Hidden" Grid.Row="1" Margin="0" Grid.RowSpan="2">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition x:Name="NameHC" Width="1.5*"/>
-                    <ColumnDefinition x:Name="PercentHC" Width="25"/>
+                    <ColumnDefinition x:Name="PercentHC" Width="0"/>
                     <ColumnDefinition x:Name="DmgHC" Width="72"/>
-                    <ColumnDefinition x:Name="DmgDHC" Width="46" />
+                    <ColumnDefinition x:Name="DmgDHC" Width="52" />
                     <ColumnDefinition x:Name="DPSHC" Width="44"/>
                     <ColumnDefinition x:Name="JAHC" Width="28"/>
                     <ColumnDefinition x:Name="CriHC" Width="28"/>
