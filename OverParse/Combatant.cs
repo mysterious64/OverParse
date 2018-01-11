@@ -537,9 +537,9 @@ namespace OverParse
         }
 
         // Calclate the actual Damage Per Second / DPS
-        private string CalculateDPS (IEnumerable<OverParse.Attack> attackID) 
+        private string CalculateDPS (int damageDealt) 
         {
-            return Math.Round(attackID / (double)ActiveTime).ToString("N0");
+            return Math.Round(damageDealt / (double)ActiveTime).ToString("N0");
         }
 
         // Fetch the total Damage Dealt value [ Use after (GetAttackID) function ]
