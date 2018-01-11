@@ -488,16 +488,24 @@ namespace OverParse
         }
 
         // Fetch the attack ID
-        private string GetAttackID (string attackID) 
+        private List<Attack> GetAttackID (params string[] attackID) 
         {
             return Attacks.Where(a => attackID.Contains(a.ID));
         }
 
-        // Use after [ GetAttackID ] function
-        private string AverageJACrit (Func<string, string> func, string attackID, string criJA = "Cri") 
+        // Fetch the JA/Critical value (Use after [ GetAttackID ] function)
+        private string GetJACrit (Func<List<Attack>, List<Attack>> func, string attackID, string criJA) 
         {
-            string data = func(attackID);
-            return (data.Average(x => x.criJA) * 100).ToString("N2");
+            IEnumerable<OverParse.Attack> data = func(attackID);
+
+            if (criJA == "Cri") 
+            {
+                return (data.Average(x => x.Cri) * 100).ToString("N2");    
+            }
+            else 
+            {
+                return (data.Average(x => x.JA) * 100).ToString("N2");
+            }
         }
 
         // Constructor #1

@@ -199,7 +199,7 @@ namespace OverParse
                 File.Copy(Directory.GetCurrentDirectory() + "\\resources\\PSO2DamageDump.dll", attemptDirectory + "\\plugins" + "\\PSO2DamageDump.dll", true);
                 File.Copy(Directory.GetCurrentDirectory() + "\\resources\\PSO2DamageDump.cfg", attemptDirectory + "\\plugins" + "\\PSO2DamageDump.cfg", true);
                 Properties.Settings.Default.InstalledPluginVersion = pluginVersion;
-                MessageBox.Show("etup complete! A few files have been copied to your pso2_bin folder.\n\nIf PSO2 is running right now, you'll need to close it before the changes can take effect.", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show("Setup complete! A few files have been copied to your pso2_bin folder.\n\nIf PSO2 is running right now, you'll need to close it before the changes can take effect.", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Information);
                 // Console.WriteLine("Plugin install successful");
                 return true;
             }
@@ -267,14 +267,14 @@ namespace OverParse
                 string timer = timespan.ToString(@"mm\:ss");
                 string log = DateTime.Now.ToString("F") + " | " + timer + " | "  + Environment.NewLine + Environment.NewLine;
 
+                log += Environment.NewLine;
+
                 foreach (Combatant c in combatants)
                 {
-                    try
+                    if (c.IsAlly || c.IsZanverse || c.IsFinish)
                     {
-                        if (c.IsAlly || c.IsZanverse || c.IsFinish)
-                            log += $"{c.Name} | {c.PercentReadDPSReadout}% | {c.ReadDamage.ToString("N0")} dmg | {c.Damaged} dmgd | {c.DPS} DPS | JA : {c.WJAPercent}% | Critical : {c.WCRIPercent}% | Max:{c.MaxHitdmg} ({c.MaxHit})" + Environment.NewLine;
+                        log += $"{c.Name} | {c.PercentReadDPSReadout} contrib | {c.ReadDamage.ToString("N0")} dmg | {c.Damaged} dmgd | {c.DPS} DPS | JA : {c.WJAPercent}% | Critical : {c.WCRIPercent}% | Max: {c.MaxHitdmg} ({c.MaxHit})" + Environment.NewLine;
                     }
-                    catch{/* 今の所何もしないっぽい */}
                 }
 
                 log += Environment.NewLine + Environment.NewLine;
@@ -361,10 +361,10 @@ namespace OverParse
                             string avg = i.Item2.Average().ToString("N0");
                             //string ja = (i.Item3.Average() * 100).ToString("N2") ?? "null";
                             //string cri = (i.Item4.Average() * 100).ToString("N2") ?? "null" ;
-                            log += $"{paddedPercent}%   | {i.Item1} - {sum} dmg";
+                            log += $"{paddedPercent}% | {i.Item1} ({sum} dmg)";
                             //log += $" - JA : {ja}% - Critical : {cri}%";
                             log += Environment.NewLine;
-                            log += $"   |   {hits} hits - {min} min, {avg} avg, {max} max" + Environment.NewLine;
+                            log += $"       |   {hits} hits - {min} min, {avg} avg, {max} max" + Environment.NewLine;
                         }
 
                         log += Environment.NewLine;
@@ -400,7 +400,7 @@ namespace OverParse
 
             if (!running)
             {
-                return $"Waiting...";
+                return $"Waiting for combat data...";
             }
 
             return encounterData;
