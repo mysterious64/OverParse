@@ -511,7 +511,7 @@ namespace OverParse
         }
 
         // Fetch the Max Damage Hit that the player did
-        private IEnumerable<OverParse.Attack> GetMaxHit (params string[] attackID) 
+        private Attack GetMaxHit (params string[] attackID) 
         {
             Attacks.RemoveAll(a => !attackID.Contains(a.ID));
             Attacks.Sort((x, y) => y.Damage.CompareTo(x.Damage));
