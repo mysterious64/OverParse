@@ -19,12 +19,85 @@ namespace OverParse
         // Static Variables
         public static float maxShare = 0;
         public static string Log;
-        public static string[] FinishAttackIDs = new string[] { "2268332858", "170999070", "2268332813", "1266101764", "11556353", "1233721870", "1233722348", "3480338695" };
-        public static string[] PhotonAttackIDs = new string[] { "2414748436", "1954812953", "2822784832", "3339644659", "2676260123", "224805109" };
-        public static string[] LaconiumAttackIDs = new string[] { "1913897098", "2235773608", "2235773610", "2235773611", "2235773818", "2235773926", "2235773927", "2235773944", "2618804663", "2619614461", "3607718359" };
-        public static string[] AISAttackIDs = new string[] { "119505187", "79965782", "79965783", "79965784", "80047171", "434705298", "79964675", "1460054769", "4081218683", "3298256598", "2826401717" };
-        public static string[] DBAttackIDs = new string[] { "267911699", "262346668", "265285249", "264996390" , "311089933" , "3988916155" , "265781051" , "3141577094" , "2289473436" , "517914866" , "517914869" , "1117313539" , "1611279117" , "3283361988" , "1117313602" , "395090797" , "2429416220" , "1697271546" , "1117313924" };
-        public static string[] RideAttackIDs = new string[] { "3491866260", "2056025809", "2534881408", "2600476838", "1247666429", "3750571080", "3642240295", "651750924", "2452463220", "1732461796", "3809261131", "1876785244", "3765765641", "3642969286", "1258041436" };
+
+        // Hero Finish Attack IDs
+        public static string[] FinishAttackIDs      = new string[] { "2268332858"  , // Hero Time Sword slashes
+                                                                     "170999070"   , // Hero Time Sword finish
+                                                                     "2268332813"  , // Hero Time Sword finish hard hit
+                                                                     "1266101764"  , // Hero Time Talis pull-in
+                                                                     "11556353"    , // Hero Time Talis slashes
+                                                                     "1233721870"  , // Hero Time Talis slashes while switched to Sword
+                                                                     "1233722348"  , // Hero Time Talis slashes while switched to TMG
+                                                                     "3480338695" }; // Hero Time TMG burst
+        // Photon Weaponry Attack IDs
+        public static string[] PhotonAttackIDs      = new string[] { "2414748436"  , // Facility Cannon
+                                                                     "1954812953"  , // Photon Cannon (Uncharged)
+                                                                     "2822784832"  , // Photon Cannon (Charged)
+                                                                     "3339644659"  , // Photon Particle Turret
+                                                                     "2676260123"  , // Photon Laser Cannon
+                                                                     "224805109"  }; // Photon Punisher
+        // A.I.S. Weapon Attack IDs
+        public static string[] AISAttackIDs         = new string[] { "119505187"   , // A.I.S rifle (Solid Vulcan)
+                                                                     "79965782"    , // A.I.S melee first attack (Photon Saber)
+                                                                     "79965783"    , // A.I.S melee second attack (Photon Saber)
+                                                                     "79965784"    , // A.I.S melee third attack (Photon Saber)
+                                                                     "80047171"    , // A.I.S dash melee (Photon Saber)
+                                                                     "434705298"   , // A.I.S rockets (Photon Grenade)
+                                                                     "79964675"    , // A.I.S gap closer PA attack (Photon Rush)
+                                                                     "1460054769"  , // A.I.S cannon (Photon Blaster)
+                                                                     "4081218683"  , // A.I.S mob freezing attack (Photon Blizzard)
+                                                                     "3298256598"  , // A.I.S Weak Bullet
+                                                                     "2826401717" }; // A.I.S Area Heal
+        // Rideroid Weapon Attack IDs
+        public static string[] RideAttackIDs        = new string[] { "3491866260"  , // Rideroid throw
+                                                                     "2056025809"  , // Rideroid hit forward slow
+                                                                     "2534881408"  , // Rideroid hit forward stop
+                                                                     "2600476838"  , // Rideroid hit dodge
+                                                                     "1247666429"  , // Rideroid hit forward fast
+                                                                     "3750571080"  , // Big UFO outer control unit hit?
+                                                                     "3642240295"  , // Big UFO Core hit?
+                                                                     "651750924"   , // Big UFO hit?
+                                                                     "2452463220"  , // Something relating to big ufo and rideroid
+                                                                     "1732461796"  , // Something relating to big ufo and rideroid
+                                                                     "3809261131"  , // Something relating to big ufo and rideroid
+                                                                     "1876785244"  , // Rideroid auto-attack (Mother phase 1)
+                                                                     "3765765641"  , // Rideroid rockets (Mother phase 1)
+                                                                     "3642969286"  , // Rideroid barrel roll (Mother phase 1)
+                                                                     "1258041436" }; // Rideroid Mother's wall spun back (Mother phase 1)
+        // Dark Blast Attack IDs
+        public static string[] DBAttackIDs          = new string[] { "267911699"   , // Dark Blast first hit
+                                                                     "262346668"   , // Dark Blast second
+                                                                     "265285249"   , // Dark Blast third
+                                                                     "264996390"   , // Dark Blast fourth (kick)
+                                                                     "311089933"   , // Dark Blast fifth (launcher)
+                                                                     "3988916155"  , // Dark Blast sixth (pummel)
+                                                                     "265781051"   , // Dark Blast seventh (pummel pt2)
+                                                                     "3141577094"  , // Dark Blast Step Attack
+                                                                     "2289473436"  , // Dark Blast Violence Step
+                                                                     "517914866"   , // Physical Dash melee
+                                                                     "517914869"   , // Physical Dash melee wide range
+                                                                     "1117313539"  , // Punishment Knuckle (uncharged)
+                                                                     "1611279117"  , // Punishment Knuckle (charged)
+                                                                     "3283361988"  , // Ultimate Impact
+                                                                     "1117313602"  , // Infinity Rush hits (uncharged)
+                                                                     "395090797"   , // Infinity Rush finish (uncharged)
+                                                                     "2429416220"  , // Infinity Rush hits charged
+                                                                     "1697271546"  , // Infinity Rush finish charged
+                                                                     "1117313924" }; // Tyrant Strike
+        // Laconium Sword (& Cannons) Attack IDs
+        public static string[] LaconiumAttackIDs    = new string[] { "1913897098"  , // Rapid-Fire Mana Gun
+                                                                     "2235773608"  , // Laconium Sword air second normal attack 
+                                                                     "2235773610"  , // Laconium Sword air first normal attack 
+                                                                     "2235773611"  , // Laconium Sword air third normal attack
+                                                                     "2235773818"  , // Buster Divide (Laconium Sword uncharged)
+                                                                     "2235773926"  , // Laconium Sword second normal attack
+                                                                     "2235773927"  , // Laconium Sword first normal attack
+                                                                     "2235773944"  , // Laconium Sword third normal attack
+                                                                     "2618804663"  , // Buster Divide (Laconium Sword charged)
+                                                                     "2619614461"  , // Laconium Sword Step Attack
+                                                                     "3607718359" }; // Laconium Sword slash
+        // List of the above attack IDs combined
+        public static string[] NonAllyAttackIDs     = PhotonAttackIDs.Concat(AISAttackIDs).Concat(RideAttackIDs).Concat(DBAttackIDs).Concat(LaconiumAttackIDs).ToArray();
 
         public int Damage => Attacks.Sum(x => x.Damage);
 
@@ -68,81 +141,20 @@ namespace OverParse
 
         public string DPSReadout => PercentReadDPSReadout;
 
-        //Ally Data
-        public string AllyReadPct => AllyPct.ToString("N2");
-        public int AllyDamage
-        {
-            get
-            {
-                int temp = Damage;
-                int temp2 = DBDamage + PwpDamage + AisDamage + RideDamage;
-                temp -= temp2;
-                if (Properties.Settings.Default.SeparateZanverse)
-                    temp -= GetZanverseDamage;
-                if (Properties.Settings.Default.SeparateFinish)
-                    temp -= GetFinishDamage;
-                return temp;
-            }
-        }
-        public string AllyReadDamage => AllyDamage.ToString("N0");
-        public string AllyDPS => Math.Round(AllyDamage / (double)ActiveTime).ToString("N0");
-        public string AllyJAPct => (Attacks.Where(a => !DBAttackIDs.Contains(a.ID) && !PhotonAttackIDs.Contains(a.ID) && !AISAttackIDs.Contains(a.ID) && !RideAttackIDs.Contains(a.ID)).Average(x => x.JA) * 100).ToString("N2");
-        public string AllyCriPct => (Attacks.Where(a => !DBAttackIDs.Contains(a.ID) && !PhotonAttackIDs.Contains(a.ID) && !AISAttackIDs.Contains(a.ID) && !RideAttackIDs.Contains(a.ID)).Average(x => x.Cri) * 100).ToString("N2");
-        public string AllyMaxHitdmg => AllyMaxHit.Damage.ToString("N0");
-        public string AllyAtkName
-        {
-            get
-            {
-                if (AllyMaxHit == null) { return "--"; }
-                string attack = "Unknown";
-                if (MainWindow.skillDict.ContainsKey(AllyMaxHit.ID)) { attack = MainWindow.skillDict[AllyMaxHit.ID]; }
-                return MaxHitAttack.Damage.ToString(attack);
-            }
-        }
-        public Attack AllyMaxHit
-        {
-            get
-            {
-                Attacks.RemoveAll(a => (DBAttackIDs.Contains(a.ID) || PhotonAttackIDs.Contains(a.ID) || AISAttackIDs.Contains(a.ID) || RideAttackIDs.Contains(a.ID)));
-                Attacks.Sort((x, y) => y.Damage.CompareTo(x.Damage));
-                if (Attacks != null)
-                {
-                    return Attacks.FirstOrDefault();
-                } else {
-                    return null;
-                }
-            }
-        }
-
-        /* Dark Blast (DaB) - Ultimate Dark Falz Player Shenanigans (Ultimate IMPACT etc.)
+        /* Player-chan - A.R.K.S. Guardian / Protaganist / Matoi's Love Interest 
          * GET Data Properties
-         */ 
+         */
 
-        public int      DBDamage        => GetDamageDealt(GetAttackID(DBAttackIDs));    // DaB Total Damage
-        public Attack   DBMaxHit        => GetMaxHit(DBAttackIDs);                      // DaB Max Hit Damage
-        public string   DBAtkName       => GetAttackName(DBMaxHit);                     // DaB Max Hit Attack Name
-        public string   DBDPS           => CalculateDPS(DBDamage);                      // DaB DPS
-        public string   DBJAPct         => GetJAValue(GetAttackID(DBAttackIDs));        // DaB JA Percentage (%)
-        public string   DBCriPct        => GetCritValue(GetAttackID(DBAttackIDs));      // DaB Critical Percentage (%)
+        public int      AllyDamage       => GetDamageDealt(GetAttackID(NonAllyAttackIDs, true)); // Ally Total Damage
+        public Attack   AllyMaxHit       => GetMaxHit(NonAllyAttackIDs, true);                   // Ally Max Hit Damage
+        public string   AllyAtkName      => GetAttackName(AllyMaxHit);                           // Ally Max Hit Attack Name
+        public string   AllyDPS          => CalculateDPS(AllyDamage);                            // Ally DPS
+        public string   AllyJAPct        => GetJAValue(GetAttackID(NonAllyAttackIDs, true));     // Ally JA Percentage (%)
+        public string   AllyCriPct       => GetCritValue(GetAttackID(NonAllyAttackIDs, true));   // Ally Critical Percentage (%)
 
-        public string   DBReadPct       => DBPct.ToString("N2");            // Read DaB on MPA contribution (%)
-        public string   DBReadDamage    => DBDamage.ToString("N0");         // Read DaB on damage dealt
-        public string   DBMaxHitdmg     => DBMaxHit.Damage.ToString("N0");  // Read DaB on Max Hit for damage
-
-        /* Laconium Sword | Mana Cannons (LwS) - Feminized Gilgamesh VS Giant Winged Fire-breathing Lizard
-         * GET Data Properties
-         */ 
-        
-        public int      LswDamage       => GetDamageDealt(GetAttackID(LaconiumAttackIDs)); // LwS Total Damage
-        public Attack   LswMaxHit       => GetMaxHit(LaconiumAttackIDs);                   // LwS Max Hit Damage
-        public string   LswAtkName      => GetAttackName(LswMaxHit);                       // LwS Max Hit Attack Name
-        public string   LswDPS          => CalculateDPS(LswDamage);                        // LwS DPS
-        public string   LswJAPct        => GetJAValue(GetAttackID(LaconiumAttackIDs));     // LwS JA Percentage (%)
-        public string   LswCriPct       => GetCritValue(GetAttackID(LaconiumAttackIDs));   // LwS Critical Percentage (%)
-
-        public string   LswReadPct      => LswPct.ToString("N2");            // Read LwS on MPA contribution (%)
-        public string   LswReadDamage   => LswDamage.ToString("N0");         // Read LwS on damage dealt
-        public string   LswMaxHitdmg    => LswMaxHit.Damage.ToString("N0");  // Read LwS on Max Hit for damage
+        public string   AllyReadPct      => AllyPct.ToString("N2");            // Read Ally on MPA contribution (%)
+        public string   AllyReadDamage   => AllyDamage.ToString("N0");         // Read Ally on damage dealt
+        public string   AllyMaxHitdmg    => AllyMaxHit.Damage.ToString("N0");  // Read Ally on Max Hit for damage
 
         /* Photon Weaponry (PwP) - A.R.K.S. Supplied Tools of "Massive Destruction" (Photon Punisher etc.)
          * GET Data Properties
@@ -188,6 +200,36 @@ namespace OverParse
         public string   RideReadPct     => RidePct.ToString("N2");            // Read Ride on MPA contribution (%)
         public string   RideReadDamage  => RideDamage.ToString("N0");         // Read Ride on damage dealt
         public string   RideMaxHitdmg   => RideMaxHit.Damage.ToString("N0");  // Read Ride on Max Hit for damage
+
+        /* Dark Blast (DaB) - Ultimate Dark Falz Player Shenanigans (Ultimate IMPACT etc.)
+         * GET Data Properties
+         */ 
+
+        public int      DBDamage        => GetDamageDealt(GetAttackID(DBAttackIDs));    // DaB Total Damage
+        public Attack   DBMaxHit        => GetMaxHit(DBAttackIDs);                      // DaB Max Hit Damage
+        public string   DBAtkName       => GetAttackName(DBMaxHit);                     // DaB Max Hit Attack Name
+        public string   DBDPS           => CalculateDPS(DBDamage);                      // DaB DPS
+        public string   DBJAPct         => GetJAValue(GetAttackID(DBAttackIDs));        // DaB JA Percentage (%)
+        public string   DBCriPct        => GetCritValue(GetAttackID(DBAttackIDs));      // DaB Critical Percentage (%)
+
+        public string   DBReadPct       => DBPct.ToString("N2");            // Read DaB on MPA contribution (%)
+        public string   DBReadDamage    => DBDamage.ToString("N0");         // Read DaB on damage dealt
+        public string   DBMaxHitdmg     => DBMaxHit.Damage.ToString("N0");  // Read DaB on Max Hit for damage
+
+        /* Laconium Sword | Mana Cannons (LwS) - Feminized Gilgamesh VS Giant Winged Fire-breathing Lizard
+         * GET Data Properties
+         */ 
+        
+        public int      LswDamage       => GetDamageDealt(GetAttackID(LaconiumAttackIDs)); // LwS Total Damage
+        public Attack   LswMaxHit       => GetMaxHit(LaconiumAttackIDs);                   // LwS Max Hit Damage
+        public string   LswAtkName      => GetAttackName(LswMaxHit);                       // LwS Max Hit Attack Name
+        public string   LswDPS          => CalculateDPS(LswDamage);                        // LwS DPS
+        public string   LswJAPct        => GetJAValue(GetAttackID(LaconiumAttackIDs));     // LwS JA Percentage (%)
+        public string   LswCriPct       => GetCritValue(GetAttackID(LaconiumAttackIDs));   // LwS Critical Percentage (%)
+
+        public string   LswReadPct      => LswPct.ToString("N2");            // Read LwS on MPA contribution (%)
+        public string   LswReadDamage   => LswDamage.ToString("N0");         // Read LwS on damage dealt
+        public string   LswMaxHitdmg    => LswMaxHit.Damage.ToString("N0");  // Read LwS on Max Hit for damage
 
         public string FDPSReadout
         {
@@ -348,7 +390,6 @@ namespace OverParse
             }
         }
 
-
         /* CLASS FUNCTIONS */ 
 
         // Censors other players' name except the user
@@ -401,15 +442,30 @@ namespace OverParse
         }
 
         // Fetch the attack ID
-        private IEnumerable<OverParse.Attack> GetAttackID (params string[] attackID) 
+        private IEnumerable<OverParse.Attack> GetAttackID (params string[] attackID, bool ally = false) 
         {
-            return Attacks.Where(a => attackID.Contains(a.ID));
+            if (ally) 
+            {
+                return Attacks.Where(a => !attackID.Contains(a.ID));
+            } 
+            else 
+            {
+                return Attacks.Where(a => attackID.Contains(a.ID));
+            }
         }
 
         // Fetch the Max Damage Hit that the player did
-        private Attack GetMaxHit (params string[] attackID) 
+        private Attack GetMaxHit (params string[] attackID, bool ally = false) 
         {
-            Attacks.RemoveAll(a => !attackID.Contains(a.ID));
+            if (ally) 
+            {
+                Attacks.RemoveAll(a => attackID.Contains(a.ID));
+            } 
+            else 
+            {
+                Attacks.RemoveAll(a => !attackID.Contains(a.ID));
+            }
+
             Attacks.Sort((x, y) => y.Damage.CompareTo(x.Damage));
 
             if (Attacks != null)
@@ -439,9 +495,24 @@ namespace OverParse
         }
 
         // Fetch the total Damage Dealt value [ Use after (GetAttackID) function ]
-        private int GetDamageDealt (IEnumerable<OverParse.Attack> attackID) 
+        private int GetDamageDealt (IEnumerable<OverParse.Attack> attackID, bool ally = false) 
         {
-            return attackID.Sum(x => x.Damage);
+            if (ally) 
+            {
+                int temp = Damage;
+                int temp2 = attackID;
+
+                temp -= temp2;
+
+                if (Properties.Settings.Default.SeparateZanverse) { temp -= GetZanverseDamage; }
+                if (Properties.Settings.Default.SeparateFinish) { temp -= GetFinishDamage; }
+
+                return temp;
+            } 
+            else 
+            {
+                return attackID.Sum(x => x.Damage);
+            }
         }
 
         // Fetch the Just Attack value [ Use after (GetAttackID) function ]
