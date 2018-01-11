@@ -120,7 +120,7 @@ namespace OverParse
         public string DBReadDamage => DBDamage.ToString("N0");
         public string DBDPS => Math.Round(DBDamage / (double)ActiveTime).ToString("N0");
 
-        public string DBJAPct => GetJACrit(GetAttackID, "DBAttackIDs", "JA");
+        public string DBJAPct => GetJACrit(GetAttackID(DBAttackIDs), "JA");
 
 
         // public string DBJAPct => (Attacks.Where(a => DBAttackIDs.Contains(a.ID)).Average(x => x.JA) * 100).ToString("N2");
@@ -494,17 +494,15 @@ namespace OverParse
         }
 
         // Fetch the JA/Critical value (Use after [ GetAttackID ] function)
-        private string GetJACrit (Func<List<Attack>, List<Attack>> func, string attackID, string criJA) 
+        private string GetJACrit (IEnumerable<OverParse.Attack> attackID, string criJA) 
         {
-            IEnumerable<OverParse.Attack> data = func(attackID);
-
             if (criJA == "Cri") 
             {
-                return (data.Average(x => x.Cri) * 100).ToString("N2");    
+                return (attackID.Average(x => x.Cri) * 100).ToString("N2");    
             }
-            else if (criJA == "JA")
+            else
             {
-                return (data.Average(x => x.JA) * 100).ToString("N2");
+                return (attackID.Average(x => x.JA) * 100).ToString("N2");
             }
         }
 
