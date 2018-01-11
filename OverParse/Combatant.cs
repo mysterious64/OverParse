@@ -114,19 +114,27 @@ namespace OverParse
             }
         }
 
-        //DarkBlast Data
-        public string DBReadPct => DBPct.ToString("N2");
-        public int DBDamage => Attacks.Where(a => DBAttackIDs.Contains(a.ID)).Sum(x => x.Damage);
-        public string DBReadDamage => DBDamage.ToString("N0");
-        public string DBDPS => Math.Round(DBDamage / (double)ActiveTime).ToString("N0");
+        /* Dark Blast (DaB) - Ultimate Dark Falz Player Shenanigans
+         * GET Data Properties
+         */ 
 
-        public string DBJAPct => GetJACrit(GetAttackID(DBAttackIDs), "JA");
+        public int      DBDamage        => GetDamageDealt(GetAttackID(DBAttackIDs));    // DaB Total Damage
+        public Attack   DBMaxHit        => GetMaxHit(DBAttackIDs);                      // DaB Max Hit Damage
+        public string   DBAtkName       => GetAttackName(DBMaxHit);                     // DaB Max Hit Attack Name
+        public string   DBDPS           => CalculateDPS(DBDamage);                      // DaB DPS
+        public string   DBJAPct         => GetJAValue(GetAttackID(DBAttackIDs));        // DaB JA Percentage (%)
+        public string   DBCriPct        => GetCritValue(GetAttackID(DBAttackIDs));      // DaB Critical Percentage (%)
 
+        public string   DBReadPct       => DBPct.ToString("N2");            // Read DaB on MPA contribution (%)
+        public string   DBReadDamage    => DBDamage.ToString("N0");         // Read DaB on damage dealt
+        public string   DBMaxHitdmg     => DBMaxHit.Damage.ToString("N0");  // Read DaB on Max Hit for damage
 
+        // public int DBDamage => Attacks.Where(a => DBAttackIDs.Contains(a.ID)).Sum(x => x.Damage);
+        // public string DBDPS => Math.Round(DBDamage / (double)ActiveTime).ToString("N0");
         // public string DBJAPct => (Attacks.Where(a => DBAttackIDs.Contains(a.ID)).Average(x => x.JA) * 100).ToString("N2");
-        public string DBCriPct => (Attacks.Where(a => DBAttackIDs.Contains(a.ID)).Average(x => x.Cri) * 100).ToString("N2");
-        public string DBMaxHitdmg => DBMaxHit.Damage.ToString("N0");
-        public string DBAtkName
+        // public string DBCriPct => (Attacks.Where(a => DBAttackIDs.Contains(a.ID)).Average(x => x.Cri) * 100).ToString("N2");
+        
+        /*public string DBAtkName
         {
             get
             {
@@ -135,8 +143,9 @@ namespace OverParse
                 if (MainWindow.skillDict.ContainsKey(DBMaxHit.ID)) { attack = MainWindow.skillDict[DBMaxHit.ID]; }
                 return MaxHitAttack.Damage.ToString(attack);
             }
-        }
-        public Attack DBMaxHit
+        }*/
+
+        /*public Attack DBMaxHit
         {
             get
             {
@@ -149,7 +158,7 @@ namespace OverParse
                     return null;
                 }
             }
-        }
+        }*/
 
         //Laconium sword Data
         public string LswReadPct => LswPct.ToString("N2");
@@ -355,29 +364,6 @@ namespace OverParse
             }
         }
 
-        private String FormatNumber(double value)
-        {
-            int num = (int)Math.Round(value);
-
-            if (value >= 100000000)
-                return (value / 1000000).ToString("#,0") + "M";
-            if (value >= 1000000)
-                return (value / 1000000D).ToString("0.0") + "M";
-            if (value >= 100000)
-                return (value / 1000).ToString("#,0") + "K";
-            if (value >= 1000)
-                return (value / 1000D).ToString("0.0") + "K";
-            return value.ToString("#,0");
-        }
-
-        public string AnonymousName()
-        {
-            if (IsYou)
-                return Name;
-            else
-                return "----";
-        }
-
         public string DisplayName
         {
             get
@@ -415,27 +401,6 @@ namespace OverParse
                     return new SolidColorBrush(new Color());
                 }
             }
-        }
-
-        LinearGradientBrush GenerateBarBrush(Color c, Color c2)
-        {
-            if (!Properties.Settings.Default.ShowDamageGraph)
-                c = new Color();
-
-            if (IsYou && Properties.Settings.Default.HighlightYourDamage)
-                c = Color.FromArgb(128, 0, 255, 255);
-
-            LinearGradientBrush lgb = new LinearGradientBrush
-            {
-                StartPoint = new System.Windows.Point(0, 0),
-                EndPoint = new System.Windows.Point(1, 0)
-            };
-            lgb.GradientStops.Add(new GradientStop(c, 0));
-            lgb.GradientStops.Add(new GradientStop(c, ReadDamage / maxShare));
-            lgb.GradientStops.Add(new GradientStop(c2, ReadDamage / maxShare));
-            lgb.GradientStops.Add(new GradientStop(c2, 1));
-            lgb.SpreadMethod = GradientSpreadMethod.Repeat;
-            return lgb;
         }
 
         public bool IsAlly
@@ -487,22 +452,125 @@ namespace OverParse
             }
         }
 
+
+        /* CLASS FUNCTIONS */ 
+
+        // Censors other players' name except the user
+        public string AnonymousName()
+        {
+            if (IsYou)
+                return Name;
+            else
+                return "----";
+        }
+
+        // Draw method for generating the damage graph
+        LinearGradientBrush GenerateBarBrush(Color c, Color c2)
+        {
+            if (!Properties.Settings.Default.ShowDamageGraph)
+                c = new Color();
+
+            if (IsYou && Properties.Settings.Default.HighlightYourDamage)
+                c = Color.FromArgb(128, 0, 255, 255);
+
+            LinearGradientBrush lgb = new LinearGradientBrush
+            {
+                StartPoint = new System.Windows.Point(0, 0),
+                EndPoint = new System.Windows.Point(1, 0)
+            };
+            lgb.GradientStops.Add(new GradientStop(c, 0));
+            lgb.GradientStops.Add(new GradientStop(c, ReadDamage / maxShare));
+            lgb.GradientStops.Add(new GradientStop(c2, ReadDamage / maxShare));
+            lgb.GradientStops.Add(new GradientStop(c2, 1));
+            lgb.SpreadMethod = GradientSpreadMethod.Repeat;
+            return lgb;
+        }
+
+        /* HELPER FUNCTIONS */
+
+        // Formating numbers to either K (1,000) or M (1,000,000)
+        private String FormatNumber(double value)
+        {
+            int num = (int)Math.Round(value);
+
+            if (value >= 100000000)
+                return (value / 1000000).ToString("#,0") + "M";
+            if (value >= 1000000)
+                return (value / 1000000D).ToString("0.0") + "M";
+            if (value >= 100000)
+                return (value / 1000).ToString("#,0") + "K";
+            if (value >= 1000)
+                return (value / 1000D).ToString("0.0") + "K";
+            return value.ToString("#,0");
+        }
+
         // Fetch the attack ID
         private IEnumerable<OverParse.Attack> GetAttackID (params string[] attackID) 
         {
             return Attacks.Where(a => attackID.Contains(a.ID));
         }
 
-        // Fetch the JA/Critical value (Use after [ GetAttackID ] function)
-        private string GetJACrit (IEnumerable<OverParse.Attack> attackID, string criJA) 
+        // Fetch the Max Damage Hit that the player did
+        private IEnumerable<OverParse.Attack> GetMaxHit (params string[] attackID) 
         {
-            if (criJA == "Cri") 
+            Attacks.RemoveAll(a => !attackID.Contains(a.ID));
+            Attacks.Sort((x, y) => y.Damage.CompareTo(x.Damage));
+
+            if (Attacks != null)
             {
-                return (attackID.Average(x => x.Cri) * 100).ToString("N2");    
+                return Attacks.FirstOrDefault();
+            } 
+            else 
+            {
+                return null;
             }
-            else
+        }
+
+        // Fetch the Attack Name that achieved Max Damage Hit
+        private string GetAttackName (Attack maxHit) 
+        {
+            if (maxHit == null) { return "--"; }
+            string attack = "Unknown";
+
+            if (MainWindow.skillDict.ContainsKey(maxHit.ID)) { attack = MainWindow.skillDict[maxHit.ID]; }
+            return MaxHitAttack.Damage.ToString(attack);
+        }
+
+        // Calclate the actual Damage Per Second / DPS
+        private string CalculateDPS (IEnumerable<OverParse.Attack> attackID) 
+        {
+            return Math.Round(attackID / (double)ActiveTime).ToString("N0");
+        }
+
+        // Fetch the total Damage Dealt value [ Use after (GetAttackID) function ]
+        private int GetDamageDealt (IEnumerable<OverParse.Attack> attackID) 
+        {
+            return attackID.Sum(x => x.Damage);
+        }
+
+        // Fetch the Just Attack value [ Use after (GetAttackID) function ]
+        private string GetJAValue (IEnumerable<OverParse.Attack> attackID, bool nodecimal = false) 
+        {
+            if (nodecimal) 
+            {
+                return (attackID.Average(x => x.JA) * 100).ToString("N0");
+            }
+            else 
             {
                 return (attackID.Average(x => x.JA) * 100).ToString("N2");
+            }
+        }
+
+        // Fetch the Critical Attack value [ Use after (GetAttackID) function ]
+        private string GetCritValue (IEnumerable<OverParse.Attack> attackID, bool nodecimal = false) 
+        {
+            if (nodecimal) 
+            {
+                return (attackID.Average(x => x.Cri) * 100).ToString("N0");    
+            }
+            else 
+            {
+                return (attackID.Average(x => x.Cri) * 100).ToString("N2");    
             }
         }
 
@@ -531,6 +599,7 @@ namespace OverParse
         }
     }
 
+    // Tyrone-sama's Hacks! - kyaaa
     static class Hacks
     {
         public static string currentPlayerID;
@@ -538,6 +607,7 @@ namespace OverParse
         public static string targetID = "";
     }
 
+    // Attack class properties
     public class Attack
     {
         public string ID;
