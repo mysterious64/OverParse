@@ -114,7 +114,7 @@ namespace OverParse
             }
         }
 
-        /* Dark Blast (DaB) - Ultimate Dark Falz Player Shenanigans
+        /* Dark Blast (DaB) - Ultimate Dark Falz Player Shenanigans (Ultimate IMPACT etc.)
          * GET Data Properties
          */ 
 
@@ -129,169 +129,65 @@ namespace OverParse
         public string   DBReadDamage    => DBDamage.ToString("N0");         // Read DaB on damage dealt
         public string   DBMaxHitdmg     => DBMaxHit.Damage.ToString("N0");  // Read DaB on Max Hit for damage
 
-        // public int DBDamage => Attacks.Where(a => DBAttackIDs.Contains(a.ID)).Sum(x => x.Damage);
-        // public string DBDPS => Math.Round(DBDamage / (double)ActiveTime).ToString("N0");
-        // public string DBJAPct => (Attacks.Where(a => DBAttackIDs.Contains(a.ID)).Average(x => x.JA) * 100).ToString("N2");
-        // public string DBCriPct => (Attacks.Where(a => DBAttackIDs.Contains(a.ID)).Average(x => x.Cri) * 100).ToString("N2");
+        /* Laconium Sword | Mana Cannons (LwS) - Feminized Gilgamesh VS Giant Winged Fire-breathing Lizard
+         * GET Data Properties
+         */ 
         
-        /*public string DBAtkName
-        {
-            get
-            {
-                if (DBMaxHit == null) { return "--"; }
-                string attack = "Unknown";
-                if (MainWindow.skillDict.ContainsKey(DBMaxHit.ID)) { attack = MainWindow.skillDict[DBMaxHit.ID]; }
-                return MaxHitAttack.Damage.ToString(attack);
-            }
-        }*/
+        public int      LswDamage       => GetDamageDealt(GetAttackID(LaconiumAttackIDs)); // LwS Total Damage
+        public Attack   LswMaxHit       => GetMaxHit(LaconiumAttackIDs);                   // LwS Max Hit Damage
+        public string   LswAtkName      => GetAttackName(LswMaxHit);                       // LwS Max Hit Attack Name
+        public string   LswDPS          => CalculateDPS(LswDamage);                        // LwS DPS
+        public string   LswJAPct        => GetJAValue(GetAttackID(LaconiumAttackIDs));     // LwS JA Percentage (%)
+        public string   LswCriPct       => GetCritValue(GetAttackID(LaconiumAttackIDs));   // LwS Critical Percentage (%)
 
-        /*public Attack DBMaxHit
-        {
-            get
-            {
-                Attacks.RemoveAll(a => !DBAttackIDs.Contains(a.ID));
-                Attacks.Sort((x, y) => y.Damage.CompareTo(x.Damage));
-                if (Attacks != null)
-                {
-                    return Attacks.FirstOrDefault();
-                } else {
-                    return null;
-                }
-            }
-        }*/
+        public string   LswReadPct      => LswPct.ToString("N2");            // Read LwS on MPA contribution (%)
+        public string   LswReadDamage   => LswDamage.ToString("N0");         // Read LwS on damage dealt
+        public string   LswMaxHitdmg    => LswMaxHit.Damage.ToString("N0");  // Read LwS on Max Hit for damage
 
-        //Laconium sword Data
-        public string LswReadPct => LswPct.ToString("N2");
-        public int LswDamage => Attacks.Where(a => LaconiumAttackIDs.Contains(a.ID)).Sum(x => x.Damage);
-        public string LswReadDamage => LswDamage.ToString("N0");
-        public string LswDPS => Math.Round(LswDamage / (double)ActiveTime).ToString("N0");
-        public string LswJAPct => (Attacks.Where(a => LaconiumAttackIDs.Contains(a.ID)).Average(x => x.JA) * 100).ToString("N2");
-        public string LswCriPct => (Attacks.Where(a => LaconiumAttackIDs.Contains(a.ID)).Average(x => x.Cri) * 100).ToString("N2");
-        public string LswMaxHitdmg => LswMaxHit.Damage.ToString("N0");
-        public string LswAtkName
-        {
-            get
-            {
-                if (LswMaxHit == null) { return "--"; }
-                string attack = "Unknown";
-                if (MainWindow.skillDict.ContainsKey(LswMaxHit.ID)) { attack = MainWindow.skillDict[LswMaxHit.ID]; }
-                return MaxHitAttack.Damage.ToString(attack);
-            }
-        }
-        public Attack LswMaxHit
-        {
-            get
-            {
-                Attacks.RemoveAll(a => !LaconiumAttackIDs.Contains(a.ID));
-                Attacks.Sort((x, y) => y.Damage.CompareTo(x.Damage));
-                if (Attacks != null)
-                {
-                    return Attacks.FirstOrDefault();
-                } else {
-                    return null;
-                }
-            }
-        }
+        /* Photon Weaponry (PwP) - A.R.K.S. Supplied Tools of "Massive Destruction" (Photon Punisher etc.)
+         * GET Data Properties
+         */
 
-        //PhotonWeapon Data Properties
-        public string PwpReadPct => PwpPct.ToString("N2");
-        public int PwpDamage => Attacks.Where(a => PhotonAttackIDs.Contains(a.ID)).Sum(x => x.Damage);
-        public string PwpReadDamage => PwpDamage.ToString("N0");
-        public string PwpDPS => Math.Round(PwpDamage / (double)ActiveTime).ToString("N0");
-        public string PwpJAPct => (Attacks.Where(a => PhotonAttackIDs.Contains(a.ID)).Average(x => x.JA) * 100).ToString("N2");
-        public string PwpCriPct => (Attacks.Where(a => PhotonAttackIDs.Contains(a.ID)).Average(x => x.Cri) * 100).ToString("N2");
-        public string PwpMaxHitdmg => PwpMaxHit.Damage.ToString("N0");
-        public string PwpAtkName
-        {
-            get
-            {
-                if (PwpMaxHit == null) { return "--"; }
-                string attack = "Unknown";
-                if (MainWindow.skillDict.ContainsKey(PwpMaxHit.ID)) { attack = MainWindow.skillDict[PwpMaxHit.ID]; }
-                return MaxHitAttack.Damage.ToString(attack);
-            }
-        }
-        public Attack PwpMaxHit
-        {
-            get
-            {
-                Attacks.RemoveAll(a => !PhotonAttackIDs.Contains(a.ID));
-                Attacks.Sort((x, y) => y.Damage.CompareTo(x.Damage));
-                if (Attacks != null)
-                {
-                    return Attacks.FirstOrDefault();
-                } else {
-                    return null;
-                }
-            }
-        }
+        public int      PwpDamage       => GetDamageDealt(GetAttackID(PhotonAttackIDs)); // PwP Total Damage
+        public Attack   PwpMaxHit       => GetMaxHit(PhotonAttackIDs);                   // PwP Max Hit Damage
+        public string   PwpAtkName      => GetAttackName(PwpMaxHit);                     // PwP Max Hit Attack Name
+        public string   PwpDPS          => CalculateDPS(PwpDamage);                      // PwP DPS
+        public string   PwpJAPct        => GetJAValue(GetAttackID(PhotonAttackIDs));     // PwP JA Percentage (%)
+        public string   PwpCriPct       => GetCritValue(GetAttackID(PhotonAttackIDs));   // PwP Critical Percentage (%)
 
-        //AIS Data
-        public string AisReadPct => AisPct.ToString("N2");
-        public int AisDamage => Attacks.Where(a => AISAttackIDs.Contains(a.ID)).Sum(x => x.Damage);
-        public string AisReadDamage => PwpDamage.ToString("N0");
-        public string AisDPS => Math.Round(PwpDamage / (double)ActiveTime).ToString("N0");
-        public string AisJAPct => (Attacks.Where(a => PhotonAttackIDs.Contains(a.ID)).Average(x => x.JA) * 100).ToString("N2");
-        public string AisCriPct => (Attacks.Where(a => PhotonAttackIDs.Contains(a.ID)).Average(x => x.Cri) * 100).ToString("N2");
-        public string AisMaxHitdmg => AisMaxHit.Damage.ToString("N0");
-        public string AisAtkName
-        {
-            get
-            {
-                if (AisMaxHit == null) { return "--"; }
-                string attack = "Unknown";
-                if (MainWindow.skillDict.ContainsKey(AisMaxHit.ID)) { attack = MainWindow.skillDict[AisMaxHit.ID]; }
-                return MaxHitAttack.Damage.ToString(attack);
-            }
-        }
-        public Attack AisMaxHit
-        {
-            get
-            {
-                Attacks.RemoveAll(a => !PhotonAttackIDs.Contains(a.ID));
-                Attacks.Sort((x, y) => y.Damage.CompareTo(x.Damage));
-                if (Attacks != null)
-                {
-                    return Attacks.FirstOrDefault();
-                } else {
-                    return null;
-                }
-            }
-        }
+        public string   PwpReadPct      => PwpPct.ToString("N2");            // Read PwP on MPA contribution (%)
+        public string   PwpReadDamage   => PwpDamage.ToString("N0");         // Read PwP on damage dealt
+        public string   PwpMaxHitdmg    => PwpMaxHit.Damage.ToString("N0");  // Read PwP on Max Hit for damage
 
-        //Ridroid Data
-        public string RideReadPct => RidePct.ToString("N2");
-        public int RideDamage => Attacks.Where(a => RideAttackIDs.Contains(a.ID)).Sum(x => x.Damage);
-        public string RideReadDamage => RideDamage.ToString("N0");
-        public string RideDPS => Math.Round(RideDamage / (double)ActiveTime).ToString("N0");
-        public string RideJAPct => (Attacks.Where(a => RideAttackIDs.Contains(a.ID)).Average(x => x.JA) * 100).ToString("N2");
-        public string RideCriPct => (Attacks.Where(a => RideAttackIDs.Contains(a.ID)).Average(x => x.Cri) * 100).ToString("N2");
-        public string RideMaxHitdmg => RideMaxHit.Damage.ToString("N0");
-        public string RideAtkName
-        {
-            get
-            {
-                if (RideMaxHit == null) { return "--"; }
-                string attack = "Unknown";
-                if (MainWindow.skillDict.ContainsKey(RideMaxHit.ID)) { attack = MainWindow.skillDict[RideMaxHit.ID]; }
-                return MaxHitAttack.Damage.ToString(attack);
-            }
-        }
-        public Attack RideMaxHit
-        {
-            get
-            {
-                Attacks.RemoveAll(a => !RideAttackIDs.Contains(a.ID));
-                Attacks.Sort((x, y) => y.Damage.CompareTo(x.Damage));
-                if (Attacks != null)
-                {
-                    return Attacks.FirstOrDefault();
-                } else {
-                    return null;
-                }
-            }
-        }
+        /* A.R.K.S. Interception Silhouette (AIS) - WE ARE BORDERLESS (Yamato boat fights, Magatsu bonus etc)
+         * GET Data Properties
+         */
 
+        public int      AisDamage       => GetDamageDealt(GetAttackID(AISAttackIDs)); // AIS Total Damage
+        public Attack   AisMaxHit       => GetMaxHit(AISAttackIDs);                   // AIS Max Hit Damage
+        public string   AisAtkName      => GetAttackName(AisMaxHit);                  // AIS Max Hit Attack Name
+        public string   AisDPS          => CalculateDPS(AisDamage);                   // AIS DPS
+        public string   AisJAPct        => GetJAValue(GetAttackID(AISAttackIDs));     // AIS JA Percentage (%)
+        public string   AisCriPct       => GetCritValue(GetAttackID(AISAttackIDs));   // AIS Critical Percentage (%)
+
+        public string   AisReadPct      => AisPct.ToString("N2");            // Read AIS on MPA contribution (%)
+        public string   AisReadDamage   => AisDamage.ToString("N0");         // Read AIS on damage dealt
+        public string   AisMaxHitdmg    => AisMaxHit.Damage.ToString("N0");  // Read AIS on Max Hit for damage
+
+        /* Rideroid (Ride) - A.R.K.S. version of Sonic the Hedgehod & Up-skirt reasons (Mother EQ etc.)
+         * GET Data Properties
+         */
+
+        public int      RideDamage      => GetDamageDealt(GetAttackID(RideAttackIDs)); // Ride Total Damage
+        public Attack   RideMaxHit      => GetMaxHit(RideAttackIDs);                   // Ride Max Hit Damage
+        public string   RideAtkName     => GetAttackName(RideMaxHit);                  // Ride Max Hit Attack Name
+        public string   RideDPS         => CalculateDPS(RideDamage);                   // Ride DPS
+        public string   RideJAPct       => GetJAValue(GetAttackID(RideAttackIDs));     // Ride JA Percentage (%)
+        public string   RideCriPct      => GetCritValue(GetAttackID(RideAttackIDs));   // Ride Critical Percentage (%)
+
+        public string   RideReadPct     => RidePct.ToString("N2");            // Read Ride on MPA contribution (%)
+        public string   RideReadDamage  => RideDamage.ToString("N0");         // Read Ride on damage dealt
+        public string   RideMaxHitdmg   => RideMaxHit.Damage.ToString("N0");  // Read Ride on Max Hit for damage
 
         public string FDPSReadout
         {
