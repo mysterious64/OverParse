@@ -393,12 +393,6 @@ namespace OverParse
 
             // clear out the list
             CombatantData.Items.Clear();
-            AllyData.Items.Clear();
-            DBData.Items.Clear();
-            LswData.Items.Clear();
-            PwpData.Items.Clear();
-            AisData.Items.Clear();
-            RideData.Items.Clear();
             //workingList.RemoveAll(c => c.isTemporary != "no");
 
             // for zanverse dummy and status bar because WHAT IS GOOD STRUCTURE
@@ -623,14 +617,7 @@ namespace OverParse
                 if (!filtered && c.Damage > 0)
                 {
                     CombatantData.Items.Add(c);
-                    AllyData.Items.Add(c);
                 }
-
-                if (c.DBDamage > 0) { workingList.Sort((x, y) => y.DBDamage.CompareTo(x.DBDamage)); DBData.Items.Add(c); }
-                if (c.LswDamage > 0) { workingList.Sort((x, y) => y.LswDamage.CompareTo(x.LswDamage)); LswData.Items.Add(c); }
-                if (c.PwpDamage > 0) { workingList.Sort((x, y) => y.PwpDamage.CompareTo(x.PwpDamage)); PwpData.Items.Add(c); }
-                if(c.AisDamage > 0) { workingList.Sort((x, y) => y.AisDamage.CompareTo(x.AisDamage)); AisData.Items.Add(c); }
-                if (c.RideDamage > 0) { workingList.Sort((x, y) => y.RideDamage.CompareTo(x.RideDamage)); RideData.Items.Add(c); }
                 workingList.Sort((x, y) => y.ReadDamage.CompareTo(x.ReadDamage));
             }
 
@@ -647,12 +634,6 @@ namespace OverParse
                     EncounterStatus.Content = "Waiting... - " + encounterlog.filename;
 
                 CombatantData.Items.Refresh();
-                AllyData.Items.Refresh();
-                DBData.Items.Refresh();
-                LswData.Items.Refresh();
-                PwpData.Items.Refresh();
-                AisData.Items.Refresh();
-                RideData.Items.Refresh();
             }
 
             if (encounterlog.running)
