@@ -42,7 +42,6 @@ namespace OverParse
             InitializeComponent();
 
             Dispatcher.UnhandledException += Panic;
-            Abouttext.Text = "OverParse v3.0.3E";
             LowResources.IsChecked = Properties.Settings.Default.LowResources;
             CPUdraw.IsChecked = Properties.Settings.Default.CPUdraw;
             if (Properties.Settings.Default.LowResources) { thisProcess.PriorityClass = ProcessPriorityClass.Idle; }
