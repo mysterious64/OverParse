@@ -499,15 +499,15 @@ namespace OverParse
         {
             if (ally) 
             {
-                int temp = Damage;
-                int temp2 = attackID;
+                int player = Damage;
+                int notplayer = attackID.Sum(x => x.Damage);
 
-                temp -= temp2;
+                player -= notplayer;
 
-                if (Properties.Settings.Default.SeparateZanverse) { temp -= GetZanverseDamage; }
-                if (Properties.Settings.Default.SeparateFinish) { temp -= GetFinishDamage; }
+                if (Properties.Settings.Default.SeparateZanverse) { player -= GetZanverseDamage; }
+                if (Properties.Settings.Default.SeparateFinish) { player -= GetFinishDamage; }
 
-                return temp;
+                return player;
             } 
             else 
             {
