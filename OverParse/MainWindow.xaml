@@ -300,7 +300,6 @@
                     <ColumnDefinition x:Name="CriHC" Width="28"/>
                     <ColumnDefinition x:Name="MdmgHC" Width="50"/>
                     <ColumnDefinition x:Name="AtkHC" Width="1.5*"/>
-                    <ColumnDefinition x:Name="TabHC" Width="25" />
                 </Grid.ColumnDefinitions>
                 <Grid Grid.Column="0" x:Name="NameH" />
                 <Grid Grid.Column="1" x:Name="PercentH" />
@@ -311,7 +310,6 @@
                 <Grid Grid.Column="6" x:Name="CriH" />
                 <Grid Grid.Column="7" x:Name="MdmgH" />
                 <Grid Grid.Column="8" x:Name="AtkH" />
-                <Grid Grid.Column="9" x:Name="TabH" />
             </Grid>
 
             <Rectangle x:Name="EncounterIndicator" Grid.Row="2" Height="2" VerticalAlignment="Top"  Fill="White" IsHitTestVisible="False" />
