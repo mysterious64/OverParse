@@ -145,12 +145,12 @@ namespace OverParse
          * GET Data Properties
          */
 
-        public int      AllyDamage       => GetDamageDealt(GetAttackID(NonAllyAttackIDs, true)); // Ally Total Damage
-        public Attack   AllyMaxHit       => GetMaxHit(NonAllyAttackIDs, true);                   // Ally Max Hit Damage
+        public int      AllyDamage       => GetDamageDealt(GetAttackID(true, NonAllyAttackIDs)); // Ally Total Damage
+        public Attack   AllyMaxHit       => GetMaxHit(true, NonAllyAttackIDs);                   // Ally Max Hit Damage
         public string   AllyAtkName      => GetAttackName(AllyMaxHit);                           // Ally Max Hit Attack Name
         public string   AllyDPS          => CalculateDPS(AllyDamage);                            // Ally DPS
-        public string   AllyJAPct        => GetJAValue(GetAttackID(NonAllyAttackIDs, true));     // Ally JA Percentage (%)
-        public string   AllyCriPct       => GetCritValue(GetAttackID(NonAllyAttackIDs, true));   // Ally Critical Percentage (%)
+        public string   AllyJAPct        => GetJAValue(GetAttackID(true, NonAllyAttackIDs));     // Ally JA Percentage (%)
+        public string   AllyCriPct       => GetCritValue(GetAttackID(true, NonAllyAttackIDs));   // Ally Critical Percentage (%)
 
         public string   AllyReadPct      => AllyPct.ToString("N2");            // Read Ally on MPA contribution (%)
         public string   AllyReadDamage   => AllyDamage.ToString("N0");         // Read Ally on damage dealt
@@ -442,7 +442,7 @@ namespace OverParse
         }
 
         // Fetch the attack ID
-        private IEnumerable<OverParse.Attack> GetAttackID (params string[] attackID, bool ally = false) 
+        private IEnumerable<OverParse.Attack> GetAttackID (string[] attackID, bool ally = false) 
         {
             if (ally) 
             {
@@ -455,7 +455,7 @@ namespace OverParse
         }
 
         // Fetch the Max Damage Hit that the player did
-        private Attack GetMaxHit (params string[] attackID, bool ally = false) 
+        private Attack GetMaxHit (string[] attackID, bool ally = false) 
         {
             if (ally) 
             {
