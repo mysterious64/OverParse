@@ -267,7 +267,7 @@ namespace OverParse
                 string timer = timespan.ToString(@"mm\:ss");
                 string log = DateTime.Now.ToString("F") + " | " + timer + " | "  + Environment.NewLine + Environment.NewLine;
 
-                log += Environment.NewLine;
+                log += "[ Encounter Overview ]" + Environment.NewLine;
 
                 foreach (Combatant c in combatants)
                 {
@@ -353,7 +353,7 @@ namespace OverParse
                             double percent = i.Item2.Sum() * 100d / c.ReadDamage;
                             string spacer = (percent >= 9) ? "" : " ";
 
-                            string paddedPercent = percent.ToString("00.00").Substring(0, 5);
+                            string paddedPercent = percent.ToString("00.00");
                             string hits = i.Item2.Count().ToString("N0");
                             string sum = i.Item2.Sum().ToString("N0");
                             string min = i.Item2.Min().ToString("N0");
