@@ -290,7 +290,7 @@ namespace OverParse
             return Attacks.Where(a => a.ID == "2106601422"); // Zanverse
         }
 
-                // Returns the total damage dealt for MPA
+        // Returns the total damage dealt for MPA
         private int GetTotalDamageDealt() 
         { 
             return Attacks.Sum(x => x.Damage); 
@@ -334,7 +334,14 @@ namespace OverParse
         // Returns the total DPS of the MPA
         private double GetTotalDPS() 
         { 
-            return Damage / ActiveTime; 
+            if (Damage != 0) 
+            { 
+                return Damage / (double)ActiveTime; 
+            }
+            else 
+            { 
+                return Damage; 
+            }
         }
 
         // Returns the general DPS of the MPA
@@ -351,7 +358,10 @@ namespace OverParse
         }
 
         // Returns the general damage taken
-        private string GetGeneralDamageTaken() { return Attacks.Sum(x => x.Dmgd).ToString("N0"); }
+        private string GetGeneralDamageTaken() 
+        { 
+            return Attacks.Sum(x => x.Dmgd).ToString("N0"); 
+        }
 
         // Percentifies the DPS numbers
         private string GetPercentReadDPS()

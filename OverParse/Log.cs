@@ -273,7 +273,7 @@ namespace OverParse
                 {
                     if (c.IsAlly || c.IsZanverse || c.IsFinish)
                     {
-                        log += $"{c.Name} | {c.PercentReadDPSReadout} contrib | {c.ReadDamage.ToString("N0")} dmg | {c.Damaged} dmgd | {c.DPS} DPS | JA : {c.WJAPercent}% | Critical : {c.WCRIPercent}% | Max: {c.MaxHitdmg} ({c.MaxHit})" + Environment.NewLine;
+                        log += $"# {c.Name}\n# Contrib: {c.PercentReadDPSReadout}% | Dealt: {c.ReadDamage.ToString("N0")} dmg | Taken: {c.Damaged} dmgd | {c.DPS} DPS | JA: {c.WJAPercent}% | Critical: {c.WCRIPercent}% | Max: {c.MaxHitdmg} ({c.MaxHit})\n" + Environment.NewLine;
                     }
                 }
 
