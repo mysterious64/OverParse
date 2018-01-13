@@ -340,7 +340,7 @@ namespace OverParse
         // Returns the general DPS of the MPA
         private double GetGeneralDPS() 
         { 
-            Math.Round(ReadDamage / (double)ActiveTime); 
+            return Math.Round(ReadDamage / (double)ActiveTime); 
         }
         
         // Returns the display naming choices (Name or Anon)
