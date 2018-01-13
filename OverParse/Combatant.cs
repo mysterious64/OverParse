@@ -422,7 +422,7 @@ namespace OverParse
         // Returns the Just Attack Percentage in "00.00"
         private string GetWJAPercent() 
         { 
-            return ((Attacks.Average(a => a.JA)) * 100).ToString("00.00"); 
+            return ((Attacks.Where(a => !MainWindow.ignoreskill.Contains(a.ID)).Average(x => x.JA)) * 100).ToString("00.00"); 
         }
 
         // Returns the Critical Rate Percentange
