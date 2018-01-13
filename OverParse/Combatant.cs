@@ -335,12 +335,12 @@ namespace OverParse
         private double GetTotalDPS() 
         { 
             if (Damage != 0) 
-            { 
-                return Damage / (double)ActiveTime; 
+            {
+                return Math.Round(Damage / (double)ActiveTime); 
             }
             else 
-            { 
-                return Damage; 
+            {
+                return Damage;
             }
         }
 
