@@ -7,27 +7,31 @@ using System.Windows;
 
 namespace OverParse
 {
-    /* Handles the logging section of the parser.
-     * TODO: Fix the weird spacing noticed in the log files.
-     */
+    // Handles the logging section of the parser.
     public class Log
     {
-        private int startTimestamp = 0;
-        public int newTimestamp = 0;
-        private string encounterData;
-        private List<int> instances = new List<int>();
-        public List<Combatant> combatants = new List<Combatant>();
-        public List<Combatant> backupCombatants = new List<Combatant>();
-
+        // File Setup Variables
         private const int pluginVersion = 5;
+
         public bool valid;
         public bool notEmpty;
         public bool running;
-        public DirectoryInfo logDirectory;
+
         public string filename;
+        public DirectoryInfo logDirectory;
+
+        // Logging Variables
+        public int newTimestamp = 0;
+
+        public List<Combatant> combatants = new List<Combatant>();
+        public List<Combatant> backupCombatants = new List<Combatant>();
+
+        private int startTimestamp = 0;
+        private string encounterData;
+        private List<int> instances = new List<int>();
         private StreamReader logReader;
 
-
+        // Constructor
         public Log(string attemptDirectory)
         {
             valid = false;
@@ -189,6 +193,7 @@ namespace OverParse
             }
         }
 
+        // Updates all Parser related plugins
         public bool UpdatePlugin(string attemptDirectory)
         {
             try
@@ -211,6 +216,7 @@ namespace OverParse
             }
         }
 
+        // Copy the parse data to clipboard
         public void WriteClipboard()
         {
             string log = "";
@@ -241,6 +247,7 @@ namespace OverParse
             }
         }
 
+        // This writes to a log file
         public string WriteLog()
         {
 
@@ -359,10 +366,10 @@ namespace OverParse
                             string min = i.Item2.Min().ToString("N0");
                             string max = i.Item2.Max().ToString("N0");
                             string avg = i.Item2.Average().ToString("N0");
-                            //string ja = (i.Item3.Average() * 100).ToString("N2") ?? "null";
-                            //string cri = (i.Item4.Average() * 100).ToString("N2") ?? "null" ;
+                            string ja = (i.Item3.Average() * 100).ToString("N2") ?? "null";
+                            string cri = (i.Item4.Average() * 100).ToString("N2") ?? "null" ;
                             log += $"{paddedPercent}% | {i.Item1} ({sum} dmg)";
-                            //log += $" - JA : {ja}% - Critical : {cri}%";
+                            log += $" - JA : {ja}% - Critical : {cri}%";
                             log += Environment.NewLine;
                             log += $"       |   {hits} hits - {min} min, {avg} avg, {max} max" + Environment.NewLine;
                         }
@@ -370,7 +377,6 @@ namespace OverParse
                         log += Environment.NewLine;
                     }
                 }
-
 
                 log += "Instance IDs: " + String.Join(", ", instances.ToArray());
 
@@ -386,6 +392,7 @@ namespace OverParse
             return null;
         }
 
+        // Returns the status of the parser
         public string LogStatus()
         {
             if (!valid)
@@ -406,14 +413,13 @@ namespace OverParse
             return encounterData;
         }
 
+        // Updates the log of the parser
         public void UpdateLog(object sender, EventArgs e)
         {
-            if (!valid || !notEmpty)
-            {
-                return;
-            }
+            if (!valid || !notEmpty) { return; }
 
             string newLines = logReader.ReadToEnd();
+
             if (newLines != "")
             {
                 string[] result = newLines.Split('\n');
@@ -422,27 +428,27 @@ namespace OverParse
                     if (str != "")
                     {
                         string[] parts = str.Split(',');
-                        int lineTimestamp = int.Parse(parts[0]);
-                        int instanceID = int.Parse(parts[1]);
                         string sourceID = parts[2];
                         string sourceName = parts[3];
                         string targetID = parts[4];
                         string targetName = parts[5];
                         string attackID = parts[6];
-                        int hitDamage = int.Parse(parts[7]);
-                        int justAttack =int.Parse(parts[8]);
-                        int critical = int.Parse(parts[9]);
                         //string isMultiHit = parts[10];
                         //string isMisc = parts[11];
                         //string isMisc2 = parts[12];
-                        int index = -1;
 
+                        int lineTimestamp = int.Parse(parts[0]);
+                        int instanceID = int.Parse(parts[1]);
+                        int hitDamage = int.Parse(parts[7]);
+                        int justAttack =int.Parse(parts[8]);
+                        int critical = int.Parse(parts[9]);
+                        int index = -1;
+                        
                         if (lineTimestamp == 0 && parts[3] == "YOU")
                         {
                             Hacks.currentPlayerID = parts[2];
                             continue;
                         }
-
 
                         if (sourceID != Hacks.currentPlayerID && Properties.Settings.Default.Onlyme)
                         {
@@ -460,62 +466,47 @@ namespace OverParse
 
                         //処理スタート
 
-                        if (10000000 < int.Parse(sourceID))
+                        foreach (Combatant x in combatants)
                         {
-                            foreach (Combatant x in combatants)
+                            if (x.ID == sourceID && x.isTemporary == "no")
                             {
-                                if (x.ID == sourceID && x.isTemporary == "no")
-                                {
-                                    index = combatants.IndexOf(x);
-                                }
+                                index = combatants.IndexOf(x);
                             }
-
-                            if (index == -1)
-                            {
-                                combatants.Add(new Combatant(sourceID, sourceName));
-                                index = combatants.Count - 1;
-                            }
-
-                            Combatant source = combatants[index];
-
-                            newTimestamp = lineTimestamp;
-                            if (startTimestamp == 0)
-                            {
-                                //Console.WriteLine($"FIRST ATTACK RECORDED: {hitDamage} dmg from {sourceID} ({sourceName}) with {attackID}, to {targetID} ({targetName})");
-                                startTimestamp = newTimestamp;
-                            }
-
-                            source.Attacks.Add(new Attack(attackID, hitDamage, newTimestamp - startTimestamp, justAttack, critical, 0));
-                            running = true;
-                        } else {
-                            foreach (Combatant x in combatants)
-                            {
-                                if (x.ID == targetID && x.isTemporary == "no")
-                                {
-                                    index = combatants.IndexOf(x);
-                                }
-                            }
-
-                            if (index == -1)
-                            {
-                                combatants.Add(new Combatant(targetID, targetName));
-                                index = combatants.Count - 1;
-                            }
-
-                            Combatant source = combatants[index];
-
-                            newTimestamp = lineTimestamp;
-                            if (startTimestamp == 0)
-                            {
-                                //Console.WriteLine($"FIRST ATTACK RECORDED: {hitDamage} dmg from {sourceID} ({sourceName}) with {attackID}, to {targetID} ({targetName})");
-                                startTimestamp = newTimestamp;
-                            }
-
-                            source.Attacks.Add(new Attack("0", 0, newTimestamp - startTimestamp, 0, 0, hitDamage));
-                            running = true;
                         }
 
+                        if (index == -1)
+                        {
+                            if (10000000 < int.Parse(sourceID))
+                            {
+                                combatants.Add(new Combatant(sourceID, sourceName));
+                            }
+                            else
+                            {
+                                combatants.Add(new Combatant(targetID, targetName));
+                            }
 
+                            index = combatants.Count - 1;
+                        }
+
+                        Combatant source = combatants[index];
+
+                        newTimestamp = lineTimestamp;
+                        if (startTimestamp == 0)
+                        {
+                            // Console.WriteLine($"FIRST ATTACK RECORDED: {hitDamage} dmg from {sourceID} ({sourceName}) with {attackID}, to {targetID} ({targetName})");
+                            startTimestamp = newTimestamp;
+                        }
+
+                        if (10000000 < int.Parse(sourceID)) 
+                        {
+                            source.Attacks.Add(new Attack(attackID, hitDamage, newTimestamp - startTimestamp, justAttack, critical, 0));
+                        }
+                        else 
+                        {
+                            source.Attacks.Add(new Attack("Damage Taken", hitDamage, newTimestamp - startTimestamp, 0, 0, 0));
+                        }
+
+                        running = true;
                     }
                 }
 

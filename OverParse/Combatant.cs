@@ -8,14 +8,6 @@ namespace OverParse
     // Handles the combat data assignments
     public class Combatant
     {
-        // General Variables
-        private const float maxBGopacity = 0.6f;
-        public List<Attack> Attacks;
-        public string ID, isTemporary;
-        public string Name { get; set; }
-        public int ActiveTime;
-        public float PercentDPS, PercentReadDPS, AllyPct, DBPct, LswPct, PwpPct, AisPct, RidePct;        
-
         // Static Variables
         public static float maxShare = 0;
         public static string Log;
@@ -98,6 +90,38 @@ namespace OverParse
                                                                   "3607718359" }; // Laconium Sword slash
         // List of the above attack IDs combined
         public static string[] NonAllyAttackIDs = PhotonAttackIDs.Concat(AISAttackIDs).Concat(RideAttackIDs).Concat(DBAttackIDs).Concat(LaconiumAttackIDs).ToArray();
+
+        // General Variables
+        private const float maxBGopacity = 0.6f;
+        public List<Attack> Attacks;
+        public string ID, isTemporary;
+        public string Name { get; set; }
+        public int ActiveTime;
+        public float PercentDPS, PercentReadDPS, AllyPct, DBPct, LswPct, PwpPct, AisPct, RidePct;
+
+        // Constructor #1
+        public Combatant(string id, string name)
+        {
+            ID = id;
+            Name = name;
+            PercentDPS = -1;
+            Attacks = new List<Attack>();
+            isTemporary = "no";
+            PercentReadDPS = 0;
+            ActiveTime = 0;
+        }
+
+        // Constructor #2
+        public Combatant(string id, string name, string temp)
+        {
+            ID = id;
+            Name = name;
+            PercentDPS = -1;
+            Attacks = new List<Attack>();
+            isTemporary = temp;
+            PercentReadDPS = 0;
+            ActiveTime = 0;
+        }
 
         /* Common GET Data Properties */
 
@@ -592,30 +616,6 @@ namespace OverParse
         private string GetCritValue(IEnumerable<OverParse.Attack> attackID) 
         {
             return (attackID.Average(x => x.Cri) * 100).ToString("N2");    
-        }
-
-        // Constructor #1
-        public Combatant(string id, string name)
-        {
-            ID = id;
-            Name = name;
-            PercentDPS = -1;
-            Attacks = new List<Attack>();
-            isTemporary = "no";
-            PercentReadDPS = 0;
-            ActiveTime = 0;
-        }
-
-        // Constructor #2
-        public Combatant(string id, string name, string temp)
-        {
-            ID = id;
-            Name = name;
-            PercentDPS = -1;
-            Attacks = new List<Attack>();
-            isTemporary = temp;
-            PercentReadDPS = 0;
-            ActiveTime = 0;
         }
     }
 
