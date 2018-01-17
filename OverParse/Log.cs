@@ -468,47 +468,41 @@ namespace OverParse
 
                         //処理スタート
 
-                        foreach (Combatant x in combatants)
+                        if (10000000 < int.Parse(sourceID))
                         {
-                            if (x.ID == sourceID && x.isTemporary == "no")
+                            foreach (Combatant x in combatants)
                             {
-                                index = combatants.IndexOf(x);
+                                if (x.ID == sourceID && x.isTemporary == "no") { index = combatants.IndexOf(x); }
                             }
-                        }
 
-                        if (index == -1)
-                        {
-                            if (10000000 < int.Parse(sourceID))
+                            if (index == -1)
                             {
                                 combatants.Add(new Combatant(sourceID, sourceName));
+                                index = combatants.Count - 1;
                             }
-                            else
+
+                            Combatant source = combatants[index];
+
+                            source.Attacks.Add(new Attack(attackID, hitDamage, newTimestamp - startTimestamp, justAttack, critical, 0));
+                            running = true;
+                        } else {
+                            foreach (Combatant x in combatants)
+                            {
+                                if (x.ID == targetID && x.isTemporary == "no") { index = combatants.IndexOf(x); }
+                            }
+
+                            if (index == -1)
                             {
                                 combatants.Add(new Combatant(targetID, targetName));
+                                index = combatants.Count - 1;
                             }
 
-                            index = combatants.Count - 1;
-                        }
+                            Combatant source = combatants[index];
 
-                        Combatant source = combatants[index];
-
-                        newTimestamp = lineTimestamp;
-                        if (startTimestamp == 0)
-                        {
-                            // Console.WriteLine($"FIRST ATTACK RECORDED: {hitDamage} dmg from {sourceID} ({sourceName}) with {attackID}, to {targetID} ({targetName})");
-                            startTimestamp = newTimestamp;
-                        }
-
-                        if (10000000 < int.Parse(sourceID)) 
-                        {
-                            source.Attacks.Add(new Attack(attackID, hitDamage, newTimestamp - startTimestamp, justAttack, critical, 0));
-                        }
-                        else 
-                        {
                             source.Attacks.Add(new Attack("Damage Taken", hitDamage, newTimestamp - startTimestamp, 0, 0, 0));
+                            running = true;
+                            
                         }
-
-                        running = true;
                     }
                 }
 
