@@ -370,9 +370,8 @@ namespace OverParse
                             string avg = i.Item2.Average().ToString("N0");
                             string ja = (i.Item3.Average() * 100).ToString("N2") ?? "null";
                             string cri = (i.Item4.Average() * 100).ToString("N2") ?? "null" ;
-                            log += $"{paddedPercent}% | {i.Item1} ({sum} dmg)";
-                            log += $" - JA : {ja}% - Critical : {cri}%";
-                            log += Environment.NewLine;
+                            log += $"{paddedPercent}% | {i.Item1} ({sum} dmg)" + Environment.NewLine;
+                            log += $"       |   JA : {ja}% - Critical : {cri}%" + Environment.NewLine;
                             log += $"       |   {hits} hits - {min} min, {avg} avg, {max} max" + Environment.NewLine;
                         }
 
@@ -452,19 +451,13 @@ namespace OverParse
                             continue;
                         }
 
-                        if (sourceID != Hacks.currentPlayerID && Properties.Settings.Default.Onlyme)
-                        {
-                            continue;
-                        }
+                        if (sourceID != Hacks.currentPlayerID && Properties.Settings.Default.Onlyme){ continue; }
 
-                        if (!instances.Contains(instanceID))
-                            instances.Add(instanceID);
+                        if (!instances.Contains(instanceID)) { instances.Add(instanceID); }
 
-                        if (hitDamage < 1)
-                            continue;
+                        if (hitDamage < 1) { continue; }
 
-                        if (sourceID == "0" || attackID == "0")
-                            continue;
+                        if (sourceID == "0" || attackID == "0") { continue; }
 
                         //処理スタート
 
@@ -483,6 +476,13 @@ namespace OverParse
 
                             Combatant source = combatants[index];
 
+                            newTimestamp = lineTimestamp;
+                            if (startTimestamp == 0)
+                            {
+                                //Console.WriteLine($"FIRST ATTACK RECORDED: {hitDamage} dmg from {sourceID} ({sourceName}) with {attackID}, to {targetID} ({targetName})");
+                                startTimestamp = newTimestamp;
+                            }
+
                             source.Attacks.Add(new Attack(attackID, hitDamage, newTimestamp - startTimestamp, justAttack, critical, 0));
                             running = true;
                         } else {
@@ -499,10 +499,18 @@ namespace OverParse
 
                             Combatant source = combatants[index];
 
-                            source.Attacks.Add(new Attack("Damage Taken", hitDamage, newTimestamp - startTimestamp, 0, 0, 0));
+                            newTimestamp = lineTimestamp;
+                            if (startTimestamp == 0)
+                            {
+                                //Console.WriteLine($"FIRST ATTACK RECORDED: {hitDamage} dmg from {sourceID} ({sourceName}) with {attackID}, to {targetID} ({targetName})");
+                                startTimestamp = newTimestamp;
+                            }
+
+                            source.Attacks.Add(new Attack("Total Damage Taken", hitDamage, newTimestamp - startTimestamp, 0, 0, hitDamage));
                             running = true;
                             
                         }
+
                     }
                 }
 
