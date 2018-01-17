@@ -295,7 +295,7 @@ namespace OverParse
 
                         List<string> attackNames = new List<string>();
                         List<string> finishNames = new List<string>();
-                        List<Tuple<string, List<int>>> attackData = new List<Tuple<string, List<int>>>();
+                        List<Tuple<string, List<int>, List<int>, List<int>>> attackData = new List<Tuple<string, List<int>, List<int>, List<int>>>();
 
                         if (c.IsZanverse && Properties.Settings.Default.SeparateZanverse)
                         {
