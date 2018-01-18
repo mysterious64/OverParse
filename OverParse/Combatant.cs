@@ -158,7 +158,6 @@ namespace OverParse
         public string WCRIPercent => GetWCRIPercent(); // Critical Rate % in format of 00.00
 
         public bool IsYou      => CheckIsYou();               // Player-chan running
-        public bool IsAlly     => CheckIsAlly();              // Other players running
         public bool IsZanverse => CheckIsType("Zanverse");    // Zanverse being cast
         public bool IsPwp      => CheckIsType("Pwp");         // Photon weapons using
         public bool IsAIS      => CheckIsType("AIS");         // A.I.S. mode running
@@ -168,21 +167,6 @@ namespace OverParse
 
         public Brush Brush  => GetBrushPrimary();   // Player-chan damage graph
         public Brush Brush2 => GetBrushSecondary(); // Other players damage graph
-    
-        /* Player-chan - A.R.K.S. Guardian / Protaganist / Matoi's Love Interest 
-         * GET Data Properties
-         */
-
-        public int    AllyDamage     => GetDamageDealt(GetAttackID(NonAllyAttackIDs, true)); // Ally Total Damage
-        public Attack AllyMaxHit     => GetMaxHit(NonAllyAttackIDs, true);                   // Ally Max Hit Damage
-        public string AllyAtkName    => GetAttackName(AllyMaxHit);                           // Ally Max Hit Attack Name
-        public string AllyDPS        => CalculateDPS(AllyDamage);                            // Ally DPS
-        public string AllyJAPct      => GetJAValue(GetAttackID(NonAllyAttackIDs, true));     // Ally JA Percentage (%)
-        public string AllyCriPct     => GetCritValue(GetAttackID(NonAllyAttackIDs, true));   // Ally Critical Percentage (%)
-
-        public string AllyReadPct    => AllyPct.ToString("N2");            // Read Ally on MPA contribution (%)
-        public string AllyReadDamage => AllyDamage.ToString("N0");         // Read Ally on damage dealt
-        public string AllyMaxHitdmg  => AllyMaxHit.Damage.ToString("N0");  // Read Ally on Max Hit for damage
 
         /* Photon Weaponry (PwP) - A.R.K.S. Supplied Tools of "Massive Destruction" (Photon Punisher etc.)
          * GET Data Properties
@@ -258,6 +242,21 @@ namespace OverParse
         public string LswReadPct    => LswPct.ToString("N2");            // Read LwS on MPA contribution (%)
         public string LswReadDamage => LswDamage.ToString("N0");         // Read LwS on damage dealt
         public string LswMaxHitdmg  => LswMaxHit.Damage.ToString("N0");  // Read LwS on Max Hit for damage
+
+        /* CLASS FUNCTIONS */ 
+
+        // Checks if this is a player
+        public bool IsAlly()
+        {
+            if (int.Parse(ID) >= 10000000 && !IsZanverse && !IsFinish)
+            {
+                return true;
+            } 
+            else 
+            {
+                return false;
+            }
+        }
 
         /* HELPER FUNCTIONS */
 
@@ -478,19 +477,6 @@ namespace OverParse
             return (ID == Hacks.currentPlayerID); 
         }
 
-        // Checks if this is a player
-        private bool CheckIsAlly()
-        {
-            if (int.Parse(ID) >= 10000000 && !IsZanverse && !IsFinish)
-            {
-                return true;
-            } 
-            else 
-            {
-                return false;
-            }
-        }
-
         // Checks if this is using other modes of attack
         private bool CheckIsType(string currType) 
         { 
@@ -533,29 +519,15 @@ namespace OverParse
         }
 
         // Fetch the attack ID
-        private IEnumerable<OverParse.Attack> GetAttackID(string[] attackID, bool ally = false) 
+        private IEnumerable<OverParse.Attack> GetAttackID(string[] attackID) 
         {
-            if (ally) 
-            {
-                return Attacks.Where(a => !attackID.Contains(a.ID));
-            } 
-            else 
-            {
-                return Attacks.Where(a => attackID.Contains(a.ID));
-            }
+            return Attacks.Where(a => attackID.Contains(a.ID));
         }
         
         // Fetch the Max Damage Hit that the player did
-        private Attack GetMaxHit(string[] attackID, bool ally = false) 
+        private Attack GetMaxHit(string[] attackID) 
         {
-            if (ally) 
-            {
-                Attacks.RemoveAll(a => attackID.Contains(a.ID));
-            } 
-            else 
-            {
-                Attacks.RemoveAll(a => !attackID.Contains(a.ID));
-            }
+            Attacks.RemoveAll(a => !attackID.Contains(a.ID));
 
             Attacks.Sort((x, y) => y.Damage.CompareTo(x.Damage));
 
@@ -586,24 +558,9 @@ namespace OverParse
         }
 
         // Fetch the total Damage Dealt value [ Use after (GetAttackID) function ]
-        private int GetDamageDealt(IEnumerable<OverParse.Attack> attackID, bool ally = false) 
+        private int GetDamageDealt(IEnumerable<OverParse.Attack> attackID) 
         {
-            if (ally) 
-            {
-                int player = Damage;
-                int notplayer = attackID.Sum(x => x.Damage);
-
-                player -= notplayer;
-
-                if (Properties.Settings.Default.SeparateZanverse) { player -= GetZanverseDamage; }
-                if (Properties.Settings.Default.SeparateFinish) { player -= GetFinishDamage; }
-
-                return player;
-            } 
-            else 
-            {
-                return attackID.Sum(x => x.Damage);
-            }
+            return attackID.Sum(x => x.Damage);
         }
 
         // Fetch the Just Attack value [ Use after (GetAttackID) function ]

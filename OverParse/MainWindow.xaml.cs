@@ -562,7 +562,6 @@ namespace OverParse
                 if (c.IsAlly || c.IsZanverse || c.IsFinish)
                 {
                     c.PercentReadDPS = c.ReadDamage / (float)totalReadDamage * 100;
-                    c.AllyPct = c.AllyDamage / (float)totalReadDamage * 100;
                     c.DBPct = c.DBDamage / (float)totalReadDamage * 100;
                     c.LswPct = c.LswDamage / (float)totalReadDamage * 100;
                     c.PwpPct = c.PwpDamage / (float)totalReadDamage * 100;
@@ -571,7 +570,6 @@ namespace OverParse
                 } else {
                     c.PercentDPS = -1;
                     c.PercentReadDPS = -1;
-                    c.AllyPct = -1;
                     c.DBPct = -1;
                     c.LswPct = -1;
                     c.PwpPct = -1;
@@ -618,7 +616,13 @@ namespace OverParse
                 {
                     CombatantData.Items.Add(c);
                 }
-                workingList.Sort((x, y) => y.ReadDamage.CompareTo(x.ReadDamage));
+
+                if ((c.DBDamage > 0) && (SeparateTab.SelectedIndex == 1)) { workingList.Sort((x, y) => y.DBDamage.CompareTo(x.DBDamage)); DBData.Items.Add(c); }
+                if ((c.LswDamage > 0) && (SeparateTab.SelectedIndex == 2)) { workingList.Sort((x, y) => y.LswDamage.CompareTo(x.LswDamage)); LswData.Items.Add(c); }
+                if ((c.PwpDamage > 0) && (SeparateTab.SelectedIndex == 3)) { workingList.Sort((x, y) => y.PwpDamage.CompareTo(x.PwpDamage)); PwpData.Items.Add(c); }
+                if ((c.AisDamage > 0) && (SeparateTab.SelectedIndex == 4)) { workingList.Sort((x, y) => y.AisDamage.CompareTo(x.AisDamage)); AisData.Items.Add(c); }
+                if ((c.RideDamage > 0) && (SeparateTab.SelectedIndex == 5)) { workingList.Sort((x, y) => y.RideDamage.CompareTo(x.RideDamage)); RideData.Items.Add(c); }
+ 
             }
 
 
@@ -631,7 +635,7 @@ namespace OverParse
                 EncounterIndicator.Fill = new SolidColorBrush(Color.FromArgb(192, 64, 192, 64));
                 EncounterStatus.Content = $"Waiting - {lastStatus}";
                 if (lastStatus == "")
-                    EncounterStatus.Content = "Waiting... - " + encounterlog.filename;
+                    EncounterStatus.Content = "Waiting for combat data...";
 
                 CombatantData.Items.Refresh();
             }
