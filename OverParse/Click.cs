@@ -87,13 +87,13 @@ namespace OverParse
             //Encounter hotkey (no log) pressed
             EndEncounterNoLog_Click(null, null);
         }
-
+/* Unneeded Method?
         private void Questcheck_Click(object sender, RoutedEventArgs e)
         {
             QuestName quest = new QuestName();
             quest.Show();
         }
-
+*/
         private void AutoEndEncounters_Click(object sender, RoutedEventArgs e)
         {
             Properties.Settings.Default.AutoEndEncounters = AutoEndEncounters.IsChecked;
@@ -459,7 +459,7 @@ namespace OverParse
         private void About_Click(object sender, RoutedEventArgs e)
         {
             var version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
-            MessageBox.Show($"OverParse v{version} Debug\n簡易的な自己監視ツール。\n\nShoutouts to WaifuDfnseForce.\nAdditional shoutouts to Variant, AIDA, and everyone else who makes the Tweaker plugin possible.\n\nRetranslated by Mysty, Rushia, and Frostless.\nPlease use damage information responsibly.", "OverParse");
+            MessageBox.Show($"OverParse v{version} Debug\n簡易的な自己監視ツール。\n\nShoutouts to WaifuDfnseForce.\nAdditional shoutouts to Variant, AIDA, and everyone else who makes the Tweaker plugin possible.\n\nOptimized and Recoded by Mysty, Rushia, and Kiyazasu. \n\nRetranslated by Mysty, Rushia, and Frostless.\nPlease use damage information responsibly.", "OverParse");
         }
 
         private void LowResources_Click(object sender, RoutedEventArgs e)

@@ -42,7 +42,6 @@ namespace OverParse
             InitializeComponent();
 
             Dispatcher.UnhandledException += Panic;
-            Abouttext.Text = "OverParse v3.0.0";
             LowResources.IsChecked = Properties.Settings.Default.LowResources;
             CPUdraw.IsChecked = Properties.Settings.Default.CPUdraw;
             if (Properties.Settings.Default.LowResources) { thisProcess.PriorityClass = ProcessPriorityClass.Idle; }
@@ -174,6 +173,12 @@ namespace OverParse
                     MessageBox.Show("OverParse failed to update its skill mappings. This usually means your connection hiccuped for a moment.\n\nSince you have no skill mappings downloaded, all attacks will be marked as \"Unknown\". If you'd like to try and update again, please relaunch OverParse.", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Information);
                     tmp = new string[0];
                 }
+            }
+            try {
+                ignoreskill = File.ReadAllLines("ignoreskills.csv");
+            } catch (Exception e) {
+                MessageBox.Show(e.ToString());
+                ignoreskill = new string[] { "12345678900" }; //Placeholder Value
             }
 
             Console.WriteLine("Parsing skills.csv");
@@ -388,12 +393,6 @@ namespace OverParse
 
             // clear out the list
             CombatantData.Items.Clear();
-            AllyData.Items.Clear();
-            DBData.Items.Clear();
-            LswData.Items.Clear();
-            PwpData.Items.Clear();
-            AisData.Items.Clear();
-            RideData.Items.Clear();
             //workingList.RemoveAll(c => c.isTemporary != "no");
 
             // for zanverse dummy and status bar because WHAT IS GOOD STRUCTURE
@@ -618,14 +617,7 @@ namespace OverParse
                 if (!filtered && c.Damage > 0)
                 {
                     CombatantData.Items.Add(c);
-                    AllyData.Items.Add(c);
                 }
-
-                if (c.DBDamage > 0) { workingList.Sort((x, y) => y.DBDamage.CompareTo(x.DBDamage)); DBData.Items.Add(c); }
-                if (c.LswDamage > 0) { workingList.Sort((x, y) => y.LswDamage.CompareTo(x.LswDamage)); LswData.Items.Add(c); }
-                if (c.PwpDamage > 0) { workingList.Sort((x, y) => y.PwpDamage.CompareTo(x.PwpDamage)); PwpData.Items.Add(c); }
-                if(c.AisDamage > 0) { workingList.Sort((x, y) => y.AisDamage.CompareTo(x.AisDamage)); AisData.Items.Add(c); }
-                if (c.RideDamage > 0) { workingList.Sort((x, y) => y.RideDamage.CompareTo(x.RideDamage)); RideData.Items.Add(c); }
                 workingList.Sort((x, y) => y.ReadDamage.CompareTo(x.ReadDamage));
             }
 
@@ -642,12 +634,6 @@ namespace OverParse
                     EncounterStatus.Content = "Waiting... - " + encounterlog.filename;
 
                 CombatantData.Items.Refresh();
-                AllyData.Items.Refresh();
-                DBData.Items.Refresh();
-                LswData.Items.Refresh();
-                PwpData.Items.Refresh();
-                AisData.Items.Refresh();
-                RideData.Items.Refresh();
             }
 
             if (encounterlog.running)
