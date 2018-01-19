@@ -743,6 +743,23 @@ namespace OverParse
             e.Handled = true;
         }
 
+        private void AlwaysOnTop_Key(object sender, HotkeyEventArgs e)
+        {
+            // Console.WriteLine("Always-on-top hotkey pressed");
+            AlwaysOnTop.IsChecked = !AlwaysOnTop.IsChecked;
+            IntPtr wasActive = WindowsServices.GetForegroundWindow();
+
+            // hack for activating overparse window
+            this.WindowState = WindowState.Minimized;
+            this.Show();
+            this.WindowState = WindowState.Normal;
+
+            this.Topmost = AlwaysOnTop.IsChecked;
+            AlwaysOnTop_Click(null, null);
+            WindowsServices.SetForegroundWindow(wasActive);
+            e.Handled = true;
+        }
+
         /*private void WindowStats_Click(object sender, RoutedEventArgs e)
         {
             AisData.Items.Add(workingList);
