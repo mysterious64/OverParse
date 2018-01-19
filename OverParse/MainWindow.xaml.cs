@@ -508,7 +508,7 @@ namespace OverParse
             }
 
             // force resort here to neatly shuffle AIS parses back into place
-            workingList.Sort((x, y) => y.ReadDamage.CompareTo(x.ReadDamage));
+            if (SeparateTab.SelectedIndex == 0) { workingList.Sort((x, y) => y.ReadDamage.CompareTo(x.ReadDamage)); }
 
             // make dummy zanverse combatant if necessary
             int totalZanverse = workingList.Where(c => c.IsAlly == true).Sum(x => x.GetZanverseDamage);

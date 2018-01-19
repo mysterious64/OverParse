@@ -158,7 +158,7 @@ namespace OverParse
         public string WCRIPercent => GetWCRIPercent(); // Critical Rate % in format of 00.00
 
         public bool IsYou      => CheckIsYou();               // Player-chan running
-        public bool IsAlly     => CheckIsAlly(); // Other players running
+        public bool IsAlly     => CheckIsAlly();              // Other players running
         public bool IsZanverse => CheckIsType("Zanverse");    // Zanverse being cast
         public bool IsPwp      => CheckIsType("Pwp");         // Photon weapons using
         public bool IsAIS      => CheckIsType("AIS");         // A.I.S. mode running
