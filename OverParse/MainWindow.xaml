@@ -239,7 +239,7 @@
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
 
-                                <GridViewColumn Header="Damaged" x:Name="DamagedColumn" Width="{Binding ElementName=DmgdH, Path=ActualWidth}">
+                                <GridViewColumn Header="Taken" x:Name="DamagedColumn" Width="{Binding ElementName=DmgdH, Path=ActualWidth}">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <TextBlock Text="{Binding ReadDamaged}" TextAlignment="Right" Margin="-5,-1,-5,-1" Padding="0" />
@@ -296,7 +296,7 @@
                     <ColumnDefinition x:Name="NameHC" Width="1.5*"/>
                     <ColumnDefinition x:Name="PercentHC" Width="0"/>
                     <ColumnDefinition x:Name="DmgHC" Width="72"/>
-                    <ColumnDefinition x:Name="DmgDHC" Width="52" />
+                    <ColumnDefinition x:Name="DmgDHC" Width="62" />
                     <ColumnDefinition x:Name="DPSHC" Width="44"/>
                     <ColumnDefinition x:Name="JAHC" Width="28"/>
                     <ColumnDefinition x:Name="CriHC" Width="28"/>

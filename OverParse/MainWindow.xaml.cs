@@ -135,7 +135,7 @@ namespace OverParse
             HandleWindowOpacity(); HandleListOpacity(); SeparateRide_Click(null, null);
             HandleWindowOpacity(); HandleListOpacity(); SeparatePwp_Click(null, null);
 
-            //Console.WriteLine($"Launch method: {Properties.Settings.Default.LaunchMethod}");
+            // Console.WriteLine($"Launch method: {Properties.Settings.Default.LaunchMethod}");
 
             if (Properties.Settings.Default.Maximized)
             {
@@ -152,8 +152,8 @@ namespace OverParse
                 MessageBox.Show("Hot keys are currently not working for this instance of Overparse. \n\nPlease check that you are not running multiple instances of Overparse", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Information);
             }
 
-            //skills.csv
-            Console.WriteLine("Updating skills.csv");
+            // skills.csv
+            // Console.WriteLine("Updating skills.csv");
             string[] tmp;
             try
             {
@@ -167,7 +167,7 @@ namespace OverParse
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"skills.csv update failed: {ex.ToString()}");
+                // Console.WriteLine($"skills.csv update failed: {ex.ToString()}");
                 if (File.Exists("skills.csv"))
                 {
                     MessageBox.Show("OverParse failed to update its skill mappings. This usually means your connection hiccuped for a moment.\n\nA local copy will be used instead. If you'd like to try and update again, just relaunch OverParse.", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -183,10 +183,10 @@ namespace OverParse
                 ignoreskill = File.ReadAllLines("ignoreskills.csv");
             } catch (Exception e) {
                 MessageBox.Show(e.ToString());
-                ignoreskill = new string[] { "12345678900" }; //Placeholder Value
+                ignoreskill = new string[] { "12345678900" }; // Placeholder Value
             }
 
-            Console.WriteLine("Parsing skills.csv");
+            // Console.WriteLine("Parsing skills.csv");
             
             foreach (string s in tmp)
             {

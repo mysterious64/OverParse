@@ -199,30 +199,35 @@ namespace OverParse
 
         private void HideAIS_Click(object sender, RoutedEventArgs e)
         {
+            Properties.Settings.Default.HideAIS = HideAIS.IsChecked;
             if (HideAIS.IsChecked) { HidePlayers.IsChecked = false; }
             UpdateForm(null, null);
         }
 
         private void HideDB_Click(object sender, RoutedEventArgs e)
         {
+            Properties.Settings.Default.HideDB = HideDB.IsChecked;
             if (HideDB.IsChecked) { HidePlayers.IsChecked = false; }
             UpdateForm(null, null);
         }
 
         private void HideRide_Click(object sender, RoutedEventArgs e)
         {
+            Properties.Settings.Default.HideRide = HideRide.IsChecked;
             if (HideRide.IsChecked) { HidePlayers.IsChecked = false; }
             UpdateForm(null, null);
         }
 
         private void HidePwp_Click(object sender, RoutedEventArgs e)
         {
+            Properties.Settings.Default.HidePwp = HidePwp.IsChecked;
             if (HidePwp.IsChecked) { HidePlayers.IsChecked = false; }
             UpdateForm(null, null);
         }
 
         private void HideLsw_Click(object sender, RoutedEventArgs e)
         {
+            Properties.Settings.Default.HideLsw = HideLsw.IsChecked;
             if (HideLsw.IsChecked) { HidePlayers.IsChecked = false; }
             UpdateForm(null, null);
         }
