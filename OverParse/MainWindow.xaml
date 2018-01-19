@@ -155,7 +155,7 @@
                         <MenuItem Style="{StaticResource submenu}" x:Name="ListOpacity_100" IsCheckable="True" IsChecked="False" Header="100%" Click="ListOpacity_100_Click" />
                     </MenuItem>
                     <Separator />
-                    <MenuItem Style="{StaticResource submenu}" IsCheckable="True" IsChecked="True" Header="Always On Top" x:Name="AlwaysOnTop" Click="AlwaysOnTop_Click"/>
+                    <MenuItem Style="{StaticResource submenu}" IsCheckable="True" IsChecked="True" Header="Always on top" InputGestureText="Ctrl+Shift+A" x:Name="AlwaysOnTop" Click="AlwaysOnTop_Click"/>
                     <MenuItem Style="{StaticResource submenu}" IsCheckable="True" IsChecked="False" Header="Automatically Hide Window" x:Name="AutoHideWindow" Click="AutoHideWindow_Click"/>
                     <MenuItem Style="{StaticResource submenu}" IsCheckable="True" IsChecked="False" Header="Clickthrough Toggle" x:Name="ClickthroughMode" Click="ClickthroughToggle"/>
                 </MenuItem>

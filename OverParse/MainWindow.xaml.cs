@@ -10,7 +10,9 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
-using HotKeyFrame;
+using System.Windows.Threading;
+using NHotkey;
+using NHotkey.Wpf;
 
 namespace OverParse
 {
@@ -22,9 +24,6 @@ namespace OverParse
         public static string[] ignoreskill;
         private List<string> sessionLogFilenames = new List<string>();
         private string lastStatus = "";
-        private HotKey hotkey1;
-        private HotKey hotkey2;
-        private HotKey hotkey3;
         private IntPtr hwndcontainer;
         List<Combatant> workingList;
         Process thisProcess = Process.GetCurrentProcess();
@@ -50,7 +49,7 @@ namespace OverParse
             try { Directory.CreateDirectory("Logs"); }
             catch
             {
-                MessageBox.Show("OverParseにアクセス権が無く、ログの保存が出来ません！\n管理者としてOverParseを実行してみるか、システムのアクセス権を確認して下さい！\nOverParseを別のフォルダーに移動してみるのも良いかも知れません。", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Overparse cannot save logs at the moment. \n\nPlease check that you are running Overparse as an administrator or that your account has read/write access to this directory", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Error);
                 Application.Current.Shutdown();
             }
 
@@ -107,6 +106,14 @@ namespace OverParse
             SeparateRide.IsChecked = Properties.Settings.Default.SeparateRide;
             SeparatePwp.IsChecked = Properties.Settings.Default.SeparatePwp;
             SeparateLsw.IsChecked = Properties.Settings.Default.SeparateLsw;
+
+            HidePlayers.IsChecked = Properties.Settings.Default.HidePlayers;
+            HideAIS.IsChecked = Properties.Settings.Default.HideAIS;
+            HideDB.IsChecked = Properties.Settings.Default.HideDB;
+            HideRide.IsChecked = Properties.Settings.Default.HideRide;
+            HidePwp.IsChecked = Properties.Settings.Default.HidePwp;
+            HideLsw.IsChecked = Properties.Settings.Default.HideLsw;
+
             //NoMyName.IsChecked = Properties.Settings.Default.NomyName;
             Onlyme.IsChecked = Properties.Settings.Default.Onlyme;
             DPSFormat.IsChecked = Properties.Settings.Default.DPSformat;
@@ -137,14 +144,12 @@ namespace OverParse
 
             try
             {
-                hotkey1 = new HotKey(this);
-                hotkey2 = new HotKey(this);
-                hotkey3 = new HotKey(this);
-                hotkey1.Regist(ModifierKeys.Control | ModifierKeys.Shift, Key.E, new EventHandler(EndEncounter_Key),0x0071);
-                hotkey2.Regist(ModifierKeys.Control | ModifierKeys.Shift, Key.R, new EventHandler(EndEncounterNoLog_Key),0x0072);
-                hotkey3.Regist(ModifierKeys.Control | ModifierKeys.Shift, Key.D, new EventHandler(DefaultWindowSize_Key),0x0073);
+                HotkeyManager.Current.AddOrReplace("End Encounter", Key.E, ModifierKeys.Control | ModifierKeys.Shift, EndEncounter_Key);
+                HotkeyManager.Current.AddOrReplace("End Encounter (No log)", Key.R, ModifierKeys.Control | ModifierKeys.Shift, EndEncounterNoLog_Key);
+                HotkeyManager.Current.AddOrReplace("Default Window Size", Key.D, ModifierKeys.Control | ModifierKeys.Shift, DefaultWindowSize_Key);
+                HotkeyManager.Current.AddOrReplace("Always On Top", Key.A, ModifierKeys.Control | ModifierKeys.Shift, AlwaysOnTop_Key);
             } catch {
-                MessageBox.Show("OverParseはホットキーを初期化出来ませんでした。　多重起動していないか確認して下さい！\nプログラムは引き続き使用できますが、ホットキーは反応しません。", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show("Hot keys are currently not working for this instance of Overparse. \n\nPlease check that you are not running multiple instances of Overparse", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Information);
             }
 
             //skills.csv
@@ -256,7 +261,7 @@ namespace OverParse
         private void Panic(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
         {
             try { Directory.CreateDirectory("ErrorLogs"); }
-            catch { MessageBox.Show("OverParseはDirectory<ErrorLogs>の作成に失敗しました。"); }
+            catch { MessageBox.Show("OverParse has failed to create the directory: <ErrorLogs>"); }
             string datetime = string.Format("{0:yyyy-MM-dd_HH-mm-ss}", DateTime.Now);
             string filename = $"ErrorLogs/ErrorLogs - {datetime}.txt";
             string errorMessage1 = string.Format("{0}", e.Exception.Source);
@@ -508,7 +513,7 @@ namespace OverParse
             }
 
             // force resort here to neatly shuffle AIS parses back into place
-            if (SeparateTab.SelectedIndex == 0) { workingList.Sort((x, y) => y.ReadDamage.CompareTo(x.ReadDamage)); }
+            workingList.Sort((x, y) => y.ReadDamage.CompareTo(x.ReadDamage));
 
             // make dummy zanverse combatant if necessary
             int totalZanverse = workingList.Where(c => c.IsAlly == true).Sum(x => x.GetZanverseDamage);
@@ -616,12 +621,6 @@ namespace OverParse
                 {
                     CombatantData.Items.Add(c);
                 }
-
-                if ((c.DBDamage > 0) && (SeparateTab.SelectedIndex == 1)) { workingList.Sort((x, y) => y.DBDamage.CompareTo(x.DBDamage)); DBData.Items.Add(c); }
-                if ((c.LswDamage > 0) && (SeparateTab.SelectedIndex == 2)) { workingList.Sort((x, y) => y.LswDamage.CompareTo(x.LswDamage)); LswData.Items.Add(c); }
-                if ((c.PwpDamage > 0) && (SeparateTab.SelectedIndex == 3)) { workingList.Sort((x, y) => y.PwpDamage.CompareTo(x.PwpDamage)); PwpData.Items.Add(c); }
-                if ((c.AisDamage > 0) && (SeparateTab.SelectedIndex == 4)) { workingList.Sort((x, y) => y.AisDamage.CompareTo(x.AisDamage)); AisData.Items.Add(c); }
-                if ((c.RideDamage > 0) && (SeparateTab.SelectedIndex == 5)) { workingList.Sort((x, y) => y.RideDamage.CompareTo(x.RideDamage)); RideData.Items.Add(c); }
  
             }
 
@@ -722,6 +721,26 @@ namespace OverParse
         {
             Properties.Settings.Default.Save();
             Application.Current.Shutdown();
+        }
+
+        public void EndEncounter_Key(object sender, HotkeyEventArgs e)
+        {
+            //Encounter hotkey pressed
+            EndEncounter_Click(null, null);
+            e.Handled = true;
+        }
+
+        public void EndEncounterNoLog_Key(object sender, HotkeyEventArgs e)
+        {
+            //Encounter hotkey (no log) pressed
+            EndEncounterNoLog_Click(null, null);
+            e.Handled = true;
+        }
+
+        public void DefaultWindowSize_Key(object sender, HotkeyEventArgs e)
+        {
+            DefaultWindowSize_Click(null, null);
+            e.Handled = true;
         }
 
         /*private void WindowStats_Click(object sender, RoutedEventArgs e)
