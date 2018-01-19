@@ -562,5 +562,65 @@ namespace OverParse.Properties {
                 this["HideLsw"] = value;
             }
         }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool HidePlayers {
+            get {
+                return ((bool)(this["HidePlayers"]));
+            }
+            set {
+                this["HidePlayers"] = value;
+            }
+        }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool HideAIS {
+            get {
+                return ((bool)(this["HideAIS"]));
+            }
+            set {
+                this["HideAIS"] = value;
+            }
+        }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool HidePwp {
+            get {
+                return ((bool)(this["HidePwp"]));
+            }
+            set {
+                this["HidePwp"] = value;
+            }
+        }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool HideDB {
+            get {
+                return ((bool)(this["HideDB"]));
+            }
+            set {
+                this["HideDB"] = value;
+            }
+        }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool HideRide {
+            get {
+                return ((bool)(this["HideRide"]));
+            }
+            set {
+                this["HideRide"] = value;
+            }
+        }
     }
 }
