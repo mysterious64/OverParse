@@ -158,6 +158,7 @@ namespace OverParse
         public string WCRIPercent => GetWCRIPercent(); // Critical Rate % in format of 00.00
 
         public bool IsYou      => CheckIsYou();               // Player-chan running
+        public bool IsAlly     => CheckIsAlly(); // Other players running
         public bool IsZanverse => CheckIsType("Zanverse");    // Zanverse being cast
         public bool IsPwp      => CheckIsType("Pwp");         // Photon weapons using
         public bool IsAIS      => CheckIsType("AIS");         // A.I.S. mode running
@@ -242,21 +243,6 @@ namespace OverParse
         public string LswReadPct    => LswPct.ToString("N2");            // Read LwS on MPA contribution (%)
         public string LswReadDamage => LswDamage.ToString("N0");         // Read LwS on damage dealt
         public string LswMaxHitdmg  => LswMaxHit.Damage.ToString("N0");  // Read LwS on Max Hit for damage
-
-        /* CLASS FUNCTIONS */ 
-
-        // Checks if this is a player
-        public bool IsAlly()
-        {
-            if (int.Parse(ID) >= 10000000 && !IsZanverse && !IsFinish)
-            {
-                return true;
-            } 
-            else 
-            {
-                return false;
-            }
-        }
 
         /* HELPER FUNCTIONS */
 
@@ -475,6 +461,19 @@ namespace OverParse
         private bool CheckIsYou() 
         { 
             return (ID == Hacks.currentPlayerID); 
+        }
+
+        // Checks if this is a player
+        private bool CheckIsAlly()
+        {
+            if (int.Parse(ID) >= 10000000 && !IsZanverse && !IsFinish)
+            {
+                return true;
+            } 
+            else 
+            {
+                return false;
+            }
         }
 
         // Checks if this is using other modes of attack
