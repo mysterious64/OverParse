@@ -153,7 +153,7 @@ namespace OverParse
             }
 
             // skills.csv
-            // Console.WriteLine("Updating skills.csv");
+            Console.WriteLine("Updating skills.csv");
             string[] tmp;
             try
             {
@@ -167,7 +167,7 @@ namespace OverParse
             }
             catch (Exception ex)
             {
-                // Console.WriteLine($"skills.csv update failed: {ex.ToString()}");
+                Console.WriteLine($"skills.csv update failed: {ex.ToString()}");
                 if (File.Exists("skills.csv"))
                 {
                     MessageBox.Show("OverParse failed to update its skill mappings. This usually means your connection hiccuped for a moment.\n\nA local copy will be used instead. If you'd like to try and update again, just relaunch OverParse.", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -186,7 +186,7 @@ namespace OverParse
                 ignoreskill = new string[] { "12345678900" }; // Placeholder Value
             }
 
-            // Console.WriteLine("Parsing skills.csv");
+            Console.WriteLine("Parsing skills.csv");
             
             foreach (string s in tmp)
             {
