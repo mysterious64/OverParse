@@ -162,7 +162,7 @@
                     <MenuItem Style="{StaticResource submenu}" IsCheckable="True" IsChecked="False" Header="Clickthrough Toggle" x:Name="ClickthroughMode" Click="ClickthroughToggle"/>
                 </MenuItem>
                 <MenuItem Style="{StaticResource topmenu}" Header="List">
-                    <MenuItem Style="{StaticResource submenu}" Header="Hide Contribution (%)" Click="Percent_Click" x:Name:"Percentcfg" IsCheckable="True" IsChecked="True"/>
+                    <MenuItem Style="{StaticResource submenu}" Header="Hide Contribution (%)" Click="Percent_Click" x:Name="Percentcfg" IsCheckable="True" IsChecked="True"/>
                     <MenuItem Style="{StaticResource submenu}" Header="Hide Damage Taken" Click="Damaged_Click" x:Name="Damagedcfg" IsCheckable="True" IsChecked="False"/>
                     <MenuItem Style="{StaticResource submenu}" Header="Hide JA Rate" Click="JA_Click" x:Name="JAcfg" IsCheckable="True" IsChecked="False"/>
                     <MenuItem Style="{StaticResource submenu}" Header="Hide Critical Rate" Click="Critical_Click" x:Name="Cricfg" IsCheckable="True" IsChecked="False"/>
