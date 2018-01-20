@@ -351,7 +351,7 @@ namespace OverParse
                 if (!Properties.Settings.Default.Criticalcfg) { CombatantView.Columns.Add(CriColumn); }
                 CombatantView.Columns.Add(HColumn);
                 CombatantView.Columns.Add(MaxHitColumn);
-                JAHC.Width = new GridLength(39);
+                JAHC.Width = new GridLength(44);
             }
             UpdateForm(null, null);
         }
@@ -373,7 +373,7 @@ namespace OverParse
                 CombatantView.Columns.Add(CriColumn);
                 CombatantView.Columns.Add(HColumn);
                 CombatantView.Columns.Add(MaxHitColumn);
-                CriHC.Width = new GridLength(39);
+                CriHC.Width = new GridLength(44);
             }
             UpdateForm(null, null);
         }
