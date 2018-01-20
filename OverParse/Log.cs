@@ -506,7 +506,7 @@ namespace OverParse
                                 startTimestamp = newTimestamp;
                             }
 
-                            source.Attacks.Add(new Attack("Total Damage Taken", 0, newTimestamp - startTimestamp, 0, 0, hitDamage));
+                            source.Attacks.Add(new Attack("Hits Taken", 0, newTimestamp - startTimestamp, 0, 0, hitDamage));
                             running = true;
                             
                         }

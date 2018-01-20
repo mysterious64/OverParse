@@ -268,33 +268,66 @@ namespace OverParse
             Width = 670;
         }
 
-        private void ChangeFont_Click(object sender, RoutedEventArgs e)
+        private void Percent_Click(object sender, RoutedEventArgs e)
         {
-            var dlg = new emanual.Wpf.Dialogs.FontDialogEx() { Owner = this };
-
-            var font = new emanual.Wpf.Dialogs.ToolFont
+            Properties.Settings.Default.Percentcfg = Percentcfg.IsChecked;
+            if (Percentcfg.IsChecked)
             {
-                FontFamily = CombatantData.FontFamily,
-                FontSize = CombatantData.FontSize,
-                FontWeight = CombatantData.FontWeight,
-                FontStyle = CombatantData.FontStyle,
-                FontStretch = CombatantData.FontStretch
-            };
+                CombatantView.Columns.Remove(PercentColumn);
+                PercentHC.Width = new GridLength(0);
 
-            // 言語情報を保存するため、textBox1 の Tag プロパティに設定した
-            if (CombatantData.Tag == null)
-                font.FontLanguage = "ja-jp";
-            else
-                font.FontLanguage = (string)CombatantData.Tag;
-
-            dlg.Font = font;
-            dlg.SampleText = "Sample サンプル\nPSO2\nOverParse";
-
-            if (dlg.ShowDialog().Value)
-            {
-                dlg.SetPropertyToTargetObject(CombatantData);
-                CombatantData.Tag = dlg.Font.FontLanguage;
             }
+            else
+            {
+                CombatantView.Columns.Remove(DamageColumn);
+                CombatantView.Columns.Remove(DamagedColumn);
+                CombatantView.Columns.Remove(JAColumn);
+                CombatantView.Columns.Remove(CriColumn);
+                CombatantView.Columns.Remove(HColumn);
+                CombatantView.Columns.Remove(MaxHitColumn);
+
+                CombatantView.Columns.Add(PercentColumn);
+                CombatantView.Columns.Add(DamageColumn);
+                if (!Properties.Settings.Default.Damagedcfg)  { CombatantView.Columns.Add(DamagedColumn); }
+                if (!Properties.Settings.Default.JAcfg)       { CombatantView.Columns.Add(JAColumn); }
+                if (!Properties.Settings.Default.Criticalcfg) { CombatantView.Columns.Add(CriColumn); }
+                CombatantView.Columns.Add(HColumn);
+                CombatantView.Columns.Add(MaxHitColumn);
+
+                PercentHC.Width = new GridLength(28);
+            }
+            UpdateForm(null, null);
+        }
+
+        private void Damaged_Click(object sender, RoutedEventArgs e)
+        {
+            Properties.Settings.Default.Damagedcfg = Damagedcfg.IsChecked;
+            if (Damagedcfg.IsChecked)
+            {
+                CombatantView.Columns.Remove(DamagedColumn);
+                DmgDHC.Width = new GridLength(0);
+
+            }
+            else
+            {
+                CombatantView.Columns.Remove(DamageColumn);
+                CombatantView.Columns.Remove(DamagedColumn);
+                CombatantView.Columns.Remove(JAColumn);
+                CombatantView.Columns.Remove(CriColumn);
+                CombatantView.Columns.Remove(HColumn);
+                CombatantView.Columns.Remove(MaxHitColumn);
+
+                CombatantView.Columns.Add(PercentColumn);
+                CombatantView.Columns.Add(DamageColumn);
+                CombatantView.Columns.Add(DamagedColumn);
+                if (!Properties.Settings.Default.JAcfg) { CombatantView.Columns.Add(JAColumn); }
+                if (!Properties.Settings.Default.Criticalcfg) { CombatantView.Columns.Add(CriColumn); }
+                CombatantView.Columns.Add(HColumn);
+                CombatantView.Columns.Add(MaxHitColumn);
+                
+                DmgDHC.Width = new GridLength(52);
+            }
+            UpdateForm(null, null);
         }
 
         private void JA_Click(object sender, RoutedEventArgs e)
@@ -316,7 +349,7 @@ namespace OverParse
                 if (!Properties.Settings.Default.Criticalcfg) { CombatantView.Columns.Add(CriColumn); }
                 CombatantView.Columns.Add(HColumn);
                 CombatantView.Columns.Add(MaxHitColumn);
-                JAHC.Width = new GridLength(45);
+                JAHC.Width = new GridLength(28);
             }
             UpdateForm(null, null);
         }
@@ -338,7 +371,7 @@ namespace OverParse
                 CombatantView.Columns.Add(CriColumn);
                 CombatantView.Columns.Add(HColumn);
                 CombatantView.Columns.Add(MaxHitColumn);
-                CriHC.Width = new GridLength(45);
+                CriHC.Width = new GridLength(28);
             }
             UpdateForm(null, null);
         }

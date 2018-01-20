@@ -370,6 +370,30 @@ namespace OverParse.Properties {
                 this["ListOpacity"] = value;
             }
         }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool Percentcfg {
+            get {
+                return ((bool)(this["Percentcfg"]));
+            }
+            set {
+                this["Percentcfg"] = value;
+            }
+        }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool Damagedcfg {
+            get {
+                return ((bool)(this["Damagedcfg"]));
+            }
+            set {
+                this["Damagedcfg"] = value;
+            }
+        }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]

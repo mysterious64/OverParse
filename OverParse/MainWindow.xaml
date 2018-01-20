@@ -162,9 +162,10 @@
                     <MenuItem Style="{StaticResource submenu}" IsCheckable="True" IsChecked="False" Header="Clickthrough Toggle" x:Name="ClickthroughMode" Click="ClickthroughToggle"/>
                 </MenuItem>
                 <MenuItem Style="{StaticResource topmenu}" Header="List">
-                    <MenuItem Style="{StaticResource submenu}" Header="Change Font" Click="ChangeFont_Click" />
-                    <MenuItem Style="{StaticResource submenu}" Header="Hide JA" Click="JA_Click" x:Name="JAcfg" IsCheckable="True" IsChecked="False"/>
-                    <MenuItem Style="{StaticResource submenu}" Header="Hide Critical" Click="Critical_Click" x:Name="Cricfg" IsCheckable="True" IsChecked="False"/>
+                    <MenuItem Style="{StaticResource submenu}" Header="Hide Contribution (%)" Click="Percent_Click" x:Name:"Percentcfg" IsCheckable="True" IsChecked="True"/>
+                    <MenuItem Style="{StaticResource submenu}" Header="Hide Damage Taken" Click="Damaged_Click" x:Name="Damagedcfg" IsCheckable="True" IsChecked="False"/>
+                    <MenuItem Style="{StaticResource submenu}" Header="Hide JA Rate" Click="JA_Click" x:Name="JAcfg" IsCheckable="True" IsChecked="False"/>
+                    <MenuItem Style="{StaticResource submenu}" Header="Hide Critical Rate" Click="Critical_Click" x:Name="Cricfg" IsCheckable="True" IsChecked="False"/>
                     <MenuItem Style="{StaticResource submenu}" Header="Hide Attack Name" IsCheckable="True" IsChecked="False" x:Name="CompactMode" Click="CompactMode_Click"/>
                     <MenuItem Style="{StaticResource submenu}" Header="Damage Graph" IsCheckable="True" IsChecked="False" x:Name="ShowDamageGraph" Click="ShowDamageGraph_Click"/>
                     <MenuItem Style="{StaticResource submenu}" Header="Highlight Own Damage" IsCheckable="True" IsChecked="True" x:Name="HighlightYourDamage" Click="HighlightYourDamage_Click"/>
@@ -223,13 +224,13 @@
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
 
-                                <!--GridViewColumn Header="%" x:Name="PercentColumn" Width="{Binding ElementName=PercentH, Path=ActualWidth}">
+                                <GridViewColumn Header="%" x:Name="PercentColumn" Width="{Binding ElementName=PercentH, Path=ActualWidth}">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <TextBlock Text="{Binding PercentReadDPSReadout}" TextAlignment="Right" Margin="-5,-1,-5,-1" Padding="0" />
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
-                                </GridViewColumn/-->
+                                </GridViewColumn>
 
                                 <GridViewColumn Header="Damage" x:Name="DamageColumn" Width="{Binding ElementName=DmgH, Path=ActualWidth}">
                                     <GridViewColumn.CellTemplate>
@@ -255,7 +256,7 @@
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
 
-                                <GridViewColumn Header="JA" x:Name="JAColumn" Width="{Binding ElementName=JAH, Path=ActualWidth}">
+                                <GridViewColumn Header="JA %" x:Name="JAColumn" Width="{Binding ElementName=JAH, Path=ActualWidth}">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <TextBlock Text="{Binding JAPercent}" TextAlignment="Right" Margin="-5,-1,-5,-1" Padding="0" />
@@ -263,7 +264,7 @@
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
 
-                                <GridViewColumn Header="Critical" x:Name="CriColumn" Width="{Binding ElementName=CriH, Path=ActualWidth}">
+                                <GridViewColumn Header="Crit %" x:Name="CriColumn" Width="{Binding ElementName=CriH, Path=ActualWidth}">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <TextBlock Text="{Binding CRIPercent}" TextAlignment="Right" Margin="-5,-1,-5,-1" Padding="0" />
@@ -293,10 +294,10 @@
 
             <Grid Visibility="Hidden" Grid.Row="1" Margin="0" Grid.RowSpan="2">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition x:Name="NameHC" Width="1.5*"/>
-                    <ColumnDefinition x:Name="PercentHC" Width="0"/>
+                    <ColumnDefinition x:Name="NameHC" Width="1.2*"/>
+                    <ColumnDefinition x:Name="PercentHC" Width="28"/>
                     <ColumnDefinition x:Name="DmgHC" Width="72"/>
-                    <ColumnDefinition x:Name="DmgDHC" Width="62" />
+                    <ColumnDefinition x:Name="DmgDHC" Width="52" />
                     <ColumnDefinition x:Name="DPSHC" Width="44"/>
                     <ColumnDefinition x:Name="JAHC" Width="28"/>
                     <ColumnDefinition x:Name="CriHC" Width="28"/>
@@ -315,7 +316,7 @@
             </Grid>
 
             <Rectangle x:Name="EncounterIndicator" Grid.Row="2" Height="2" VerticalAlignment="Top"  Fill="White" IsHitTestVisible="False" />
-            <Label x:Name="EncounterStatus" Grid.Row="2" MinHeight="10" Foreground="White" Padding="5,0,0,0" FontSize="12" FontFamily="Noto Sans CJK JP DemiLight" IsHitTestVisible="False" />
+            <Label x:Name="EncounterStatus" Grid.Row="2" MinHeight="15" Foreground="White" Padding="5,0,0,0" FontSize="12" FontFamily="Noto Sans CJK JP DemiLight" IsHitTestVisible="False" />
         </Grid>
     </Border>
 </Window>
