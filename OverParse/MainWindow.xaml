@@ -299,8 +299,8 @@
                     <ColumnDefinition x:Name="DmgHC" Width="72"/>
                     <ColumnDefinition x:Name="DmgDHC" Width="52" />
                     <ColumnDefinition x:Name="DPSHC" Width="44"/>
-                    <ColumnDefinition x:Name="JAHC" Width="28"/>
-                    <ColumnDefinition x:Name="CriHC" Width="28"/>
+                    <ColumnDefinition x:Name="JAHC" Width="39"/>
+                    <ColumnDefinition x:Name="CriHC" Width="39"/>
                     <ColumnDefinition x:Name="MdmgHC" Width="50"/>
                     <ColumnDefinition x:Name="AtkHC" Width="1.5*"/>
                 </Grid.ColumnDefinitions>
