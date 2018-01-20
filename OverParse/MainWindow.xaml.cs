@@ -16,6 +16,7 @@ using NHotkey.Wpf;
 
 namespace OverParse
 {
+    // TODO: Code Optimization
     public partial class MainWindow : Window
     {
         private Log encounterlog;

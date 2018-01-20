@@ -1,4 +1,5 @@
-﻿<Window x:Class="OverParse.MainWindow"
+﻿<!-- TODO: Optimize the shit out of this mess -->
+<Window x:Class="OverParse.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -120,7 +121,7 @@
                         <MenuItem Style="{StaticResource submenu}" Header="Separate Zanverse" x:Name="SeparateZanverse" IsCheckable="True" IsChecked="False" Click="SeparateZanverse_Click"/>
                         <MenuItem Style="{StaticResource submenu}" Header="Separate Hero Time Finish" x:Name="SeparateFinish" IsCheckable="True" IsChecked="False" Click="SeparateFinish_Click"/>
                     </MenuItem>
-                    <MenuItem Style="{StaticResource submenu}" Header="Vehicle Separation">
+                    <MenuItem Style="{StaticResource submenu}" Header="Attack Mode Separation">
                         <MenuItem Style="{StaticResource submenu}" Header="Separate A.I.S." x:Name="SeparateAIS" IsCheckable="True" IsChecked="False" Click="SeparateAIS_Click"/>
                         <MenuItem Style="{StaticResource submenu}" Header="Separate Dark Blast" x:Name="SeparateDB" IsCheckable="True" IsChecked="False" Click="SeparateDB_Click"/>
                         <MenuItem Style="{StaticResource submenu}" Header="Separate Rideroid" x:Name="SeparateRide" IsCheckable="True" IsChecked="False" Click="SeparateRide_Click" />
@@ -162,7 +163,7 @@
                     <MenuItem Style="{StaticResource submenu}" IsCheckable="True" IsChecked="False" Header="Clickthrough Toggle" x:Name="ClickthroughMode" Click="ClickthroughToggle"/>
                 </MenuItem>
                 <MenuItem Style="{StaticResource topmenu}" Header="List">
-                    <MenuItem Style="{StaticResource submenu}" Header="Hide Contribution (%)" Click="Percent_Click" x:Name="Percentcfg" IsCheckable="True" IsChecked="True"/>
+                    <MenuItem Style="{StaticResource submenu}" Header="Hide Contribution (%)" Click="Percent_Click" x:Name="Percentcfg" IsCheckable="True" IsChecked="False"/>
                     <MenuItem Style="{StaticResource submenu}" Header="Hide Damage Taken" Click="Damaged_Click" x:Name="Damagedcfg" IsCheckable="True" IsChecked="False"/>
                     <MenuItem Style="{StaticResource submenu}" Header="Hide JA Rate" Click="JA_Click" x:Name="JAcfg" IsCheckable="True" IsChecked="False"/>
                     <MenuItem Style="{StaticResource submenu}" Header="Hide Critical Rate" Click="Critical_Click" x:Name="Cricfg" IsCheckable="True" IsChecked="False"/>
@@ -295,13 +296,13 @@
             <Grid Visibility="Hidden" Grid.Row="1" Margin="0" Grid.RowSpan="2">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition x:Name="NameHC" Width="1*"/>
-                    <ColumnDefinition x:Name="PercentHC" Width="28"/>
-                    <ColumnDefinition x:Name="DmgHC" Width="72"/>
+                    <ColumnDefinition x:Name="PercentHC" Width="39"/>
+                    <ColumnDefinition x:Name="DmgHC" Width="0.8*"/>
                     <ColumnDefinition x:Name="DmgDHC" Width="52" />
                     <ColumnDefinition x:Name="DPSHC" Width="44"/>
                     <ColumnDefinition x:Name="JAHC" Width="44"/>
                     <ColumnDefinition x:Name="CriHC" Width="44"/>
-                    <ColumnDefinition x:Name="MdmgHC" Width="50"/>
+                    <ColumnDefinition x:Name="MdmgHC" Width="0.6*"/>
                     <ColumnDefinition x:Name="AtkHC" Width="1.7*"/>
                 </Grid.ColumnDefinitions>
                 <Grid Grid.Column="0" x:Name="NameH" />

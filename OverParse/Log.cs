@@ -8,6 +8,7 @@ using System.Windows;
 namespace OverParse
 {
     // Handles the logging section of the parser.
+    // TODO: Optimise the rest of the codes
     public class Log
     {
         // File Setup Variables

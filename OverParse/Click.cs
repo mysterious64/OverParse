@@ -297,7 +297,7 @@ namespace OverParse
                 CombatantView.Columns.Add(HColumn);
                 CombatantView.Columns.Add(MaxHitColumn);
 
-                PercentHC.Width = new GridLength(28);
+                PercentHC.Width = new GridLength(39);
             }
             UpdateForm(null, null);
         }
