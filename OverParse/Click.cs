@@ -279,8 +279,10 @@ namespace OverParse
             }
             else
             {
+                CombatantView.Columns.Remove(PercentColumn);
                 CombatantView.Columns.Remove(DamageColumn);
                 CombatantView.Columns.Remove(DamagedColumn);
+                CombatantView.Columns.Remove(DPSColumn);
                 CombatantView.Columns.Remove(JAColumn);
                 CombatantView.Columns.Remove(CriColumn);
                 CombatantView.Columns.Remove(HColumn);
@@ -289,6 +291,7 @@ namespace OverParse
                 CombatantView.Columns.Add(PercentColumn);
                 CombatantView.Columns.Add(DamageColumn);
                 if (!Properties.Settings.Default.Damagedcfg)  { CombatantView.Columns.Add(DamagedColumn); }
+                CombatantView.Columns.Add(DPSColumn);
                 if (!Properties.Settings.Default.JAcfg)       { CombatantView.Columns.Add(JAColumn); }
                 if (!Properties.Settings.Default.Criticalcfg) { CombatantView.Columns.Add(CriColumn); }
                 CombatantView.Columns.Add(HColumn);
@@ -310,16 +313,15 @@ namespace OverParse
             }
             else
             {
-                CombatantView.Columns.Remove(DamageColumn);
                 CombatantView.Columns.Remove(DamagedColumn);
+                CombatantView.Columns.Remove(DPSColumn);
                 CombatantView.Columns.Remove(JAColumn);
                 CombatantView.Columns.Remove(CriColumn);
                 CombatantView.Columns.Remove(HColumn);
                 CombatantView.Columns.Remove(MaxHitColumn);
 
-                CombatantView.Columns.Add(PercentColumn);
-                CombatantView.Columns.Add(DamageColumn);
                 CombatantView.Columns.Add(DamagedColumn);
+                CombatantView.Columns.Add(DPSColumn);
                 if (!Properties.Settings.Default.JAcfg) { CombatantView.Columns.Add(JAColumn); }
                 if (!Properties.Settings.Default.Criticalcfg) { CombatantView.Columns.Add(CriColumn); }
                 CombatantView.Columns.Add(HColumn);
@@ -349,7 +351,7 @@ namespace OverParse
                 if (!Properties.Settings.Default.Criticalcfg) { CombatantView.Columns.Add(CriColumn); }
                 CombatantView.Columns.Add(HColumn);
                 CombatantView.Columns.Add(MaxHitColumn);
-                JAHC.Width = new GridLength(28);
+                JAHC.Width = new GridLength(39);
             }
             UpdateForm(null, null);
         }
@@ -371,7 +373,7 @@ namespace OverParse
                 CombatantView.Columns.Add(CriColumn);
                 CombatantView.Columns.Add(HColumn);
                 CombatantView.Columns.Add(MaxHitColumn);
-                CriHC.Width = new GridLength(28);
+                CriHC.Width = new GridLength(39);
             }
             UpdateForm(null, null);
         }
