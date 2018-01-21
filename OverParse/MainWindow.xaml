@@ -302,7 +302,7 @@
                     <ColumnDefinition x:Name="DPSHC" Width="44"/>
                     <ColumnDefinition x:Name="JAHC" Width="44"/>
                     <ColumnDefinition x:Name="CriHC" Width="44"/>
-                    <ColumnDefinition x:Name="MdmgHC" Width="0.6*"/>
+                    <ColumnDefinition x:Name="MdmgHC" Width="0.75*"/>
                     <ColumnDefinition x:Name="AtkHC" Width="1.7*"/>
                 </Grid.ColumnDefinitions>
                 <Grid Grid.Column="0" x:Name="NameH" />
