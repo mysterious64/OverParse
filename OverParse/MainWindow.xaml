@@ -297,12 +297,12 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition x:Name="NameHC" Width="1*"/>
                     <ColumnDefinition x:Name="PercentHC" Width="39"/>
-                    <ColumnDefinition x:Name="DmgHC" Width="0.8*"/>
+                    <ColumnDefinition x:Name="DmgHC" Width="72"/>
                     <ColumnDefinition x:Name="DmgDHC" Width="52" />
                     <ColumnDefinition x:Name="DPSHC" Width="44"/>
                     <ColumnDefinition x:Name="JAHC" Width="44"/>
                     <ColumnDefinition x:Name="CriHC" Width="44"/>
-                    <ColumnDefinition x:Name="MdmgHC" Width="0.75*"/>
+                    <ColumnDefinition x:Name="MdmgHC" Width="62"/>
                     <ColumnDefinition x:Name="AtkHC" Width="1.7*"/>
                 </Grid.ColumnDefinitions>
                 <Grid Grid.Column="0" x:Name="NameH" />
