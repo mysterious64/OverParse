@@ -45,7 +45,14 @@ namespace OverParse
             LowResources.IsChecked = Properties.Settings.Default.LowResources;
             CPUdraw.IsChecked = Properties.Settings.Default.CPUdraw;
             if (Properties.Settings.Default.LowResources) { thisProcess.PriorityClass = ProcessPriorityClass.Idle; }
-            if (Properties.Settings.Default.CPUdraw) { RenderOptions.ProcessRenderMode = RenderMode.SoftwareOnly; }
+            if (Properties.Settings.Default.CPUdraw) 
+            { 
+                RenderOptions.ProcessRenderMode = RenderMode.SoftwareOnly; 
+            }
+            else 
+            {
+                RenderOptions.ProcessRenderMode = RenderMode.Default; 
+            }
 
             try { Directory.CreateDirectory("Logs"); }
             catch
@@ -208,7 +215,7 @@ namespace OverParse
             //Initializing damageTimer
             System.Windows.Threading.DispatcherTimer damageTimer = new System.Windows.Threading.DispatcherTimer();
             damageTimer.Tick += new EventHandler(UpdateForm);
-            damageTimer.Interval = new TimeSpan(0, 0, 0, 0, 100);
+            damageTimer.Interval = new TimeSpan(0, 0, 0, 1);
             damageTimer.Start();
 
             //Initializing inactiveTimer
@@ -401,7 +408,6 @@ namespace OverParse
 
             // clear out the list
             CombatantData.Items.Clear();
-            //workingList.RemoveAll(c => c.isTemporary != "no");
 
             // for zanverse dummy and status bar because WHAT IS GOOD STRUCTURE
             int elapsed = 0;
@@ -461,7 +467,7 @@ namespace OverParse
                     if (!c.IsAlly)
                         continue;
                     if (c.RideDamage > 0)
-                        {
+                    {
                         Combatant RideHolder = new Combatant(c.ID, "Ride|" + c.Name, "Ride");
                         List<Attack> targetAttacks = c.Attacks.Where(a => Combatant.RideAttackIDs.Contains(a.ID)).ToList();
                         c.Attacks = c.Attacks.Except(targetAttacks).ToList();
