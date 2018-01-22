@@ -97,7 +97,7 @@ namespace OverParse
         public string ID, isTemporary;
         public string Name { get; set; }
         public int ActiveTime;
-        public float PercentDPS, PercentReadDPS, AllyPct, DBPct, LswPct, PwpPct, AisPct, RidePct;
+        public float PercentDPS, PercentReadDPS;
 
         // Constructor #1
         public Combatant(string id, string name)
@@ -125,12 +125,17 @@ namespace OverParse
 
         /* Common GET Data Properties */
 
-        public int Damage            => GetTotalDamageDealt();                        // Total damage dealt
-        public int Damaged           => GetTotalDamageTaken();                        // Total damage taken
-        public int MaxHitNum         => MaxHitAttack.Damage;                          // Max Hit damage
-        public int ReadDamage        => GetGeneralDamageDealt();                      // General damage dealt
-        public int GetZanverseDamage => GetDamageDealt(GetZanverseID());              // Zanverse total damage
-        public int GetFinishDamage   => GetDamageDealt(GetAttackID(FinishAttackIDs)); // Hero Time Finish total damage
+        public int Damage            => GetTotalDamageDealt();                          // Total damage dealt
+        public int Damaged           => GetTotalDamageTaken();                          // Total damage taken
+        public int MaxHitNum         => MaxHitAttack.Damage;                            // Max Hit damage
+        public int ReadDamage        => GetGeneralDamageDealt();                        // General damage dealt
+        public int GetZanverseDamage => GetDamageDealt(GetZanverseID());                // Zanverse total damage
+        public int GetFinishDamage   => GetDamageDealt(GetAttackID(FinishAttackIDs));   // Hero Time Finish total damage
+        public int PwpDamage         => GetDamageDealt(GetAttackID(PhotonAttackIDs));   // PwP Total Damage
+        public int AisDamage         => GetDamageDealt(GetAttackID(AISAttackIDs));      // AIS Total Damage
+        public int RideDamage        => GetDamageDealt(GetAttackID(RideAttackIDs));     // Ride Total Damage
+        public int DBDamage          => GetDamageDealt(GetAttackID(DBAttackIDs));       // DaB Total Damage
+        public int LswDamage         => GetDamageDealt(GetAttackID(LaconiumAttackIDs)); // LwS Total Damage
 
         public Attack MaxHitAttack => GetGeneralMaxHitAttack(); // General max hit damage number
 
@@ -168,81 +173,6 @@ namespace OverParse
 
         public Brush Brush  => GetBrushPrimary();   // Player-chan damage graph
         public Brush Brush2 => GetBrushSecondary(); // Other players damage graph
-
-        /* Photon Weaponry (PwP) - A.R.K.S. Supplied Tools of "Massive Destruction" (Photon Punisher etc.)
-         * GET Data Properties
-         */
-
-        public int    PwpDamage     => GetDamageDealt(GetAttackID(PhotonAttackIDs)); // PwP Total Damage
-        public Attack PwpMaxHit     => GetMaxHit(PhotonAttackIDs);                   // PwP Max Hit Damage
-        public string PwpAtkName    => GetAttackName(PwpMaxHit);                     // PwP Max Hit Attack Name
-        public string PwpDPS        => CalculateDPS(PwpDamage);                      // PwP DPS
-        public string PwpJAPct      => GetJAValue(GetAttackID(PhotonAttackIDs));     // PwP JA Percentage (%)
-        public string PwpCriPct     => GetCritValue(GetAttackID(PhotonAttackIDs));   // PwP Critical Percentage (%)
-
-        public string PwpReadPct    => PwpPct.ToString("N2");            // Read PwP on MPA contribution (%)
-        public string PwpReadDamage => PwpDamage.ToString("N0");         // Read PwP on damage dealt
-        public string PwpMaxHitdmg  => PwpMaxHit.Damage.ToString("N0");  // Read PwP on Max Hit for damage
-
-        /* A.R.K.S. Interception Silhouette (AIS) - WE ARE BORDERLESS (Yamato boat fights, Magatsu bonus etc)
-         * GET Data Properties
-         */
-
-        public int    AisDamage     => GetDamageDealt(GetAttackID(AISAttackIDs)); // AIS Total Damage
-        public Attack AisMaxHit     => GetMaxHit(AISAttackIDs);                   // AIS Max Hit Damage
-        public string AisAtkName    => GetAttackName(AisMaxHit);                  // AIS Max Hit Attack Name
-        public string AisDPS        => CalculateDPS(AisDamage);                   // AIS DPS
-        public string AisJAPct      => GetJAValue(GetAttackID(AISAttackIDs));     // AIS JA Percentage (%)
-        public string AisCriPct     => GetCritValue(GetAttackID(AISAttackIDs));   // AIS Critical Percentage (%)
-
-        public string AisReadPct    => AisPct.ToString("N2");            // Read AIS on MPA contribution (%)
-        public string AisReadDamage => AisDamage.ToString("N0");         // Read AIS on damage dealt
-        public string AisMaxHitdmg  => AisMaxHit.Damage.ToString("N0");  // Read AIS on Max Hit for damage
-
-        /* Rideroid (Ride) - A.R.K.S. version of Sonic the Hedgehod & Up-skirt reasons (Mother EQ etc.)
-         * GET Data Properties
-         */
-
-        public int    RideDamage     => GetDamageDealt(GetAttackID(RideAttackIDs)); // Ride Total Damage
-        public Attack RideMaxHit     => GetMaxHit(RideAttackIDs);                   // Ride Max Hit Damage
-        public string RideAtkName    => GetAttackName(RideMaxHit);                  // Ride Max Hit Attack Name
-        public string RideDPS        => CalculateDPS(RideDamage);                   // Ride DPS
-        public string RideJAPct      => GetJAValue(GetAttackID(RideAttackIDs));     // Ride JA Percentage (%)
-        public string RideCriPct     => GetCritValue(GetAttackID(RideAttackIDs));   // Ride Critical Percentage (%)
-
-        public string RideReadPct    => RidePct.ToString("N2");            // Read Ride on MPA contribution (%)
-        public string RideReadDamage => RideDamage.ToString("N0");         // Read Ride on damage dealt
-        public string RideMaxHitdmg  => RideMaxHit.Damage.ToString("N0");  // Read Ride on Max Hit for damage
-
-        /* Dark Blast (DaB) - Ultimate Dark Falz Player Shenanigans (Ultimate IMPACT etc.)
-         * GET Data Properties
-         */ 
-
-        public int    DBDamage     => GetDamageDealt(GetAttackID(DBAttackIDs)); // DaB Total Damage
-        public Attack DBMaxHit     => GetMaxHit(DBAttackIDs);                   // DaB Max Hit Damage
-        public string DBAtkName    => GetAttackName(DBMaxHit);                  // DaB Max Hit Attack Name
-        public string DBDPS        => CalculateDPS(DBDamage);                   // DaB DPS
-        public string DBJAPct      => GetJAValue(GetAttackID(DBAttackIDs));     // DaB JA Percentage (%)
-        public string DBCriPct     => GetCritValue(GetAttackID(DBAttackIDs));   // DaB Critical Percentage (%)
-
-        public string DBReadPct    => DBPct.ToString("N2");            // Read DaB on MPA contribution (%)
-        public string DBReadDamage => DBDamage.ToString("N0");         // Read DaB on damage dealt
-        public string DBMaxHitdmg  => DBMaxHit.Damage.ToString("N0");  // Read DaB on Max Hit for damage
-
-        /* Laconium Sword | Mana Cannons (LwS) - Feminized Gilgamesh VS Giant Winged Fire-breathing Lizard
-         * GET Data Properties
-         */ 
-        
-        public int    LswDamage     => GetDamageDealt(GetAttackID(LaconiumAttackIDs)); // LwS Total Damage
-        public Attack LswMaxHit     => GetMaxHit(LaconiumAttackIDs);                   // LwS Max Hit Damage
-        public string LswAtkName    => GetAttackName(LswMaxHit);                       // LwS Max Hit Attack Name
-        public string LswDPS        => CalculateDPS(LswDamage);                        // LwS DPS
-        public string LswJAPct      => GetJAValue(GetAttackID(LaconiumAttackIDs));     // LwS JA Percentage (%)
-        public string LswCriPct     => GetCritValue(GetAttackID(LaconiumAttackIDs));   // LwS Critical Percentage (%)
-
-        public string LswReadPct    => LswPct.ToString("N2");            // Read LwS on MPA contribution (%)
-        public string LswReadDamage => LswDamage.ToString("N0");         // Read LwS on damage dealt
-        public string LswMaxHitdmg  => LswMaxHit.Damage.ToString("N0");  // Read LwS on Max Hit for damage
 
         /* HELPER FUNCTIONS */
 
@@ -343,20 +273,27 @@ namespace OverParse
         // Returns the total DPS of the MPA
         private double GetTotalDPS() 
         { 
-            if (Damage != 0) 
-            {
-                return Math.Round(Damage / (double)ActiveTime); 
-            }
-            else 
+            if (ActiveTime == 0)
             {
                 return Damage;
+            }
+            else
+            {
+                return Damage / ActiveTime;
             }
         }
 
         // Returns the general DPS of the MPA
         private double GetGeneralDPS() 
         { 
-            return Math.Round(ReadDamage / (double)ActiveTime); 
+            if (ActiveTime == 0)
+            {
+                return ReadDamage;
+            }
+            else
+            {
+                return Math.Round(ReadDamage / (double)ActiveTime); 
+            }
         }
         
         // Returns the display naming choices (Name or Anon)
@@ -499,6 +436,7 @@ namespace OverParse
                 return new SolidColorBrush(Color.FromArgb(127, 30, 30, 30));
             }
         }
+
         // Generates the damage bar graph for other players
         private Brush GetBrushSecondary()
         {
@@ -523,6 +461,14 @@ namespace OverParse
             return Attacks.Where(a => attackID.Contains(a.ID));
         }
         
+        // Fetch the total Damage Dealt value [ Use after (GetAttackID) function ]
+        private int GetDamageDealt(IEnumerable<OverParse.Attack> attackID) 
+        {
+            return attackID.Sum(x => x.Damage);
+        }
+
+        /* NOT USED - for now (Will think of a way to add the tabs back in more efficient method)
+
         // Fetch the Max Damage Hit that the player did
         private Attack GetMaxHit(string[] attackID) 
         {
@@ -556,12 +502,6 @@ namespace OverParse
             return Math.Round(damageDealt / (double)ActiveTime).ToString("N0");
         }
 
-        // Fetch the total Damage Dealt value [ Use after (GetAttackID) function ]
-        private int GetDamageDealt(IEnumerable<OverParse.Attack> attackID) 
-        {
-            return attackID.Sum(x => x.Damage);
-        }
-
         // Fetch the Just Attack value [ Use after (GetAttackID) function ]
         private string GetJAValue(IEnumerable<OverParse.Attack> attackID) 
         {
@@ -573,6 +513,8 @@ namespace OverParse
         {
             return (attackID.Average(x => x.Cri) * 100).ToString("N2");    
         }
+
+        */
     }
 
     // Tyrone-sama's Hacks! - kyaaa (Used for finding current player ID)

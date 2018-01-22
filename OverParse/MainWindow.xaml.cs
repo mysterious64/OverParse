@@ -215,7 +215,7 @@ namespace OverParse
             //Initializing damageTimer
             System.Windows.Threading.DispatcherTimer damageTimer = new System.Windows.Threading.DispatcherTimer();
             damageTimer.Tick += new EventHandler(UpdateForm);
-            damageTimer.Interval = new TimeSpan(0, 0, 0, 1);
+            damageTimer.Interval = new TimeSpan(0, 0, 0, 0, 100);
             damageTimer.Start();
 
             //Initializing inactiveTimer
@@ -568,28 +568,12 @@ namespace OverParse
 
 
             // get group damage totals
-            int totalReadDamage = workingList.Where(c => (c.IsAlly || c.IsZanverse || c.IsFinish || c.IsAIS || c.IsPwp || c.IsDB || c.IsRide)).Sum(x => x.ReadDamage);
+            int totalReadDamage = workingList.Where(c => (c.IsAlly)).Sum(x => x.ReadDamage);
 
             // dps calcs!
             foreach (Combatant c in workingList)
             {
-                if (c.IsAlly || c.IsZanverse || c.IsFinish)
-                {
-                    c.PercentReadDPS = c.ReadDamage / (float)totalReadDamage * 100;
-                    c.DBPct = c.DBDamage / (float)totalReadDamage * 100;
-                    c.LswPct = c.LswDamage / (float)totalReadDamage * 100;
-                    c.PwpPct = c.PwpDamage / (float)totalReadDamage * 100;
-                    c.AisPct = c.AisDamage / (float)totalReadDamage * 100;
-                    c.RidePct = c.RideDamage / (float)totalReadDamage * 100;
-                } else {
-                    c.PercentDPS = -1;
-                    c.PercentReadDPS = -1;
-                    c.DBPct = -1;
-                    c.LswPct = -1;
-                    c.PwpPct = -1;
-                    c.AisPct = -1;
-                    c.RidePct = -1;
-                }
+                c.PercentReadDPS = c.ReadDamage / (float)totalReadDamage * 100;
             }
 
 
