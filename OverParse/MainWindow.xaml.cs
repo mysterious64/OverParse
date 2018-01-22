@@ -215,19 +215,19 @@ namespace OverParse
             //Initializing damageTimer
             System.Windows.Threading.DispatcherTimer damageTimer = new System.Windows.Threading.DispatcherTimer();
             damageTimer.Tick += new EventHandler(UpdateForm);
-            damageTimer.Interval = new TimeSpan(0, 0, 0, 0, 100);
+            damageTimer.Interval = new TimeSpan(0, 0, 0, 1);
             damageTimer.Start();
 
             //Initializing inactiveTimer
             System.Windows.Threading.DispatcherTimer inactiveTimer = new System.Windows.Threading.DispatcherTimer();
             inactiveTimer.Tick += new EventHandler(HideIfInactive);
-            inactiveTimer.Interval = new TimeSpan(0, 0, 1);
+            inactiveTimer.Interval = TimeSpan.FromMilliseconds(200);
             inactiveTimer.Start();
 
             //Initializing logCheckTimer
             System.Windows.Threading.DispatcherTimer logCheckTimer = new System.Windows.Threading.DispatcherTimer();
             logCheckTimer.Tick += new EventHandler(CheckForNewLog);
-            logCheckTimer.Interval = new TimeSpan(0, 0, 1);
+            logCheckTimer.Interval = new TimeSpan(0, 0, 10);
             logCheckTimer.Start();
         }
 
