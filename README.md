@@ -14,32 +14,54 @@ You can find the latest version on our [releases here](https://github.com/myster
 - [Remon-7L](https://github.com/Remon-7L/OverParse) for his design overhaul and new details (Damage Taken, JA, Crit).
 - [SkrubZer0](https://github.com/SkrubZer0/OverParse) for sharing his fixes on optimization.
 
+## MIT License
+
+Copyright (c) [2018] [Mysty]
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
 ---
 
 ## Developers Section
 ### Requirements
-This project is built with these requirements: 
+This project is made possible and built with these requirements: 
 * Microsoft's [Visual Studio 2017](https://www.visualstudio.com/vs/whatsnew/) IDE.
 * Microsoft's [.NET Framework 4.7.1](https://www.microsoft.com/net/download/dotnet-framework-runtime) Runtime.
 * The [NHotkey Library](https://github.com/thomaslevesque/NHotkey), for hot key managing.
 * The [Fody Costura](https://github.com/Fody/Costura) addon, for compiling DLLs into executable.
 
 ###### Files Explained:
-`MainWindow.xaml` OverParse’s UI is in .xaml format.
+* `MainWindow.xaml` OverParse’s UI is in .xaml format.
 
-`MainWindow.xaml.cs` On startup, the settings is loaded from here, and is responsible for starting the iteration.
+* `MainWindow.xaml.cs` On startup, the settings is loaded from here, and is responsible for starting the iteration.
 
-`Log.cs` Connects the installation and process logs, and .csv file reading.
+* `Log.cs` Connects the installation and process logs, and .csv file reading.
 
-`Click.cs` After MainWindow.xaml.cs is ran, this is relevant for processing and partitioning objects into partial classes.
+* `Click.cs` After MainWindow.xaml.cs is ran, this is relevant for processing and partitioning objects into partial classes.
 
-`WindowsServices.cs` After HideIfInactive is ran, it calls on Visual Studios’s generated window title.
+* `WindowsServices.cs` After HideIfInactive is ran, it calls on Visual Studios’s generated window title.
 
-`Details.xaml.cs` Window for when they double-click on options from ListViewItem.
+* `Details.xaml.cs` Window for when they double-click on options from ListViewItem.
 
-`FontDialogEx.xaml.cs` Font Selection Window.
+* `FontDialogEx.xaml.cs` Font Selection Window.
 
-`Inputbox.xaml.cs` The field based on inputs on the number of seconds the “auto-encounter” ends. (Rendered with WPF)
+* `Inputbox.xaml.cs` The field based on inputs on the number of seconds the “auto-encounter” ends. (Rendered with WPF)
 
 ###### Process Flow:
 1. `MainWindow.xaml.cs/MainWindow.MainWindow()` loads on startup
