@@ -47,32 +47,32 @@ This project is made possible and built with these requirements:
 * The [Fody Costura](https://github.com/Fody/Costura) addon, for compiling DLLs into executable.
 
 ###### Files Explained:
-* `MainWindow.xaml` OverParse’s UI is in .xaml format.
+1. `MainWindow.xaml` OverParse’s UI is in .xaml format.
 
-* `MainWindow.xaml.cs` On startup, the settings is loaded from here, and is responsible for starting the iteration.
+2. `MainWindow.xaml.cs` On startup, the settings is loaded from here, and is responsible for starting the iteration.
 
-* `Log.cs` Connects the installation and process logs, and .csv file reading.
+3. `Log.cs` Connects the installation and process logs, and .csv file reading.
 
-* `Click.cs` After MainWindow.xaml.cs is ran, this is relevant for processing and partitioning objects into partial classes.
+4. `Click.cs` After MainWindow.xaml.cs is ran, this is relevant for processing and partitioning objects into partial classes.
 
-* `WindowsServices.cs` After HideIfInactive is ran, it calls on Visual Studios’s generated window title.
+5. `WindowsServices.cs` After HideIfInactive is ran, it calls on Visual Studios’s generated window title.
 
-* `Details.xaml.cs` Window for when they double-click on options from ListViewItem.
+6. `Details.xaml.cs` Window for when they double-click on options from ListViewItem.
 
-* `FontDialogEx.xaml.cs` Font Selection Window.
+7. `FontDialogEx.xaml.cs` Font Selection Window.
 
-* `Inputbox.xaml.cs` The field based on inputs on the number of seconds the “auto-encounter” ends. (Rendered with WPF)
+8. `Inputbox.xaml.cs` The field based on inputs on the number of seconds the “auto-encounter” ends. (Rendered with WPF)
 
 ###### Process Flow:
 1. `MainWindow.xaml.cs/MainWindow.MainWindow()` loads on startup
 
-2. `Calls on Log.cs / Log.Log() - MainWindow()` and installation connects with PSO2
+2. Calls on `Log.cs / Log.Log() - MainWindow()` and installation connects with PSO2
 
-3. `UpdateForm` New info updated every 500ms, the screen is updated through looping.
+3. `UpdateForm()` New info updated every 1000ms, the screen is updated through looping.
 
-4. `HideIfInactive` For every second, the active window’s title is obtained through iterations.
+4. `HideIfInactive()` For every second, the active window’s title is obtained through iterations.
 
-5. `CheckForNewLog` For every second, Confirms and loops if there is no new .csv file.
+5. `CheckForNewLog()` For every second, Confirms and loops if there is no new .csv file.
 
 6. Event handlers are covered by `MainWindow.xaml.cs`, and Click.cs splits it up for easier use. However, in foresight, there’s still room for improvement, as it’s still pretty bad, at least bad in my opinion.
  
