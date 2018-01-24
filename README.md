@@ -1,24 +1,46 @@
-ファイル  
-MainWindow.xaml - OverParseのUIになるxaml  
-MainWindow.xaml.cs - 起動時に呼ばれ、設定の読み込みやループ処理の開始を担当  
-Log.cs - インストール関連、ログ書き込み関連、.csv読み込み関連  
-Click.cs - MainWindow.xaml.csからClick関連の処理を分割したもの partial class  
-Hotkey.cs - ホットキー関連  
-WindowsServices.cs - HideIfInactiveから呼ばれているアクティブなアプリのウィンドゥタイトル取得  
-Detalis - ListViewItemをダブルクリックした時のウィンドゥ  
-FontDialogEx - フォントの選択ウィンドゥ  
-inputbox - 自動エンカウント終了の秒数入力欄(WPF)  
+# Miss Mysty's OverParse
+A complete overhaul of OverParse, based on Remon-7L's design. This is a standalone log reader and overlay (for Variant's PSO2DamageDump plugin). This tool shows damage statistics for you, the user, and your MPA in realtime, and provides detailed damage breakdowns for later analysis.
 
-  
+## Latest Release
+You can find latest version on our [releases here](https://github.com/mysterious64/OverParse/releases).
 
-処理の流れ  
-MainWindow.xaml.cs / MainWindow.MainWindow() - 起動時読み込み  
-  ↓  
- Log.cs / Log.Log() - MainWindow()から呼ばれる、インストール関連  
-  ↓  
- UpdateForm - 500ms毎に情報・画面更新のループ処理  
- HideIfInactive - 1s毎にアクティブウィンドゥのタイトルを取得するループ処理  
- CheckForNewLog - 1s毎に新しい.csvファイルが無いかどうかを確認するループ処理  
-   
-イベントハンドラまみれだったMainWindow.xaml.csをClick.csに分けたので大分見やすくなったと思いますがまだまだ見通しが悪いと言えば悪いです  
+## A Word Of Warning
+This tool and any other damage parser currently violates PSO2's Terms of Service. [It is a bannable offense according to SEGA](http://pso2.jp/players/news/9224/)), and legal action could potentially be applied to your account. Please do not misuse information given to you by this tool (or any other 3rd party parsing tool for that matter) **You have been warned.**
+
+## Credits
+- [Variant](https://github.com/VariantXYZ/PSO2ACT) for keeping the damage logs up to date.
+- [TyroneSama](https://github.com/TyroneSama/OverParse) for making the original version of OverParse.
+- [Remon-7L](https://github.com/Remon-7L/OverParse) for his design overhaul and new details (Damage Taken, JA, Crit).
+- [SkrubZer0](https://github.com/SkrubZer0/OverParse) for sharing his fixes on optimization.
+
+---
+
+## Developers Section
+###### Files Explained:
+`MainWindow.xaml`
+> OverParse’s UI is in .xaml format.
+`MainWindow.xaml.cs`
+> On startup, the settings is loaded from here, and is responsible for starting the iteration.
+`Log.cs`
+> Connects the installation and process logs, and .csv file reading.
+`Click.cs`
+> After MainWindow.xaml.cs is ran, this is relevant for processing and partitioning objects into partial classes.
+`WindowsServices.cs`
+> After HideIfInactive is ran, it calls on Visual Studios’s generated window title.
+`Details` 
+> Window for when they double-click on options from ListViewItem.
+`FontDialogEx` 
+> Font Selection Window.
+`Inputbox` 
+> The field based on inputs on the number of seconds the “auto-encounter” ends. (Rendered with WPF)
+
+###### Process Flow:
+`MainWindow.xaml.cs/MainWindow.MainWindow()` loads on startup
+ ↓
+`Calls on Log.cs / Log.Log() - MainWindow()` and installation connects with PSO2
+ ↓
+`UpdateForm` - New info updated every 500ms, the screen is updated through looping.
+`HideIfInactive` - For every second, the active window’s title is obtained through iterations.
+`CheckForNewLog` - For every second, Confirms and loops if there is no new .csv file.
+Event handlers are covered by `MainWindow.xaml.cs`, and Click.cs splits it up for easier use. However, in foresight, there’s still room for improvement, as it’s still pretty bad, at least bad in my opinion.
  
