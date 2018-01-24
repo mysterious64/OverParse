@@ -142,7 +142,7 @@ namespace OverParse
         public double DPS     => GetTotalDPS();   // Total DPS for MPA
         public double ReadDPS => GetGeneralDPS(); // General DPS for each player
 
-        public string DisplayName => GetDisplayName(); // Get player/anon names
+        public string DisplayName => GetDisplayName(); // Get player OR anon names
 
         public string DamageReadout => ReadDamage.ToString("N0"); // Damage dealt stringified
         public string ReadDamaged   => GetGeneralDamageTaken();   // Damage taken stringified
