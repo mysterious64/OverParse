@@ -17,6 +17,13 @@ You can find the latest version on our [releases here](https://github.com/myster
 ---
 
 ## Developers Section
+### Requirements
+This project is built with these requirements: 
+* Microsoft's [Visual Studio 2017](https://www.visualstudio.com/vs/whatsnew/) IDE.
+* Microsoft's [.NET Framework 4.7.1](https://www.microsoft.com/net/download/dotnet-framework-runtime) Runtime.
+* The [NHotkey Library](https://github.com/thomaslevesque/NHotkey), for hot key managing.
+* The [Fody Costura](https://github.com/Fody/Costura) addon, for compiling DLLs into executable.
+
 ###### Files Explained:
 `MainWindow.xaml` OverParse’s UI is in .xaml format.
 
