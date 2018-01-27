@@ -16,7 +16,7 @@ You can find the latest version on our [releases here](https://github.com/myster
 
 ## MIT License
 
-**Copyright (c) 2018 Miss Mysty's TEAM**
+**Copyright (c) 2018 TEAM Miss Mysty**
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
@@ -28,7 +28,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 ## Developers Section
 ### Requirements
-This project is made possible and built with these requirements: 
+This project is written in `C#` and is made possible and built with these requirements: 
 * Microsoft's [Visual Studio 2017](https://www.visualstudio.com/vs/whatsnew/) IDE.
 * Microsoft's [.NET Framework 4.7.1](https://www.microsoft.com/net/download/dotnet-framework-runtime) Runtime.
 * The [NHotkey Library](https://github.com/thomaslevesque/NHotkey), for hot key managing.

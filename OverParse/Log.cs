@@ -85,20 +85,22 @@ namespace OverParse
         {
             try
             {
+                // Copy file into 'pso2_bin' folder
                 File.Copy(Directory.GetCurrentDirectory() + "\\resources\\pso2h.dll", attemptDirectory + "\\pso2h.dll", true);
                 File.Copy(Directory.GetCurrentDirectory() + "\\resources\\ddraw.dll", attemptDirectory + "\\ddraw.dll", true);
 
-                Directory.CreateDirectory(attemptDirectory + "\\plugins");
+                Directory.CreateDirectory(attemptDirectory + "\\plugins"); // Create the directory
 
+                // Copy file into 'plugins' folder
                 File.Copy(Directory.GetCurrentDirectory() + "\\resources\\PSO2DamageDump.dll", attemptDirectory + "\\plugins" + "\\PSO2DamageDump.dll", true);
                 File.Copy(Directory.GetCurrentDirectory() + "\\resources\\PSO2DamageDump.cfg", attemptDirectory + "\\plugins" + "\\PSO2DamageDump.cfg", true);
 
-                Properties.Settings.Default.InstalledPluginVersion = pluginVersion;
+                Properties.Settings.Default.InstalledPluginVersion = pluginVersion; // Plugin version noted
 
                 MessageBox.Show("Setup complete! A few files have been copied to your pso2_bin folder.\n\n" 
                               + "If PSO2 is running right now, you'll need to close it before the changes can take effect."
                               , "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Information);
-                return true; // Plugin install successful
+                return true;  // Plugin install successful
             }
             catch
             {
@@ -110,7 +112,7 @@ namespace OverParse
             }
         }
 
-        // Copy the parse data to clipboard -- To be removed --
+        // Copy the parse data to clipboard -- To be removed ? --
         public void WriteClipboard()
         {
             string log = "";
@@ -144,15 +146,16 @@ namespace OverParse
         // Writes combat data to log file
         public string WriteLog()
         {
-            if (combatants.Count != 0)
+            if (combatants.Count != 0) // Players found
             {
-                int elapsed       = newTimestamp - startTimestamp;
-                TimeSpan timespan = TimeSpan.FromSeconds(elapsed);
+                int elapsed       = newTimestamp - startTimestamp; // How long has passed
+                TimeSpan timespan = TimeSpan.FromSeconds(elapsed); // ... in seconds
 
+                // Logging the total time occured through out the encounter
                 string timer = timespan.ToString(@"mm\:ss");
                 string log   = DateTime.Now.ToString("F") + " | " + timer + " | "  + Environment.NewLine + Environment.NewLine;
 
-                log += "[ Encounter Overview ]" + Environment.NewLine;
+                log += "[ Encounter Overview ]" + Environment.NewLine; // Title
 
                 foreach (Combatant c in combatants)
                 {
