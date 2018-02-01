@@ -8,8 +8,25 @@
         WindowStartupLocation="CenterOwner"
         Title="Detalis" Height="300" Width="300">
     <Grid>
-        <Label Content="testing..." Height="30" HorizontalAlignment="Stretch" VerticalAlignment="Top" />
-        <Label Height="30" HorizontalAlignment="Stretch" VerticalAlignment="Top" x:Name="Data1" Margin="0,35,0,0" />
-        <Label x:Name="Data2" Height="30" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="0,70,0,0" />
+        <Label Content="Player ID" HorizontalAlignment="Left" VerticalAlignment="Top" Padding="0" Margin="10,10,0,0" />
+        <Label x:Name="ID" HorizontalAlignment="Left" VerticalAlignment="Top" Padding="0" Margin="95,10,0,0"/>
+        <Label Content="Player Name" HorizontalAlignment="Left" VerticalAlignment="Top" Padding="0" Margin="10,31,0,0" />
+        <Label x:Name="PlayerName" HorizontalAlignment="Left" VerticalAlignment="Top" Padding="0" Margin="95,31,0,0"/>
+        <Label Content="Percent" HorizontalAlignment="Left" VerticalAlignment="Top" Padding="0" Margin="10,52,0,0" />
+        <Label x:Name="Percent" HorizontalAlignment="Left" VerticalAlignment="Top" Padding="0" Margin="95,52,0,0"/>
+        <Label Content="Total Damage" HorizontalAlignment="Left" VerticalAlignment="Top" Padding="0" Margin="10,73,0,0" />
+        <Label x:Name="Damage" HorizontalAlignment="Left" VerticalAlignment="Top" Padding="0" Margin="95,73,0,0"/>
+        <Label Content="Total Damaged" HorizontalAlignment="Left" VerticalAlignment="Top" Padding="0" Margin="10,94,0,0" />
+        <Label x:Name="Damaged" HorizontalAlignment="Left" VerticalAlignment="Top" Padding="0" Margin="95,94,0,0"/>
+        <Label Content="DPS" HorizontalAlignment="Left" VerticalAlignment="Top" Padding="0" Margin="10,115,0,0" RenderTransformOrigin="2.295,2.281" />
+        <Label x:Name="DPS" HorizontalAlignment="Left" VerticalAlignment="Top" Padding="0" Margin="95,115,0,0"/>
+        <Label Content="Just Attack" HorizontalAlignment="Left" VerticalAlignment="Top" Padding="0" Margin="10,136,0,0" />
+        <Label x:Name="JA" HorizontalAlignment="Left" VerticalAlignment="Top" Padding="0" Margin="95,136,0,0"/>
+        <Label Content="Critical" HorizontalAlignment="Left" VerticalAlignment="Top" Padding="0" Margin="10,157,0,0" />
+        <Label x:Name="Critical" HorizontalAlignment="Left" VerticalAlignment="Top" Padding="0" Margin="95,157,0,0"/>
+        <Label Content="Max Hit" HorizontalAlignment="Left" VerticalAlignment="Top" Padding="0" Margin="10,178,0,0" />
+        <Label x:Name="Max" HorizontalAlignment="Left" VerticalAlignment="Top" Padding="0" Margin="95,178,0,0" />
+        <Label Content="Attack Name" HorizontalAlignment="Left" VerticalAlignment="Top" Padding="0" Margin="10,199,0,0" />
+        <Label x:Name="Atk" HorizontalAlignment="Left" VerticalAlignment="Top" Padding="0" Margin="95,199,0,0"/>
     </Grid>
 </Window>
