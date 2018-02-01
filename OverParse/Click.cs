@@ -3,19 +3,15 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
-using HotKeyFrame;
 
 namespace OverParse
 {
     public partial class MainWindow : Window
     {
-
 
         private void EndEncounter_Click(object sender, RoutedEventArgs e)
         {
@@ -25,6 +21,7 @@ namespace OverParse
             UpdateForm(null, null); // I'M FUCKING STUPID
             Properties.Settings.Default.AutoEndEncounters = temp;
             encounterlog.backupCombatants = encounterlog.combatants;
+            Log.backupTime = Log.ActiveTime;
 
 
             List<Combatant> workingListCopy = new List<Combatant>();
@@ -32,8 +29,8 @@ namespace OverParse
             {
                 Combatant temp2 = new Combatant(c.ID, c.Name, c.isTemporary);
                 foreach (Attack a in c.Attacks)
-                    temp2.Attacks.Add(new Attack(a.ID, a.Damage, a.Timestamp, a.JA, a.Cri, a.Dmgd));
-                temp2.ActiveTime = c.ActiveTime;
+                    temp2.Attacks.Add(new Attack(a.ID, a.Damage, a.JA, a.Cri));
+                temp2.Damaged = c.Damaged;
                 temp2.PercentReadDPS = c.PercentReadDPS;
                 workingListCopy.Add(temp2);
             }
@@ -62,6 +59,7 @@ namespace OverParse
 
             encounterlog = new Log(Properties.Settings.Default.Path);
             UpdateForm(null, null);
+            Log.startTimestamp = 0;
         }
 
         public void EndEncounter_Key(object sender, EventArgs e)
@@ -73,6 +71,7 @@ namespace OverParse
         private void EndEncounterNoLog_Click(object sender, RoutedEventArgs e)
         {
             //Ending encounter (no log)
+            Log.ActiveTime = Log.backupTime;
             bool temp = Properties.Settings.Default.AutoEndEncounters;
             Properties.Settings.Default.AutoEndEncounters = false;
             UpdateForm(null, null);
@@ -80,6 +79,7 @@ namespace OverParse
             //Reinitializing log
             encounterlog = new Log(Properties.Settings.Default.Path);
             UpdateForm(null, null);
+            Log.startTimestamp = 0;
         }
 
         private void EndEncounterNoLog_Key(object sender, EventArgs e)
@@ -87,13 +87,7 @@ namespace OverParse
             //Encounter hotkey (no log) pressed
             EndEncounterNoLog_Click(null, null);
         }
-/* Unneeded Method?
-        private void Questcheck_Click(object sender, RoutedEventArgs e)
-        {
-            QuestName quest = new QuestName();
-            quest.Show();
-        }
-*/
+
         private void AutoEndEncounters_Click(object sender, RoutedEventArgs e)
         {
             Properties.Settings.Default.AutoEndEncounters = AutoEndEncounters.IsChecked;
@@ -256,6 +250,28 @@ namespace OverParse
             UpdateForm(null, null);
         }
 
+        private void ChangeInterval_Click(object sender, RoutedEventArgs e)
+        {
+            AlwaysOnTop.IsChecked = false;
+            Inputbox input = new Inputbox("OverParse", "Change .csv Read Interval... (ms)", Properties.Settings.Default.Updateinv.ToString()) { Owner = this };
+            input.ShowDialog();
+            if (Int32.TryParse(input.ResultText, out int x))
+            {
+                if (x > 49)
+                {
+                    damageTimer.Interval = new TimeSpan(0, 0, 0, 0, x);
+                    Properties.Settings.Default.Updateinv = x;
+                }
+                else { MessageBox.Show("Error"); }
+            }
+            else
+            {
+                if (input.ResultText.Length > 0) { MessageBox.Show("Couldn't parse your input. Enter only a number."); }
+            }
+
+            AlwaysOnTop.IsChecked = Properties.Settings.Default.AlwaysOnTop;
+        }
+
         private void DefaultWindowSize_Click(object sender, RoutedEventArgs e)
         {
             Height = 275;
@@ -268,139 +284,60 @@ namespace OverParse
             Width = 670;
         }
 
-        private void Percent_Click(object sender, RoutedEventArgs e)
+        private void SelectColumn_Click(object sender, RoutedEventArgs e)
         {
-            Properties.Settings.Default.Percentcfg = Percentcfg.IsChecked;
-            if (Percentcfg.IsChecked)
-            {
-                CombatantView.Columns.Remove(PercentColumn);
-                PercentHC.Width = new GridLength(0);
+            GridLength temp = new GridLength(0);
+            bool Name, Pct, Dmg, Dmgd, DPS, JA, Cri, Hit, Atk, Vrb;
+            Name = Pct = Dmg = Dmgd = DPS = JA = Cri = Hit = Atk = true;
+            Vrb = Properties.Settings.Default.Variable;
+            if (NameHC.Width == temp) { Name = false; }
+            if (PercentHC.Width == temp) { Pct = false; }
+            if (DmgHC.Width == temp) { Dmg = false; }
+            if (DmgDHC.Width == temp) { Dmgd = false; }
+            if (DPSHC.Width == temp) { DPS = false; }
+            if (JAHC.Width == temp) { JA = false; }
+            if (CriHC.Width == temp) { Cri = false; }
+            if (MdmgHC.Width == temp) { Hit = false; }
+            if (AtkHC.Width == temp) { Atk = false; }
+            SelectColumn selectColumn = new SelectColumn(Name, Pct, Dmg, Dmgd, DPS, JA, Cri, Hit, Atk, Vrb) { Owner = this };
+            selectColumn.ShowDialog();
+            if (!(bool)selectColumn.DialogResult) { return; }
+            CombatantView.Columns.Clear();
 
+
+            if (selectColumn.ResultName) { CombatantView.Columns.Add(NameColumn); NameHC.Width = new GridLength(1, GridUnitType.Star); } else { NameHC.Width = temp; }
+            if (selectColumn.Vrb)
+            {
+                if (selectColumn.Pct) { CombatantView.Columns.Add(PercentColumn); PercentHC.Width = new GridLength(0.4, GridUnitType.Star); } else { PercentHC.Width = temp; }
+                if (selectColumn.Dmg) { CombatantView.Columns.Add(DamageColumn); DmgHC.Width = new GridLength(0.8, GridUnitType.Star); } else { DmgHC.Width = temp; }
+                if (selectColumn.Dmgd) { CombatantView.Columns.Add(DamagedColumn); DmgDHC.Width = new GridLength(0.6, GridUnitType.Star); } else { DmgDHC.Width = temp; }
+                if (selectColumn.DPS) { CombatantView.Columns.Add(DPSColumn); DPSHC.Width = new GridLength(0.6, GridUnitType.Star); } else { DPSHC.Width = temp; }
+                if (selectColumn.JA) { CombatantView.Columns.Add(JAColumn); JAHC.Width = new GridLength(0.4, GridUnitType.Star); } else { JAHC.Width = temp; }
+                if (selectColumn.Cri) { CombatantView.Columns.Add(CriColumn); CriHC.Width = new GridLength(0.4, GridUnitType.Star); } else { CriHC.Width = temp; }
+                if (selectColumn.Hit) { CombatantView.Columns.Add(HColumn); MdmgHC.Width = new GridLength(0.6, GridUnitType.Star); } else { MdmgHC.Width = temp; }
             }
             else
             {
-                CombatantView.Columns.Remove(PercentColumn);
-                CombatantView.Columns.Remove(DamageColumn);
-                CombatantView.Columns.Remove(DamagedColumn);
-                CombatantView.Columns.Remove(DPSColumn);
-                CombatantView.Columns.Remove(JAColumn);
-                CombatantView.Columns.Remove(CriColumn);
-                CombatantView.Columns.Remove(HColumn);
-                CombatantView.Columns.Remove(MaxHitColumn);
-
-                CombatantView.Columns.Add(PercentColumn);
-                CombatantView.Columns.Add(DamageColumn);
-                if (!Properties.Settings.Default.Damagedcfg)  { CombatantView.Columns.Add(DamagedColumn); }
-                CombatantView.Columns.Add(DPSColumn);
-                if (!Properties.Settings.Default.JAcfg)       { CombatantView.Columns.Add(JAColumn); }
-                if (!Properties.Settings.Default.Criticalcfg) { CombatantView.Columns.Add(CriColumn); }
-                CombatantView.Columns.Add(HColumn);
-                CombatantView.Columns.Add(MaxHitColumn);
-
-                PercentHC.Width = new GridLength(39);
+                if (selectColumn.Pct) { CombatantView.Columns.Add(PercentColumn); PercentHC.Width = new GridLength(39); } else { PercentHC.Width = temp; }
+                if (selectColumn.Dmg) { CombatantView.Columns.Add(DamageColumn); DmgHC.Width = new GridLength(78); } else { DmgHC.Width = temp; }
+                if (selectColumn.Dmgd) { CombatantView.Columns.Add(DamagedColumn); DmgDHC.Width = new GridLength(56); } else { DmgDHC.Width = temp; }
+                if (selectColumn.DPS) { CombatantView.Columns.Add(DPSColumn); DPSHC.Width = new GridLength(56); } else { DPSHC.Width = temp; }
+                if (selectColumn.JA) { CombatantView.Columns.Add(JAColumn); JAHC.Width = new GridLength(39); } else { JAHC.Width = temp; }
+                if (selectColumn.Cri) { CombatantView.Columns.Add(CriColumn); CriHC.Width = new GridLength(39); } else { CriHC.Width = temp; }
+                if (selectColumn.Hit) { CombatantView.Columns.Add(HColumn); MdmgHC.Width = new GridLength(62); } else { MdmgHC.Width = temp; }
             }
-            UpdateForm(null, null);
-        }
-
-        private void Damaged_Click(object sender, RoutedEventArgs e)
-        {
-            Properties.Settings.Default.Damagedcfg = Damagedcfg.IsChecked;
-            if (Damagedcfg.IsChecked)
-            {
-                CombatantView.Columns.Remove(DamagedColumn);
-                DmgDHC.Width = new GridLength(0);
-
-            }
-            else
-            {
-                CombatantView.Columns.Remove(DamagedColumn);
-                CombatantView.Columns.Remove(DPSColumn);
-                CombatantView.Columns.Remove(JAColumn);
-                CombatantView.Columns.Remove(CriColumn);
-                CombatantView.Columns.Remove(HColumn);
-                CombatantView.Columns.Remove(MaxHitColumn);
-
-                CombatantView.Columns.Add(DamagedColumn);
-                CombatantView.Columns.Add(DPSColumn);
-                if (!Properties.Settings.Default.JAcfg) { CombatantView.Columns.Add(JAColumn); }
-                if (!Properties.Settings.Default.Criticalcfg) { CombatantView.Columns.Add(CriColumn); }
-                CombatantView.Columns.Add(HColumn);
-                CombatantView.Columns.Add(MaxHitColumn);
-                
-                DmgDHC.Width = new GridLength(52);
-            }
-            UpdateForm(null, null);
-        }
-
-        private void JA_Click(object sender, RoutedEventArgs e)
-        {
-            Properties.Settings.Default.JAcfg = JAcfg.IsChecked;
-            if (JAcfg.IsChecked)
-            {
-                CombatantView.Columns.Remove(JAColumn);
-                JAHC.Width = new GridLength(0);
-
-            }
-            else
-            {
-                CombatantView.Columns.Remove(JAColumn);
-                CombatantView.Columns.Remove(CriColumn);
-                CombatantView.Columns.Remove(HColumn);
-                CombatantView.Columns.Remove(MaxHitColumn);
-                CombatantView.Columns.Add(JAColumn);
-                if (!Properties.Settings.Default.Criticalcfg) { CombatantView.Columns.Add(CriColumn); }
-                CombatantView.Columns.Add(HColumn);
-                CombatantView.Columns.Add(MaxHitColumn);
-                JAHC.Width = new GridLength(44);
-            }
-            UpdateForm(null, null);
-        }
-
-        private void Critical_Click(object sender, RoutedEventArgs e)
-        {
-            Properties.Settings.Default.Criticalcfg = Cricfg.IsChecked;
-            if (Cricfg.IsChecked)
-            {
-                CombatantView.Columns.Remove(CriColumn);
-                CriHC.Width = new GridLength(0);
-
-            }
-            else
-            {
-                CombatantView.Columns.Remove(CriColumn);
-                CombatantView.Columns.Remove(HColumn);
-                CombatantView.Columns.Remove(MaxHitColumn);
-                CombatantView.Columns.Add(CriColumn);
-                CombatantView.Columns.Add(HColumn);
-                CombatantView.Columns.Add(MaxHitColumn);
-                CriHC.Width = new GridLength(44);
-            }
-            UpdateForm(null, null);
-        }
-
-
-        private void CompactMode_Click(object sender, RoutedEventArgs e)
-        {
-            Properties.Settings.Default.CompactMode = CompactMode.IsChecked;
-            if (CompactMode.IsChecked)
-            {
-                AtkHC.Width = new GridLength(0, GridUnitType.Star);
-            }
-            else
-            {
-                AtkHC.Width = new GridLength(1.5, GridUnitType.Star);
-            }
-            UpdateForm(null, null);
-        }
-
-        private void VariableColumn_Click(object sender, RoutedEventArgs e)
-        {
-            PercentHC.Width = new GridLength(0.4, GridUnitType.Star);
-            DmgHC.Width = new GridLength(0.8, GridUnitType.Star);
-            DPSHC.Width = new GridLength(0.6, GridUnitType.Star);
-            JAHC.Width = new GridLength(0.4, GridUnitType.Star);
-            CriHC.Width = new GridLength(0.4, GridUnitType.Star);
-            MdmgHC.Width = new GridLength(0.6, GridUnitType.Star);
+            if (selectColumn.Atk) { CombatantView.Columns.Add(MaxHitColumn); AtkHC.Width = new GridLength(1.7, GridUnitType.Star); } else { AtkHC.Width = temp; }
+            Properties.Settings.Default.ListName = selectColumn.ResultName;
+            Properties.Settings.Default.ListPct = selectColumn.Pct;
+            Properties.Settings.Default.ListDmg = selectColumn.Dmg;
+            Properties.Settings.Default.ListDmgd = selectColumn.Dmgd;
+            Properties.Settings.Default.ListDPS = selectColumn.DPS;
+            Properties.Settings.Default.ListJA = selectColumn.JA;
+            Properties.Settings.Default.ListCri = selectColumn.Cri;
+            Properties.Settings.Default.ListHit = selectColumn.Hit;
+            Properties.Settings.Default.ListAtk = selectColumn.Atk;
+            Properties.Settings.Default.ListHit = selectColumn.Hit;
+            Properties.Settings.Default.Variable = selectColumn.Vrb;
         }
 
         private void ShowDamageGraph_Click(object sender, RoutedEventArgs e)
@@ -499,7 +436,7 @@ namespace OverParse
         private void About_Click(object sender, RoutedEventArgs e)
         {
             var version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
-            MessageBox.Show($"OverParse v{version} Debug\n簡易的な自己監視ツール。\n\nShoutouts to WaifuDfnseForce.\nAdditional shoutouts to Variant, AIDA, and everyone else who makes the Tweaker plugin possible.\n\nOptimized and Recoded by Mysty, Rushia, and Kiyazasu. \n\nRetranslated by Mysty, Rushia, and Frostless.\nPlease use damage information responsibly.", "OverParse");
+            MessageBox.Show($"OverParse v{version} EN\n簡易的な自己監視ツール。\n\nShoutouts to WaifuDfnseForce.\nAdditional shoutouts to Variant, AIDA, and everyone else who makes the Tweaker plugin possible.\n\nOptimized and Recoded by Mysty, Rushia, and Kiyazasu. \n\nRetranslated by Mysty, Rushia, and Frostless.\nPlease use damage information responsibly.", "OverParse");
         }
 
         private void LowResources_Click(object sender, RoutedEventArgs e)
@@ -537,7 +474,7 @@ namespace OverParse
 
         private void Github_Click(object sender, RoutedEventArgs e) => Process.Start("https://github.com/mysterious64/OverParse");
 
-        private void SkipPlugin_Click(object sender, RoutedEventArgs e) => Properties.Settings.Default.InstalledPluginVersion = 4;
+        private void SkipPlugin_Click(object sender, RoutedEventArgs e) => Properties.Settings.Default.InstalledPluginVersion = 5;
 
         private void ResetLogFolder_Click(object sender, RoutedEventArgs e)
         {
