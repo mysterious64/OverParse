@@ -57,15 +57,15 @@ namespace OverParse
                                                                   "3642969286"  , // Rideroid barrel roll (Mother phase 1)
                                                                   "1258041436" }; // Rideroid Mother's wall spun back (Mother phase 1)
         // Dark Blast Attack IDs
-        public static string[] DBAttackIDs       = new string[] { "267911699"   , // Dark Blast first hit
-                                                                  "262346668"   , // Dark Blast second
-                                                                  "265285249"   , // Dark Blast third
-                                                                  "264996390"   , // Dark Blast fourth (kick)
-                                                                  "311089933"   , // Dark Blast fifth (launcher)
-                                                                  "3988916155"  , // Dark Blast sixth (pummel)
-                                                                  "265781051"   , // Dark Blast seventh (pummel pt2)
-                                                                  "3141577094"  , // Dark Blast Step Attack
-                                                                  "2289473436"  , // Dark Blast Violence Step
+        public static string[] DBAttackIDs       = new string[] { "267911699"   , // Dark Blast (Elder) first hit
+                                                                  "262346668"   , // Dark Blast (Elder) second
+                                                                  "265285249"   , // Dark Blast (Elder) third
+                                                                  "264996390"   , // Dark Blast (Elder) fourth (kick)
+                                                                  "311089933"   , // Dark Blast (Elder) fifth (launcher)
+                                                                  "3988916155"  , // Dark Blast (Elder) sixth (pummel)
+                                                                  "265781051"   , // Dark Blast (Elder) seventh (pummel pt2)
+                                                                  "3141577094"  , // Dark Blast (Elder) Step Attack
+                                                                  "2289473436"  , // Dark Blast (Elder) Violence Step
                                                                   "517914866"   , // Physical Dash melee
                                                                   "517914869"   , // Physical Dash melee wide range
                                                                   "1117313539"  , // Punishment Knuckle (uncharged)
@@ -75,7 +75,19 @@ namespace OverParse
                                                                   "395090797"   , // Infinity Rush finish (uncharged)
                                                                   "2429416220"  , // Infinity Rush hits charged
                                                                   "1697271546"  , // Infinity Rush finish charged
-                                                                  "1117313924" }; // Tyrant Strike
+                                                                  "1117313924"  , // Tyrant Strike
+                                                                  "2743071591"  , // Dark Blast (Loser) hit
+                                                                  "1783571383"  , // Ortho Sabarta (1-4?)
+                                                                  "2928504078"  , // Ortho Sabarta (1-4?)
+                                                                  "1783571188"  , // Convergent Ray uncharged
+                                                                  "2849190450"  , // Convergent Ray charged
+                                                                  "1223455602"  , // Gamma Burst
+                                                                  "651603449"   , // Wisdom Force
+                                                                  "2970658149"  , // Dive Assault
+                                                                  "2191939386"  , // Counter Step
+                                                                  "2091027507"  , //Special,Diffusion Ray
+                                                                  "4078260742"  , // Sharp Glide
+                                                                }; 
         // Laconium Sword (& Cannons) Attack IDs
         public static string[] LaconiumAttackIDs = new string[] { "1913897098"  , // Rapid-Fire Mana Gun
                                                                   "2235773608"  , // Laconium Sword air second normal attack 
@@ -93,10 +105,9 @@ namespace OverParse
 
         // General Variables
         private const float maxBGopacity = 0.6f;
-        public List<Attack> Attacks;
+        public List<Attack> Attacks, ZvsAttacks, HTFAttacks, DBAttacks, LswAttacks, PwpAttacks, AisAttacks, RideAttacks;
         public string ID, isTemporary;
         public string Name { get; set; }
-        public int ActiveTime;
         public float PercentDPS, PercentReadDPS;
 
         // Constructor #1
@@ -106,9 +117,22 @@ namespace OverParse
             Name = name;
             PercentDPS = -1;
             Attacks = new List<Attack>();
+            ZvsAttacks = new List<Attack>();
+            HTFAttacks = new List<Attack>();
+            DBAttacks = new List<Attack>();
+            LswAttacks = new List<Attack>();
+            PwpAttacks = new List<Attack>();
+            AisAttacks = new List<Attack>();
+            RideAttacks = new List<Attack>();
             isTemporary = "no";
             PercentReadDPS = 0;
-            ActiveTime = 0;
+            ZvsDamage = 0;
+            HTFDamage = 0;
+            DBDamage = 0;
+            LswDamage = 0;
+            PwpDamage = 0;
+            AisDamage = 0;
+            RideDamage = 0;
         }
 
         // Constructor #2
@@ -118,26 +142,34 @@ namespace OverParse
             Name = name;
             PercentDPS = -1;
             Attacks = new List<Attack>();
+            ZvsAttacks = new List<Attack>();
+            HTFAttacks = new List<Attack>();
+            DBAttacks = new List<Attack>();
+            LswAttacks = new List<Attack>();
+            PwpAttacks = new List<Attack>();
+            AisAttacks = new List<Attack>();
+            RideAttacks = new List<Attack>();
             isTemporary = temp;
             PercentReadDPS = 0;
-            ActiveTime = 0;
+            ZvsDamage = 0;
+            HTFDamage = 0;
+            DBDamage = 0;
+            LswDamage = 0;
+            PwpDamage = 0;
+            AisDamage = 0;
+            RideDamage = 0;
         }
 
         /* Common GET Data Properties */
 
         public int Damage            => GetTotalDamageDealt();                          // Total damage dealt
-        public int Damaged           => GetTotalDamageTaken();                          // Total damage taken
+        public int Damaged, ZvsDamage, HTFDamage, DBDamage, LswDamage, PwpDamage, AisDamage, RideDamage;                          // Total damage taken
         public int MaxHitNum         => MaxHitAttack.Damage;                            // Max Hit damage
         public int ReadDamage        => GetGeneralDamageDealt();                        // General damage dealt
-        public int GetZanverseDamage => GetDamageDealt(GetZanverseID());                // Zanverse total damage
-        public int GetFinishDamage   => GetDamageDealt(GetAttackID(FinishAttackIDs));   // Hero Time Finish total damage
-        public int PwpDamage         => GetDamageDealt(GetAttackID(PhotonAttackIDs));   // PwP Total Damage
-        public int AisDamage         => GetDamageDealt(GetAttackID(AISAttackIDs));      // AIS Total Damage
-        public int RideDamage        => GetDamageDealt(GetAttackID(RideAttackIDs));     // Ride Total Damage
-        public int DBDamage          => GetDamageDealt(GetAttackID(DBAttackIDs));       // DaB Total Damage
-        public int LswDamage         => GetDamageDealt(GetAttackID(LaconiumAttackIDs)); // LwS Total Damage
 
         public Attack MaxHitAttack => GetGeneralMaxHitAttack(); // General max hit damage number
+
+        public string RatioPercent => $"{PercentReadDPS:00.00}";
 
         public double DPS     => GetTotalDPS();   // Total DPS for MPA
         public double ReadDPS => GetGeneralDPS(); // General DPS for each player
@@ -145,7 +177,7 @@ namespace OverParse
         public string DisplayName => GetDisplayName(); // Get player OR anon names
 
         public string DamageReadout => ReadDamage.ToString("N0"); // Damage dealt stringified
-        public string ReadDamaged   => GetGeneralDamageTaken();   // Damage taken stringified
+        public string ReadDamaged   => Damaged.ToString("N0");   // Damage taken stringified
 
         public string StringDPS             => ReadDPS.ToString("N0"); // DPS numbers stringified
         public string PercentReadDPSReadout => GetPercentReadDPS();    // DPS numbers percentified
@@ -238,7 +270,7 @@ namespace OverParse
         // Returns the total damage taken for MPA
         private int GetTotalDamageTaken() 
         { 
-            return Attacks.Sum(x => x.Dmgd); 
+            return Damaged; 
         }
 
         // Returns the general damage dealt by players
@@ -249,9 +281,9 @@ namespace OverParse
 
             int temp = Damage;
             if (Properties.Settings.Default.SeparateZanverse)
-                temp -= GetZanverseDamage;
+                temp -= ZvsDamage;
             if (Properties.Settings.Default.SeparateFinish)
-                temp -= GetFinishDamage;
+                temp -= ZvsDamage;
             if (Properties.Settings.Default.SeparatePwp)
                 temp -= PwpDamage;
             if (Properties.Settings.Default.SeparateAIS)
@@ -273,26 +305,26 @@ namespace OverParse
         // Returns the total DPS of the MPA
         private double GetTotalDPS() 
         { 
-            if (ActiveTime == 0)
+            if (OverParse.Log.ActiveTime == 0)
             {
                 return Damage;
             }
             else
             {
-                return Damage / ActiveTime;
+                return Damage / OverParse.Log.ActiveTime;
             }
         }
 
         // Returns the general DPS of the MPA
         private double GetGeneralDPS() 
         { 
-            if (ActiveTime == 0)
+            if (OverParse.Log.ActiveTime == 0)
             {
                 return ReadDamage;
             }
             else
             {
-                return Math.Round(ReadDamage / (double)ActiveTime); 
+                return Math.Round(ReadDamage / (double)OverParse.Log.ActiveTime); 
             }
         }
         
@@ -303,11 +335,6 @@ namespace OverParse
             return Name;
         }
 
-        // Returns the general damage taken
-        private string GetGeneralDamageTaken() 
-        { 
-            return Attacks.Sum(x => x.Dmgd).ToString("N0"); 
-        }
 
         // Percentifies the DPS numbers
         private string GetPercentReadDPS()
@@ -454,18 +481,7 @@ namespace OverParse
                 return new SolidColorBrush(new Color());
             }
         }
-
-        // Fetch the attack ID
-        private IEnumerable<OverParse.Attack> GetAttackID(string[] attackID) 
-        {
-            return Attacks.Where(a => attackID.Contains(a.ID));
-        }
         
-        // Fetch the total Damage Dealt value [ Use after (GetAttackID) function ]
-        private int GetDamageDealt(IEnumerable<OverParse.Attack> attackID) 
-        {
-            return attackID.Sum(x => x.Damage);
-        }
 
         /* NOT USED - for now (Will think of a way to add the tabs back in more efficient method)
 
@@ -529,20 +545,14 @@ namespace OverParse
     public class Attack
     {
         public string ID;
-        public int Damage;
-        public int Timestamp;
-        public int JA;
-        public int Cri;
-        public int Dmgd;
+        public int Damage , JA , Cri;
 
-        public Attack(string initID, int initDamage, int initTimestamp, int justAttack, int critical, int damaged)
+        public Attack(string initID, int initDamage, int justAttack, int critical)
         {
             ID = initID;
             Damage = initDamage;
-            Timestamp = initTimestamp;
             JA = justAttack;
             Cri = critical;
-            Dmgd = damaged;
         }
     }
 }

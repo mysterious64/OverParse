@@ -26,7 +26,8 @@ namespace OverParse
         private List<string> sessionLogFilenames = new List<string>();
         private string lastStatus = "";
         private IntPtr hwndcontainer;
-        List<Combatant> workingList;
+        List<Combatant> workingList = new List<Combatant>();
+        public DispatcherTimer damageTimer = new DispatcherTimer();
         Process thisProcess = Process.GetCurrentProcess();
 
         protected override void OnSourceInitialized(EventArgs e)
@@ -132,18 +133,16 @@ namespace OverParse
             AutoHideWindow.IsChecked = Properties.Settings.Default.AutoHideWindow;
 
             ShowDamageGraph.IsChecked = Properties.Settings.Default.ShowDamageGraph; ShowDamageGraph_Click(null, null);
-            Percentcfg.IsChecked = Properties.Settings.Default.Percentcfg; Percent_Click(null, null);
-            Damagedcfg.IsChecked = Properties.Settings.Default.Damagedcfg; Damaged_Click(null, null);
-            JAcfg.IsChecked = Properties.Settings.Default.JAcfg; JA_Click(null, null);
-            Cricfg.IsChecked = Properties.Settings.Default.Criticalcfg; Critical_Click(null, null);
-            CompactMode.IsChecked = Properties.Settings.Default.CompactMode; CompactMode_Click(null, null);
             AnonymizeNames.IsChecked = Properties.Settings.Default.AnonymizeNames; AnonymizeNames_Click(null, null);
             HighlightYourDamage.IsChecked = Properties.Settings.Default.HighlightYourDamage; HighlightYourDamage_Click(null, null);
             Clock.IsChecked = Properties.Settings.Default.Clock; Clock_Click(null, null);
-            HandleWindowOpacity(); HandleListOpacity(); SeparateAIS_Click(null, null);
-            HandleWindowOpacity(); HandleListOpacity(); SeparateDB_Click(null, null);
-            HandleWindowOpacity(); HandleListOpacity(); SeparateRide_Click(null, null);
-            HandleWindowOpacity(); HandleListOpacity(); SeparatePwp_Click(null, null);
+            SeparateAIS_Click(null, null);
+            SeparateDB_Click(null, null);
+            SeparateRide_Click(null, null);
+            SeparatePwp_Click(null, null);
+            SeparateLsw_Click(null, null);
+            HandleWindowOpacity(); HandleListOpacity();
+            LoadListColumn();
 
             // Console.WriteLine($"Launch method: {Properties.Settings.Default.LaunchMethod}");
 
@@ -169,12 +168,15 @@ namespace OverParse
             {
                 WebClient client = new WebClient();
                 Stream stream = client.OpenRead("https://raw.githubusercontent.com/VariantXYZ/PSO2ACT/master/PSO2ACT/skills.csv");
-                StreamReader webreader = new StreamReader(stream);
-                String content = webreader.ReadToEnd();
-
-                tmp = content.Split('\n');
-                File.WriteAllText("skills.csv", content);
-            }
+                using (StreamReader webreader = new StreamReader(stream))
+                {
+                    String content = webreader.ReadToEnd();
+                    tmp = content.Split('\n');
+                    File.WriteAllText("skills.csv", content);
+                }
+                client.Dispose();
+                stream.Dispose();
+                }
             catch (Exception ex)
             {
                 Console.WriteLine($"skills.csv update failed: {ex.ToString()}");
@@ -189,6 +191,9 @@ namespace OverParse
                     tmp = new string[0];
                 }
             }
+
+
+
             try {
                 ignoreskill = File.ReadAllLines("ignoreskills.csv");
             } catch (Exception e) {
@@ -213,9 +218,8 @@ namespace OverParse
             UpdateForm(null, null);
 
             //Initializing damageTimer
-            System.Windows.Threading.DispatcherTimer damageTimer = new System.Windows.Threading.DispatcherTimer();
             damageTimer.Tick += new EventHandler(UpdateForm);
-            damageTimer.Interval = new TimeSpan(0, 0, 0, 1);
+            damageTimer.Interval = new TimeSpan(0, 0, 0, 0, Properties.Settings.Default.Updateinv);
             damageTimer.Start();
 
             //Initializing inactiveTimer
@@ -266,6 +270,33 @@ namespace OverParse
                 //Console.WriteLine($"Found a new log file ({log.Name}), switching...");
                 encounterlog = new Log(Properties.Settings.Default.Path);
             }
+        }
+
+        private void LoadListColumn()
+        {
+            GridLength temp = new GridLength(0);
+            if (!Properties.Settings.Default.ListName) { CombatantView.Columns.Remove(NameColumn); NameHC.Width = temp; }
+            if (Properties.Settings.Default.Variable)
+            {
+                if (Properties.Settings.Default.ListPct) { PercentHC.Width = new GridLength(0.4, GridUnitType.Star); } else { CombatantView.Columns.Remove(PercentColumn); PercentHC.Width = temp; }
+                if (Properties.Settings.Default.ListDmg) { DmgHC.Width = new GridLength(0.8, GridUnitType.Star); } else { CombatantView.Columns.Remove(DamageColumn); DmgHC.Width = temp; }
+                if (Properties.Settings.Default.ListDmgd) { DmgDHC.Width = new GridLength(0.6, GridUnitType.Star); } else { CombatantView.Columns.Remove(DamagedColumn); DmgDHC.Width = temp; }
+                if (Properties.Settings.Default.ListDPS) { DPSHC.Width = new GridLength(0.6, GridUnitType.Star); } else { CombatantView.Columns.Remove(DPSColumn); DPSHC.Width = temp; }
+                if (Properties.Settings.Default.ListJA) { JAHC.Width = new GridLength(0.4, GridUnitType.Star); } else { CombatantView.Columns.Remove(JAColumn); JAHC.Width = temp; }
+                if (Properties.Settings.Default.ListCri) { CriHC.Width = new GridLength(0.4, GridUnitType.Star); } else { CombatantView.Columns.Remove(CriColumn); CriHC.Width = temp; }
+                if (Properties.Settings.Default.ListHit) { MdmgHC.Width = new GridLength(0.6, GridUnitType.Star); } else { CombatantView.Columns.Remove(HColumn); MdmgHC.Width = temp; }
+            }
+            else
+            {
+                if (Properties.Settings.Default.ListPct) { PercentHC.Width = new GridLength(39); } else { CombatantView.Columns.Remove(PercentColumn); PercentHC.Width = temp; }
+                if (Properties.Settings.Default.ListDmg) { DmgHC.Width = new GridLength(78); } else { CombatantView.Columns.Remove(DamageColumn); DmgHC.Width = temp; }
+                if (Properties.Settings.Default.ListDmgd) { DmgDHC.Width = new GridLength(56); } else { CombatantView.Columns.Remove(DamagedColumn); DmgDHC.Width = temp; }
+                if (Properties.Settings.Default.ListDPS) { DPSHC.Width = new GridLength(56); } else { CombatantView.Columns.Remove(DPSColumn); DPSHC.Width = temp; }
+                if (Properties.Settings.Default.ListJA) { JAHC.Width = new GridLength(39); } else { CombatantView.Columns.Remove(JAColumn); JAHC.Width = temp; }
+                if (Properties.Settings.Default.ListCri) { CriHC.Width = new GridLength(39); } else { CombatantView.Columns.Remove(CriColumn); CriHC.Width = temp; }
+                if (Properties.Settings.Default.ListHit) { MdmgHC.Width = new GridLength(62); } else { CombatantView.Columns.Remove(HColumn); MdmgHC.Width = temp; }
+            }
+            if (!Properties.Settings.Default.ListAtk) { CombatantView.Columns.Remove(MaxHitColumn); AtkHC.Width = temp; }
         }
 
         private void Panic(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
@@ -383,37 +414,22 @@ namespace OverParse
 
         public void UpdateForm(object sender, EventArgs e)
         {
+            if (encounterlog == null) { return; }
             if (Properties.Settings.Default.Clock) { Datetime.Content = DateTime.Now.ToString("HH:mm:ss.ff"); }
-            if (encounterlog == null)
-            {
-                return;
-            }
 
             encounterlog.UpdateLog(this, null);
             EncounterStatus.Content = encounterlog.LogStatus();
 
-            // every part of this section is fucking stupid
-
             // get a copy of the right combatants
             List<Combatant> targetList = (encounterlog.running ? encounterlog.combatants : lastCombatants);
-            workingList = new List<Combatant>();
-            foreach (Combatant c in targetList)
-            {
-                Combatant temp = new Combatant(c.ID, c.Name, c.isTemporary);
-                foreach (Attack a in c.Attacks)
-                    temp.Attacks.Add(new Attack(a.ID, a.Damage, a.Timestamp,a.JA,a.Cri,a.Dmgd));
-                temp.ActiveTime = c.ActiveTime;
-                workingList.Add(temp);
-            }
+            workingList.Clear();
+            foreach (Combatant c in targetList) { workingList.Add(c); }
 
             // clear out the list
             CombatantData.Items.Clear();
 
             // for zanverse dummy and status bar because WHAT IS GOOD STRUCTURE
-            int elapsed = 0;
-            Combatant stealActiveTimeDummy = workingList.FirstOrDefault();
-            if (stealActiveTimeDummy != null)
-                elapsed = stealActiveTimeDummy.ActiveTime;
+            int elapsed = Log.ActiveTime;
 
             // create and sort dummy AIS combatants
             if (Properties.Settings.Default.SeparateAIS)
@@ -427,10 +443,8 @@ namespace OverParse
                     if (c.AisDamage > 0)
                     {
                         Combatant AISHolder = new Combatant(c.ID, "AIS|" + c.Name, "AIS");
-                        List<Attack> targetAttacks = c.Attacks.Where(a => Combatant.AISAttackIDs.Contains(a.ID)).ToList();
-                        c.Attacks = c.Attacks.Except(targetAttacks).ToList();
-                        AISHolder.Attacks.AddRange(targetAttacks);
-                        AISHolder.ActiveTime = elapsed;
+                        c.Attacks = c.Attacks.Except(c.AisAttacks).ToList();
+                        AISHolder.Attacks.AddRange(c.AisAttacks);
                         pendingCombatants.Add(AISHolder);
                     }
                 }
@@ -448,10 +462,8 @@ namespace OverParse
                     if (c.DBDamage > 0)
                     {
                         Combatant DBHolder = new Combatant(c.ID, "DB|" + c.Name, "DB");
-                        List<Attack> targetAttacks = c.Attacks.Where(a => Combatant.DBAttackIDs.Contains(a.ID)).ToList();
-                        c.Attacks = c.Attacks.Except(targetAttacks).ToList();
-                        DBHolder.Attacks.AddRange(targetAttacks);
-                        DBHolder.ActiveTime = elapsed;
+                        c.Attacks = c.Attacks.Except(c.DBAttacks).ToList();
+                        DBHolder.Attacks.AddRange(c.DBAttacks);
                         pendingDBCombatants.Add(DBHolder);
                     }
                 }
@@ -469,10 +481,8 @@ namespace OverParse
                     if (c.RideDamage > 0)
                     {
                         Combatant RideHolder = new Combatant(c.ID, "Ride|" + c.Name, "Ride");
-                        List<Attack> targetAttacks = c.Attacks.Where(a => Combatant.RideAttackIDs.Contains(a.ID)).ToList();
-                        c.Attacks = c.Attacks.Except(targetAttacks).ToList();
-                        RideHolder.Attacks.AddRange(targetAttacks);
-                        RideHolder.ActiveTime = elapsed;
+                        c.Attacks = c.Attacks.Except(c.RideAttacks).ToList();
+                        RideHolder.Attacks.AddRange(c.RideAttacks);
                         pendingRideCombatants.Add(RideHolder);
                     }
                 }
@@ -490,10 +500,8 @@ namespace OverParse
                     if (c.PwpDamage > 0)
                     {
                         Combatant PhotonHolder = new Combatant(c.ID, "Pwp|" + c.Name, "Pwp");
-                        List<Attack> targetAttacks = c.Attacks.Where(a => Combatant.PhotonAttackIDs.Contains(a.ID)).ToList();
-                        c.Attacks = c.Attacks.Except(targetAttacks).ToList();
-                        PhotonHolder.Attacks.AddRange(targetAttacks);
-                        PhotonHolder.ActiveTime = elapsed;
+                        c.Attacks = c.Attacks.Except(c.PwpAttacks).ToList();
+                        PhotonHolder.Attacks.AddRange(c.PwpAttacks);
                         pendingPwpCombatants.Add(PhotonHolder);
                     }
                 }
@@ -511,10 +519,8 @@ namespace OverParse
                     if (c.LswDamage > 0)
                     {
                         Combatant LswHolder = new Combatant(c.ID, "Lsw|" + c.Name, "Lsw");
-                        List<Attack> targetAttacks = c.Attacks.Where(a => Combatant.LaconiumAttackIDs.Contains(a.ID)).ToList();
-                        c.Attacks = c.Attacks.Except(targetAttacks).ToList();
-                        LswHolder.Attacks.AddRange(targetAttacks);
-                        LswHolder.ActiveTime = elapsed;
+                        c.Attacks = c.Attacks.Except(c.LswAttacks).ToList();
+                        LswHolder.Attacks.AddRange(c.LswAttacks);
                         pendingLswCombatants.Add(LswHolder);
                     }
                 }
@@ -525,24 +531,22 @@ namespace OverParse
             workingList.Sort((x, y) => y.ReadDamage.CompareTo(x.ReadDamage));
 
             // make dummy zanverse combatant if necessary
-            int totalZanverse = workingList.Where(c => c.IsAlly == true).Sum(x => x.GetZanverseDamage);
-            int totalFinish = workingList.Where(c => c.IsAlly == true).Sum(x => x.GetFinishDamage);
+            int totalZanverse = workingList.Sum(x => x.ZvsDamage);
+            int totalFinish = workingList.Sum(x => x.HTFDamage);
 
             if (Properties.Settings.Default.SeparateFinish)
             {
                 if (totalFinish > 0)
                 {
-                    Combatant finishHolder = new Combatant("99999995", "HTF Attacks", "HTF Attacks");
+                    Combatant finishHolder = new Combatant("99999998", "HTF Attacks", "HTF Attacks");
                     foreach (Combatant c in workingList)
                     {
                         if (c.IsAlly)
                         {
-                            List<Attack> targetAttacks = c.Attacks.Where(a => Combatant.FinishAttackIDs.Contains(a.ID)).ToList();
-                            finishHolder.Attacks.AddRange(targetAttacks);
-                            c.Attacks = c.Attacks.Except(targetAttacks).ToList();
+                            finishHolder.Attacks.AddRange(c.HTFAttacks);
+                            c.Attacks = c.Attacks.Except(c.HTFAttacks).ToList();
                         }
                     }
-                    finishHolder.ActiveTime = elapsed;
                     workingList.Add(finishHolder);
                 }
             }
@@ -551,24 +555,21 @@ namespace OverParse
             {
                 if (totalZanverse > 0)
                 {
-                    Combatant zanverseHolder = new Combatant("99999997", "Zanverse", "Zanverse");
+                    Combatant zanverseHolder = new Combatant("99999999", "Zanverse", "Zanverse");
                     foreach (Combatant c in workingList)
                     {
                         if (c.IsAlly)
                         {
-                            List<Attack> targetAttacks = c.Attacks.Where(a => a.ID == "2106601422").ToList();
-                            zanverseHolder.Attacks.AddRange(targetAttacks);
-                            c.Attacks = c.Attacks.Except(targetAttacks).ToList();
+                            zanverseHolder.Attacks.AddRange(c.ZvsAttacks);
+                            c.Attacks = c.Attacks.Except(c.ZvsAttacks).ToList();
                         }
                     }
-                    zanverseHolder.ActiveTime = elapsed;
                     workingList.Add(zanverseHolder);
                 }
             }
 
-
             // get group damage totals
-            int totalReadDamage = workingList.Where(c => (c.IsAlly)).Sum(x => x.ReadDamage);
+            int totalReadDamage = workingList.Sum(x => x.Damage);
 
             // dps calcs!
             foreach (Combatant c in workingList)
@@ -644,11 +645,6 @@ namespace OverParse
 
                 if (totalDPS > 0)
                     EncounterStatus.Content += $" - Total : {totalReadDamage.ToString("N0")}" + $" - {totalDPS.ToString("N0")} DPS";
-
-                //if (Properties.Settings.Default.CompactMode)
-                    //foreach (Combatant c in workingList)
-                        //if (c.IsYou)
-                            //EncounterStatus.Content += $" - MAX: {c.MaxHitNum.ToString("N0")}";
 
                 if (!Properties.Settings.Default.SeparateZanverse)
                     EncounterStatus.Content += $" - Zanverse : {totalZanverse.ToString("N0")}";
@@ -753,21 +749,6 @@ namespace OverParse
             e.Handled = true;
         }
 
-        /*private void WindowStats_Click(object sender, RoutedEventArgs e)
-        {
-            AisData.Items.Add(workingList);
-            string result = "";
-            result += $"Name: {AisNameColumn.Width.ToString()}  Percent: {AisPercentColumn.Width.ToString()}";
-            result += $"Name: {DmgHC.ActualWidth.ToString()}  Percent: {DPSHC.ActualWidth.ToString()}";
-            result += $"Name: {JAHC.ActualWidth.ToString()}  Percent: {CriHC.ActualWidth.ToString()}";
-            result += $"maxdmg: {MdmgHC.ActualWidth.ToString()}  Atk: {AtkHC.ActualWidth.ToString()}";
-            result += $"Tab: {TabHC.ActualWidth.ToString()}  Percent: {PercentHC.ActualWidth.ToString()}";
-            result += $"menu bar: {MenuBar.Width.ToString()} width {MenuBar.Height.ToString()} height\n";
-            result += $"menu bar: {MenuBar.Padding} padding {MenuBar.Margin} margin\n";
-            result += $"menu item: {AutoEndEncounters.Foreground} fg {AutoEndEncounters.Background} bg\n";
-            MessageBox.Show(result);
-        }*/
-
         private void Window_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (e.LeftButton == MouseButtonState.Pressed)
@@ -776,11 +757,11 @@ namespace OverParse
             }
         }
 
-        private void ListViewItem_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        private void ListViewItem_MouseRightClick(object sender, MouseButtonEventArgs e)
         {
-            ListViewItem targetItem = (ListViewItem)sender;
-            string data = targetItem.Content.ToString();
-            Detalis f = new Detalis(data, "value") { Owner = this };
+            ListViewItem data = sender as ListViewItem;
+            Combatant data2 = (Combatant)data.DataContext;
+            Detalis f = new Detalis(data2) { Owner = this };
             f.Show();
         }
     }

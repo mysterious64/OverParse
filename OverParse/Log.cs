@@ -19,14 +19,18 @@ namespace OverParse
         private const int pluginVersion = 5;
 
         // Logging Variables
+        public static int ActiveTime = 0;
+        public static int startTimestamp = 0;
+        public static int backupTime = 0;
         public int newTimestamp = 0;
         public List<Combatant> combatants = new List<Combatant>();
         public List<Combatant> backupCombatants = new List<Combatant>();
 
-        private int startTimestamp = 0;
         private string encounterData;
         private List<int> instances = new List<int>();
         private StreamReader logReader;
+
+        public string ManualattemptDirectory;
 
         // Constructor
         public Log(string attemptDirectory)
@@ -35,6 +39,7 @@ namespace OverParse
             notEmpty = false;
             running  = false;
             nagMe    = false;
+            ManualattemptDirectory = attemptDirectory;
 
             SetupWarning(); // Setup first time warning
 
@@ -148,8 +153,8 @@ namespace OverParse
         {
             if (combatants.Count != 0) // Players found
             {
-                int elapsed       = newTimestamp - startTimestamp; // How long has passed
-                TimeSpan timespan = TimeSpan.FromSeconds(elapsed); // ... in seconds
+                int elapsed = ActiveTime;
+                TimeSpan timespan = TimeSpan.FromSeconds(elapsed);
 
                 // Logging the total time occured through out the encounter
                 string timer = timespan.ToString(@"mm\:ss");
@@ -182,7 +187,7 @@ namespace OverParse
                         {
                             foreach (Combatant c2 in backupCombatants)
                             {
-                                if (c2.GetZanverseDamage > 0)
+                                if (c2.ZvsDamage > 0)
                                     attackNames.Add(c2.ID);
                             }
 
@@ -200,7 +205,7 @@ namespace OverParse
                         {
                             foreach (Combatant c3 in backupCombatants)
                             {
-                                if (c3.GetFinishDamage > 0)
+                                if (c3.HTFDamage > 0)
                                     finishNames.Add(c3.ID);
                             }
 
@@ -366,13 +371,17 @@ namespace OverParse
                             Combatant source = combatants[index];
 
                             newTimestamp = lineTimestamp;
-                            if (startTimestamp == 0)
-                            {
-                                //Console.WriteLine($"FIRST ATTACK RECORDED: {hitDamage} dmg from {sourceID} ({sourceName}) with {attackID}, to {targetID} ({targetName})");
-                                startTimestamp = newTimestamp;
-                            }
+                            if (startTimestamp == 0) { startTimestamp = newTimestamp; }
+                            ActiveTime = newTimestamp - startTimestamp;
 
-                            source.Attacks.Add(new Attack(attackID, hitDamage, newTimestamp - startTimestamp, justAttack, critical, 0));
+                            if (attackID == "2106601422") { source.ZvsDamage += hitDamage; source.ZvsAttacks.Add(new Attack(attackID, hitDamage, justAttack, critical)); }
+                            if (Combatant.FinishAttackIDs.Contains(attackID)) { source.HTFDamage += hitDamage; source.HTFAttacks.Add(new Attack(attackID, hitDamage, justAttack, critical)); }
+                            if (Combatant.DBAttackIDs.Contains(attackID)) { source.DBDamage += hitDamage; source.DBAttacks.Add(new Attack(attackID, hitDamage, justAttack, critical)); }
+                            if (Combatant.LaconiumAttackIDs.Contains(attackID)) { source.LswDamage += hitDamage; source.LswAttacks.Add(new Attack(attackID, hitDamage, justAttack, critical)); }
+                            if (Combatant.PhotonAttackIDs.Contains(attackID)) { source.PwpDamage += hitDamage; source.PwpAttacks.Add(new Attack(attackID, hitDamage, justAttack, critical)); }
+                            if (Combatant.AISAttackIDs.Contains(attackID)) { source.AisDamage += hitDamage; source.AisAttacks.Add(new Attack(attackID, hitDamage, justAttack, critical)); }
+                            if (Combatant.RideAttackIDs.Contains(attackID)) { source.RideDamage += hitDamage; source.RideAttacks.Add(new Attack(attackID, hitDamage, justAttack, critical)); }
+                            source.Attacks.Add(new Attack(attackID, hitDamage,  justAttack, critical));
                             running = true;
                         } 
                         else 
@@ -398,7 +407,7 @@ namespace OverParse
                                 startTimestamp = newTimestamp;
                             }
 
-                            source.Attacks.Add(new Attack("Hits Taken", 0, newTimestamp - startTimestamp, 0, 0, hitDamage));
+                            source.Damaged += hitDamage;
                             running = true;
                             
                         }
@@ -411,15 +420,6 @@ namespace OverParse
                 if (startTimestamp != 0)
                 {
                     encounterData = "0:00:00 - ∞ DPS";
-                }
-
-                if (startTimestamp != 0 && newTimestamp != startTimestamp)
-                {
-                    foreach (Combatant x in combatants)
-                    {
-                        if (x.IsAlly || x.IsZanverse)
-                            x.ActiveTime = (newTimestamp - startTimestamp);
-                    }
                 }
             }
         }
@@ -520,7 +520,7 @@ namespace OverParse
             }
             else if (Properties.Settings.Default.LaunchMethod == "Manual")
             {
-                bool pluginsExist = File.Exists(attemptDirectory + "\\pso2h.dll") && File.Exists(attemptDirectory + "\\ddraw.dll") && File.Exists(attemptDirectory + "\\plugins" + "\\PSO2DamageDump.dll");
+                bool pluginsExist = File.Exists(ManualattemptDirectory + "\\pso2h.dll") && File.Exists(ManualattemptDirectory + "\\ddraw.dll") && File.Exists(ManualattemptDirectory + "\\plugins" + "\\PSO2DamageDump.dll");
                 if (!pluginsExist)
                     Properties.Settings.Default.InstalledPluginVersion = -1;
 
@@ -553,7 +553,7 @@ namespace OverParse
                     else if (selfdestructResult == MessageBoxResult.Yes)
                     {
                         // Accepted plugin install
-                        bool success = UpdatePlugin(attemptDirectory);
+                        bool success = UpdatePlugin(ManualattemptDirectory);
                         if (!pluginsExist && !success)
                             Environment.Exit(-1);
                     }
