@@ -85,8 +85,9 @@ namespace OverParse
                                                                   "651603449"   , // Wisdom Force
                                                                   "2970658149"  , // Dive Assault
                                                                   "2191939386"  , // Counter Step
-                                                                  "2091027507"  , //Special,Diffusion Ray
+                                                                  "2091027507"  , // Special,Diffusion Ray
                                                                   "4078260742"  , // Sharp Glide
+                                                                  "2743062721"    // Attack Advance (Loser)
                                                                 }; 
         // Laconium Sword (& Cannons) Attack IDs
         public static string[] LaconiumAttackIDs = new string[] { "1913897098"  , // Rapid-Fire Mana Gun
