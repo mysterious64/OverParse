@@ -709,7 +709,7 @@ namespace OverParse.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("250")]
+        [global::System.Configuration.DefaultSettingValueAttribute("1000")]
         public int Updateinv {
             get {
                 return ((int)(this["Updateinv"]));
