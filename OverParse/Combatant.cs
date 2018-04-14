@@ -87,8 +87,7 @@ namespace OverParse
                                                                   "2191939386"  , // Counter Step
                                                                   "2091027507"  , // Special,Diffusion Ray
                                                                   "4078260742"  , // Sharp Glide
-                                                                  "2743062721"    // Attack Advance (Loser)
-                                                                }; 
+                                                                  "2743062721" }; // Attack Advance (Loser) 
         // Laconium Sword (& Cannons) Attack IDs
         public static string[] LaconiumAttackIDs = new string[] { "1913897098"  , // Rapid-Fire Mana Gun
                                                                   "2235773608"  , // Laconium Sword air second normal attack 
@@ -163,14 +162,13 @@ namespace OverParse
 
         /* Common GET Data Properties */
 
-        public int Damage            => GetTotalDamageDealt();                          // Total damage dealt
-        public int Damaged, ZvsDamage, HTFDamage, DBDamage, LswDamage, PwpDamage, AisDamage, RideDamage;                          // Total damage taken
-        public int MaxHitNum         => MaxHitAttack.Damage;                            // Max Hit damage
-        public int ReadDamage        => GetGeneralDamageDealt();                        // General damage dealt
+        public int Damage     => GetTotalDamageDealt();   // Total damage dealt
+        public int MaxHitNum  => MaxHitAttack.Damage;     // Max Hit damage
+        public int ReadDamage => GetGeneralDamageDealt(); // General damage dealt
+
+        public int Damaged, ZvsDamage, HTFDamage, DBDamage, LswDamage, PwpDamage, AisDamage, RideDamage; // Remon's fixes
 
         public Attack MaxHitAttack => GetGeneralMaxHitAttack(); // General max hit damage number
-
-        public string RatioPercent => $"{PercentReadDPS:00.00}";
 
         public double DPS     => GetTotalDPS();   // Total DPS for MPA
         public double ReadDPS => GetGeneralDPS(); // General DPS for each player
@@ -203,6 +201,7 @@ namespace OverParse
         public bool IsRide     => CheckIsType("Ride");        // Rideroid mode running
         public bool IsFinish   => CheckIsType("HTF Attacks"); // Hero Time Finish executing
         public bool IsDB       => CheckIsType("DB");          // Dark Blast running
+        public bool IsLsw      => CheckIsType("Lsw");         // Laconium/Mana cannon running
 
         public Brush Brush  => GetBrushPrimary();   // Player-chan damage graph
         public Brush Brush2 => GetBrushSecondary(); // Other players damage graph
@@ -271,20 +270,20 @@ namespace OverParse
         // Returns the total damage taken for MPA
         private int GetTotalDamageTaken() 
         { 
-            return Damaged; 
+            return Damaged;
         }
 
         // Returns the general damage dealt by players
         private int GetGeneralDamageDealt()
         {
-            if (IsZanverse || IsFinish || IsAIS || IsPwp || IsDB || IsRide)
+            if (IsZanverse || IsFinish || IsAIS || IsPwp || IsDB || IsRide || IsLsw)
                 return Damage;
 
             int temp = Damage;
             if (Properties.Settings.Default.SeparateZanverse)
                 temp -= ZvsDamage;
             if (Properties.Settings.Default.SeparateFinish)
-                temp -= ZvsDamage;
+                temp -= HTFDamage;
             if (Properties.Settings.Default.SeparatePwp)
                 temp -= PwpDamage;
             if (Properties.Settings.Default.SeparateAIS)
@@ -293,6 +292,8 @@ namespace OverParse
                 temp -= DBDamage;
             if (Properties.Settings.Default.SeparateRide)
                 temp -= RideDamage;
+            if (Properties.Settings.Default.SeparateLsw)
+                temp -= LswDamage;
             return temp;
         }
 

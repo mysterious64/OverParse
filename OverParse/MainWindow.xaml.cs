@@ -290,10 +290,10 @@ namespace OverParse
             {
                 if (Properties.Settings.Default.ListPct) { PercentHC.Width = new GridLength(39); } else { CombatantView.Columns.Remove(PercentColumn); PercentHC.Width = temp; }
                 if (Properties.Settings.Default.ListDmg) { DmgHC.Width = new GridLength(78); } else { CombatantView.Columns.Remove(DamageColumn); DmgHC.Width = temp; }
-                if (Properties.Settings.Default.ListDmgd) { DmgDHC.Width = new GridLength(56); } else { CombatantView.Columns.Remove(DamagedColumn); DmgDHC.Width = temp; }
-                if (Properties.Settings.Default.ListDPS) { DPSHC.Width = new GridLength(56); } else { CombatantView.Columns.Remove(DPSColumn); DPSHC.Width = temp; }
-                if (Properties.Settings.Default.ListJA) { JAHC.Width = new GridLength(39); } else { CombatantView.Columns.Remove(JAColumn); JAHC.Width = temp; }
-                if (Properties.Settings.Default.ListCri) { CriHC.Width = new GridLength(39); } else { CombatantView.Columns.Remove(CriColumn); CriHC.Width = temp; }
+                if (Properties.Settings.Default.ListDmgd) { DmgDHC.Width = new GridLength(52); } else { CombatantView.Columns.Remove(DamagedColumn); DmgDHC.Width = temp; }
+                if (Properties.Settings.Default.ListDPS) { DPSHC.Width = new GridLength(44); } else { CombatantView.Columns.Remove(DPSColumn); DPSHC.Width = temp; }
+                if (Properties.Settings.Default.ListJA) { JAHC.Width = new GridLength(44); } else { CombatantView.Columns.Remove(JAColumn); JAHC.Width = temp; }
+                if (Properties.Settings.Default.ListCri) { CriHC.Width = new GridLength(44); } else { CombatantView.Columns.Remove(CriColumn); CriHC.Width = temp; }
                 if (Properties.Settings.Default.ListHit) { MdmgHC.Width = new GridLength(62); } else { CombatantView.Columns.Remove(HColumn); MdmgHC.Width = temp; }
             }
             if (!Properties.Settings.Default.ListAtk) { CombatantView.Columns.Remove(MaxHitColumn); AtkHC.Width = temp; }
