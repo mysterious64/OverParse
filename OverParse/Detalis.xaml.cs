@@ -13,7 +13,7 @@ namespace OverParse
             //Testing...
             ID.Content = data.ID;
             PlayerName.Content = data.Name;
-            Percent.Content = data.RatioPercent;
+            Percent.Content = data.PercentReadDPSReadout;
             Damage.Content = data.ReadDamage;
             Damaged.Content = data.ReadDamaged;
             DPS.Content = data.ReadDPS;
