@@ -126,8 +126,7 @@ namespace OverParse
             RideAttacks = new List<Attack>();
             isTemporary = "no";
             PercentReadDPS = 0;
-            ZvsDamage = 0;
-            HTFDamage = 0;
+            Damaged = 0;
             DBDamage = 0;
             LswDamage = 0;
             PwpDamage = 0;
@@ -151,8 +150,7 @@ namespace OverParse
             RideAttacks = new List<Attack>();
             isTemporary = temp;
             PercentReadDPS = 0;
-            ZvsDamage = 0;
-            HTFDamage = 0;
+            Damaged = 0;
             DBDamage = 0;
             LswDamage = 0;
             PwpDamage = 0;
@@ -162,14 +160,9 @@ namespace OverParse
 
         /* Common GET Data Properties */
 
-        public int Damaged;   // Remon's fixes
-        public int ZvsDamage  => GetDamageDealt(GetZanverseID());                // Zanverse total damage
-        public int HTFDamage  => GetDamageDealt(GetAttackID(FinishAttackIDs));   // Hero Time Finish total damage
-        public int PwpDamage  => GetDamageDealt(GetAttackID(PhotonAttackIDs));   // PwP Total Damage
-        public int AisDamage  => GetDamageDealt(GetAttackID(AISAttackIDs));      // AIS Total Damage
-        public int RideDamage => GetDamageDealt(GetAttackID(RideAttackIDs));     // Ride Total Damage
-        public int DBDamage   => GetDamageDealt(GetAttackID(DBAttackIDs));       // DaB Total Damage
-        public int LswDamage  => GetDamageDealt(GetAttackID(LaconiumAttackIDs)); // LwS Total Damage
+        public int Damaged, DBDamage, LswDamage, PwpDamage, AisDamage, RideDamage; // Remon's fixes
+        public int ZvsDamage  => GetDamageDealt(GetZanverseID());                  // Zanverse total damage
+        public int HTFDamage  => GetDamageDealt(GetAttackID(FinishAttackIDs));     // Hero Time Finish total damage
 
         public int Damage     => GetGeneralDamage();  // General damage dealt
         public int MaxHitNum  => MaxHitAttack.Damage; // Max Hit damage

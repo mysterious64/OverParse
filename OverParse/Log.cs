@@ -375,15 +375,7 @@ namespace OverParse
                             if (startTimestamp == 0) { startTimestamp = newTimestamp; }
                             ActiveTime = newTimestamp - startTimestamp;
 
-                            if (attackID == "2106601422") // Zanverse
-                            { 
-                                source.ZvsDamage += hitDamage; source.ZvsAttacks.Add(new Attack(attackID, hitDamage, justAttack, critical)); 
-                            }
-                            else if (Combatant.FinishAttackIDs.Contains(attackID)) // Hero Finish Attacks
-                            { 
-                                source.HTFDamage += hitDamage; source.HTFAttacks.Add(new Attack(attackID, hitDamage, justAttack, critical)); 
-                            }
-                            else if (Combatant.DBAttackIDs.Contains(attackID)) // Dark Blast Attacks
+                            if (Combatant.DBAttackIDs.Contains(attackID)) // Dark Blast Attacks
                             { 
                                 source.DBDamage += hitDamage; source.DBAttacks.Add(new Attack(attackID, hitDamage, justAttack, critical)); 
                             }

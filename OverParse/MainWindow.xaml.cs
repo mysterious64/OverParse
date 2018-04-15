@@ -423,7 +423,15 @@ namespace OverParse
             // get a copy of the right combatants
             List<Combatant> targetList = (encounterlog.running ? encounterlog.combatants : lastCombatants);
             workingList.Clear();
-            foreach (Combatant c in targetList) { workingList.Add(c); }
+            foreach (Combatant c in targetList) 
+            { 
+                Combatant temp = new Combatant(c.ID, c.Name, c.isTemporary);
+                foreach (Attack a in c.Attacks)
+                {
+                    temp.Attacks.Add(new Attack(a.ID, a.Damage, a.JA, a.Cri)); 
+                }
+                workingList.Add(temp);
+            }
 
             // clear out the list
             CombatantData.Items.Clear();
@@ -443,8 +451,9 @@ namespace OverParse
                     if (c.AisDamage > 0)
                     {
                         Combatant AISHolder = new Combatant(c.ID, "AIS|" + c.Name, "AIS");
-                        c.Attacks = c.Attacks.Except(c.AisAttacks).ToList();
-                        AISHolder.Attacks.AddRange(c.AisAttacks);
+                        List<Attack> targetAttacks = c.Attacks.Where(a => Combatant.AISAttackIDs.Contains(a.ID)).ToList();
+                        c.Attacks = c.Attacks.Except(targetAttacks).ToList();
+                        AISHolder.Attacks.AddRange(targetAttacks);
                         pendingCombatants.Add(AISHolder);
                     }
                 }
@@ -462,8 +471,9 @@ namespace OverParse
                     if (c.DBDamage > 0)
                     {
                         Combatant DBHolder = new Combatant(c.ID, "DB|" + c.Name, "DB");
-                        c.Attacks = c.Attacks.Except(c.DBAttacks).ToList();
-                        DBHolder.Attacks.AddRange(c.DBAttacks);
+                        List<Attack> targetAttacks = c.Attacks.Where(a => Combatant.DBAttackIDs.Contains(a.ID)).ToList();
+                        c.Attacks = c.Attacks.Except(targetAttacks).ToList();
+                        DBHolder.Attacks.AddRange(targetAttacks);
                         pendingDBCombatants.Add(DBHolder);
                     }
                 }
@@ -481,8 +491,9 @@ namespace OverParse
                     if (c.RideDamage > 0)
                     {
                         Combatant RideHolder = new Combatant(c.ID, "Ride|" + c.Name, "Ride");
-                        c.Attacks = c.Attacks.Except(c.RideAttacks).ToList();
-                        RideHolder.Attacks.AddRange(c.RideAttacks);
+                        List<Attack> targetAttacks = c.Attacks.Where(a => Combatant.RideAttackIDs.Contains(a.ID)).ToList();
+                        c.Attacks = c.Attacks.Except(targetAttacks).ToList();
+                        RideHolder.Attacks.AddRange(targetAttacks);
                         pendingRideCombatants.Add(RideHolder);
                     }
                 }
@@ -500,8 +511,9 @@ namespace OverParse
                     if (c.PwpDamage > 0)
                     {
                         Combatant PhotonHolder = new Combatant(c.ID, "Pwp|" + c.Name, "Pwp");
-                        c.Attacks = c.Attacks.Except(c.PwpAttacks).ToList();
-                        PhotonHolder.Attacks.AddRange(c.PwpAttacks);
+                        List<Attack> targetAttacks = c.Attacks.Where(a => Combatant.PhotonAttackIDs.Contains(a.ID)).ToList();
+                        c.Attacks = c.Attacks.Except(targetAttacks).ToList();
+                        PhotonHolder.Attacks.AddRange(targetAttacks);
                         pendingPwpCombatants.Add(PhotonHolder);
                     }
                 }
@@ -519,8 +531,9 @@ namespace OverParse
                     if (c.LswDamage > 0)
                     {
                         Combatant LswHolder = new Combatant(c.ID, "Lsw|" + c.Name, "Lsw");
-                        c.Attacks = c.Attacks.Except(c.LswAttacks).ToList();
-                        LswHolder.Attacks.AddRange(c.LswAttacks);
+                        List<Attack> targetAttacks = c.Attacks.Where(a => Combatant.LaconiumAttackIDs.Contains(a.ID)).ToList();
+                        c.Attacks = c.Attacks.Except(targetAttacks).ToList();
+                        LswHolder.Attacks.AddRange(targetAttacks);
                         pendingLswCombatants.Add(LswHolder);
                     }
                 }
@@ -543,8 +556,9 @@ namespace OverParse
                     {
                         if (c.IsAlly)
                         {
-                            finishHolder.Attacks.AddRange(c.HTFAttacks);
-                            c.Attacks = c.Attacks.Except(c.HTFAttacks).ToList();
+                            List<Attack> targetAttacks = c.Attacks.Where(a => Combatant.FinishAttackIDs.Contains(a.ID)).ToList();
+                            finishHolder.Attacks.AddRange(targetAttacks);
+                            c.Attacks = c.Attacks.Except(targetAttacks).ToList();
                         }
                     }
                     workingList.Add(finishHolder);
@@ -560,8 +574,9 @@ namespace OverParse
                     {
                         if (c.IsAlly)
                         {
-                            zanverseHolder.Attacks.AddRange(c.ZvsAttacks);
-                            c.Attacks = c.Attacks.Except(c.ZvsAttacks).ToList();
+                            List<Attack> targetAttacks = c.Attacks.Where(a => a.ID == "2106601422").ToList();
+                            zanverseHolder.Attacks.AddRange(targetAttacks);
+                            c.Attacks = c.Attacks.Except(targetAttacks).ToList();
                         }
                     }
                     workingList.Add(zanverseHolder);
@@ -569,14 +584,13 @@ namespace OverParse
             }
 
             // get group damage totals
-            int totalReadDamage = workingList.Sum(x => x.Damage);
+            int totalReadDamage = workingList.Where(c => c.IsAlly).Sum(x => x.Damage);
 
             // dps calcs!
             foreach (Combatant c in workingList)
             {
                 c.PercentReadDPS = c.ReadDamage / (float)totalReadDamage * 100;
             }
-
 
             // damage graph stuff
             Combatant.maxShare = 0;
@@ -617,7 +631,6 @@ namespace OverParse
                 }
  
             }
-
 
             // status pane updates
             EncounterIndicator.Fill = new SolidColorBrush(Color.FromArgb(192, 255, 128, 128));
