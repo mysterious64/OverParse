@@ -306,7 +306,7 @@
             </Grid>
 
             <Rectangle x:Name="EncounterIndicator" Grid.Row="2" Height="2" VerticalAlignment="Top"  Fill="White" IsHitTestVisible="False" />
-            <Label x:Name="EncounterStatus" Grid.Row="2" Foreground="White" Padding="5,3,3,3" FontSize="12" FontFamily="Noto Sans CJK JP DemiLight" IsHitTestVisible="False" />
+            <Label x:Name="EncounterStatus" Grid.Row="2" Foreground="White" Padding="4,5,5,5" FontSize="12" FontFamily="Noto Sans CJK JP DemiLight" IsHitTestVisible="False" />
         </Grid>
     </Border>
 </Window>
