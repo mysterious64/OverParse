@@ -258,13 +258,13 @@ namespace OverParse
         }
 
         // Fetch the technique "Zanverse" damage
-        private IEnumerable<OverParse.Attack> GetZanverseDamage() 
+        private int GetZanverseDamage() 
         {
             return Attacks.Where(a => a.ID == "2106601422").Sum(x => x.Damage); // Zanverse
         }
 
         // Fetch the all "Hero Time Finish" damage
-        private IEnumerable<OverParse.Attack> GetHTFAttackDamage() 
+        private int GetHTFAttackDamage() 
         {
             return Attacks.Where(a => FinishAttackIDs.Contains(a.ID)).Sum(x => x.Damage);
         }
