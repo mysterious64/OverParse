@@ -162,9 +162,14 @@ namespace OverParse
 
         /* Common GET Data Properties */
 
-        public int Damaged, DBDamage, LswDamage, PwpDamage, AisDamage, RideDamage; // Remon's fixes
-        public int ZvsDamage => GetZanverseDamage();  // Zanverse damage
-        public int HTFDamage => GetHTFAttackDamage(); // Hero Time Finish damage
+        public int Damaged;   // Remon's fixes
+        public int ZvsDamage  => GetDamageDealt(GetZanverseID());                // Zanverse total damage
+        public int HTFDamage  => GetDamageDealt(GetAttackID(FinishAttackIDs));   // Hero Time Finish total damage
+        public int PwpDamage  => GetDamageDealt(GetAttackID(PhotonAttackIDs));   // PwP Total Damage
+        public int AisDamage  => GetDamageDealt(GetAttackID(AISAttackIDs));      // AIS Total Damage
+        public int RideDamage => GetDamageDealt(GetAttackID(RideAttackIDs));     // Ride Total Damage
+        public int DBDamage   => GetDamageDealt(GetAttackID(DBAttackIDs));       // DaB Total Damage
+        public int LswDamage  => GetDamageDealt(GetAttackID(LaconiumAttackIDs)); // LwS Total Damage
 
         public int Damage     => GetGeneralDamage();  // General damage dealt
         public int MaxHitNum  => MaxHitAttack.Damage; // Max Hit damage
@@ -257,16 +262,22 @@ namespace OverParse
             return value.ToString("#,0");
         }
 
-        // Fetch the technique "Zanverse" damage
-        private int GetZanverseDamage() 
+        // Fetch the technique "Zanverse" ID
+        private IEnumerable<OverParse.Attack> GetZanverseID() 
         {
-            return Attacks.Where(a => a.ID == "2106601422").Sum(x => x.Damage); // Zanverse
+            return Attacks.Where(a => a.ID == "2106601422"); // Zanverse
         }
 
-        // Fetch the all "Hero Time Finish" damage
-        private int GetHTFAttackDamage() 
+        // Fetch the attack ID
+        private IEnumerable<OverParse.Attack> GetAttackID(string[] attackID) 
         {
-            return Attacks.Where(a => FinishAttackIDs.Contains(a.ID)).Sum(x => x.Damage);
+            return Attacks.Where(a => attackID.Contains(a.ID));
+        }
+        
+        // Fetch the total Damage Dealt value [ Use after (GetAttackID) function ]
+        private int GetDamageDealt(IEnumerable<OverParse.Attack> attackID) 
+        {
+            return attackID.Sum(x => x.Damage);
         }
 
         // Returns the general damage dealt
