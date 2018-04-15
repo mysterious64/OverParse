@@ -428,8 +428,9 @@ namespace OverParse
                 Combatant temp = new Combatant(c.ID, c.Name, c.isTemporary);
                 foreach (Attack a in c.Attacks)
                 {
-                    temp.Attacks.Add(new Attack(a.ID, a.Damage, a.JA, a.Cri)); 
+                    temp.Attacks.Add(new Attack(a.ID, a.Damage, a.JA, a.Cri, a.Timestamp)); 
                 }
+                temp.ActiveTime = c.ActiveTime;
                 workingList.Add(temp);
             }
 
@@ -437,7 +438,10 @@ namespace OverParse
             CombatantData.Items.Clear();
 
             // for zanverse dummy and status bar because WHAT IS GOOD STRUCTURE
-            int elapsed = Log.ActiveTime;
+            int elapsed = 0;
+
+            Combatant stealActiveTimeDummy = workingList.FirstOrDefault();
+            if (stealActiveTimeDummy != null) { elapsed = stealActiveTimeDummy.ActiveTime; }
 
             // create and sort dummy AIS combatants
             if (Properties.Settings.Default.SeparateAIS)
@@ -454,6 +458,7 @@ namespace OverParse
                         List<Attack> targetAttacks = c.Attacks.Where(a => Combatant.AISAttackIDs.Contains(a.ID)).ToList();
                         c.Attacks = c.Attacks.Except(targetAttacks).ToList();
                         AISHolder.Attacks.AddRange(targetAttacks);
+                        AISHolder.ActiveTime = elapsed;
                         pendingCombatants.Add(AISHolder);
                     }
                 }
@@ -474,6 +479,7 @@ namespace OverParse
                         List<Attack> targetAttacks = c.Attacks.Where(a => Combatant.DBAttackIDs.Contains(a.ID)).ToList();
                         c.Attacks = c.Attacks.Except(targetAttacks).ToList();
                         DBHolder.Attacks.AddRange(targetAttacks);
+                        DBHolder.ActiveTime = elapsed;
                         pendingDBCombatants.Add(DBHolder);
                     }
                 }
@@ -494,6 +500,7 @@ namespace OverParse
                         List<Attack> targetAttacks = c.Attacks.Where(a => Combatant.RideAttackIDs.Contains(a.ID)).ToList();
                         c.Attacks = c.Attacks.Except(targetAttacks).ToList();
                         RideHolder.Attacks.AddRange(targetAttacks);
+                        RideHolder.ActiveTime = elapsed;
                         pendingRideCombatants.Add(RideHolder);
                     }
                 }
@@ -514,6 +521,7 @@ namespace OverParse
                         List<Attack> targetAttacks = c.Attacks.Where(a => Combatant.PhotonAttackIDs.Contains(a.ID)).ToList();
                         c.Attacks = c.Attacks.Except(targetAttacks).ToList();
                         PhotonHolder.Attacks.AddRange(targetAttacks);
+                        PhotonHolder.ActiveTime = elapsed;
                         pendingPwpCombatants.Add(PhotonHolder);
                     }
                 }
@@ -534,6 +542,7 @@ namespace OverParse
                         List<Attack> targetAttacks = c.Attacks.Where(a => Combatant.LaconiumAttackIDs.Contains(a.ID)).ToList();
                         c.Attacks = c.Attacks.Except(targetAttacks).ToList();
                         LswHolder.Attacks.AddRange(targetAttacks);
+                        LswHolder.ActiveTime = elapsed;
                         pendingLswCombatants.Add(LswHolder);
                     }
                 }
@@ -544,8 +553,8 @@ namespace OverParse
             workingList.Sort((x, y) => y.ReadDamage.CompareTo(x.ReadDamage));
 
             // make dummy zanverse combatant if necessary
-            int totalZanverse = workingList.Sum(x => x.ZvsDamage);
-            int totalFinish = workingList.Sum(x => x.HTFDamage);
+            int totalZanverse = workingList.Where(c => c.IsAlly == true).Sum(x => x.ZvsDamage);
+            int totalFinish = workingList.Where(c => c.IsAlly == true).Sum(x => x.HTFDamage);
 
             if (Properties.Settings.Default.SeparateFinish)
             {
@@ -561,6 +570,7 @@ namespace OverParse
                             c.Attacks = c.Attacks.Except(targetAttacks).ToList();
                         }
                     }
+                    finishHolder.ActiveTime = elapsed;
                     workingList.Add(finishHolder);
                 }
             }
@@ -579,6 +589,7 @@ namespace OverParse
                             c.Attacks = c.Attacks.Except(targetAttacks).ToList();
                         }
                     }
+                    zanverseHolder.ActiveTime = elapsed;
                     workingList.Add(zanverseHolder);
                 }
             }

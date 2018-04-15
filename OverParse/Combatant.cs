@@ -109,6 +109,7 @@ namespace OverParse
         public string ID, isTemporary;
         public string Name { get; set; }
         public float PercentDPS, PercentReadDPS;
+        public int ActiveTime;
 
         // Constructor #1
         public Combatant(string id, string name)
@@ -117,21 +118,10 @@ namespace OverParse
             Name = name;
             PercentDPS = -1;
             Attacks = new List<Attack>();
-            ZvsAttacks = new List<Attack>();
-            HTFAttacks = new List<Attack>();
-            DBAttacks = new List<Attack>();
-            LswAttacks = new List<Attack>();
-            PwpAttacks = new List<Attack>();
-            AisAttacks = new List<Attack>();
-            RideAttacks = new List<Attack>();
             isTemporary = "no";
             PercentReadDPS = 0;
+            ActiveTime = 0;
             Damaged = 0;
-            DBDamage = 0;
-            LswDamage = 0;
-            PwpDamage = 0;
-            AisDamage = 0;
-            RideDamage = 0;
         }
 
         // Constructor #2
@@ -141,28 +131,22 @@ namespace OverParse
             Name = name;
             PercentDPS = -1;
             Attacks = new List<Attack>();
-            ZvsAttacks = new List<Attack>();
-            HTFAttacks = new List<Attack>();
-            DBAttacks = new List<Attack>();
-            LswAttacks = new List<Attack>();
-            PwpAttacks = new List<Attack>();
-            AisAttacks = new List<Attack>();
-            RideAttacks = new List<Attack>();
             isTemporary = temp;
             PercentReadDPS = 0;
+            ActiveTime = 0;
             Damaged = 0;
-            DBDamage = 0;
-            LswDamage = 0;
-            PwpDamage = 0;
-            AisDamage = 0;
-            RideDamage = 0;
         }
 
         /* Common GET Data Properties */
 
-        public int Damaged, DBDamage, LswDamage, PwpDamage, AisDamage, RideDamage; // Remon's fixes
-        public int ZvsDamage  => GetDamageDealt(GetZanverseID());                  // Zanverse total damage
-        public int HTFDamage  => GetDamageDealt(GetAttackID(FinishAttackIDs));     // Hero Time Finish total damage
+        public int Damaged;   // Remon's fixes
+        public int ZvsDamage  => GetDamageDealt(GetZanverseID());                // Zanverse total damage
+        public int HTFDamage  => GetDamageDealt(GetAttackID(FinishAttackIDs));   // Hero Time Finish total damage
+        public int PwpDamage  => GetDamageDealt(GetAttackID(PhotonAttackIDs));   // PwP Total Damage
+        public int AisDamage  => GetDamageDealt(GetAttackID(AISAttackIDs));      // AIS Total Damage
+        public int RideDamage => GetDamageDealt(GetAttackID(RideAttackIDs));     // Ride Total Damage
+        public int DBDamage   => GetDamageDealt(GetAttackID(DBAttackIDs));       // DaB Total Damage
+        public int LswDamage  => GetDamageDealt(GetAttackID(LaconiumAttackIDs)); // LwS Total Damage
 
         public int Damage     => GetGeneralDamage();  // General damage dealt
         public int MaxHitNum  => MaxHitAttack.Damage; // Max Hit damage
@@ -201,7 +185,7 @@ namespace OverParse
         public bool IsRide     => CheckIsType("Ride");        // Rideroid mode running
         public bool IsFinish   => CheckIsType("HTF Attacks"); // Hero Time Finish executing
         public bool IsDB       => CheckIsType("DB");          // Dark Blast running
-        public bool IsLsw      => CheckIsType("Lsw");         // Laconium/Mana cannon running
+        public bool IsLsw      => CheckIsType("Lsw");         // Laconium Sword or Mana cannon running
 
         public Brush Brush  => GetBrushPrimary();   // Player-chan damage graph
         public Brush Brush2 => GetBrushSecondary(); // Other players damage graph
@@ -313,26 +297,26 @@ namespace OverParse
         // Returns the general DPS
         private double GetGeneralDPS() 
         { 
-            if (OverParse.Log.ActiveTime == 0)
+            if (ActiveTime == 0)
             {
                 return Damage;
             }
             else
             {
-                return Damage / OverParse.Log.ActiveTime;
+                return Damage / ActiveTime;
             }
         }
 
         // Returns the DPS that has been filtered
         private double GetReadingDPS() 
         { 
-            if (OverParse.Log.ActiveTime == 0)
+            if (ActiveTime == 0)
             {
                 return ReadDamage;
             }
             else
             {
-                return Math.Round(ReadDamage / (double)OverParse.Log.ActiveTime); 
+                return Math.Round(ReadDamage / (double)ActiveTime); 
             }
         }
         
@@ -553,14 +537,15 @@ namespace OverParse
     public class Attack
     {
         public string ID;
-        public int Damage , JA , Cri;
+        public int Damage, JA, Cri, Timestamp;
 
-        public Attack(string initID, int initDamage, int justAttack, int critical)
+        public Attack(string initID, int initDamage, int justAttack, int critical, int initTimestamp)
         {
             ID = initID;
             Damage = initDamage;
             JA = justAttack;
             Cri = critical;
+            Timestamp = initTimestamp;
         }
     }
 }

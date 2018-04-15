@@ -19,9 +19,7 @@ namespace OverParse
         private const int pluginVersion = 5;
 
         // Logging Variables
-        public static int ActiveTime = 0;
-        public static int startTimestamp = 0;
-        public static int backupTime = 0;
+        public int startTimestamp = 0;
         public int newTimestamp = 0;
         public List<Combatant> combatants = new List<Combatant>();
         public List<Combatant> backupCombatants = new List<Combatant>();
@@ -153,7 +151,7 @@ namespace OverParse
         {
             if (combatants.Count != 0) // Players found
             {
-                int elapsed = ActiveTime;
+                int elapsed = newTimestamp - startTimestamp;
                 TimeSpan timespan = TimeSpan.FromSeconds(elapsed);
 
                 // Logging the total time occured through out the encounter
@@ -370,33 +368,14 @@ namespace OverParse
                             }
 
                             Combatant source = combatants[index];
-
-                            newTimestamp = lineTimestamp;
-                            if (startTimestamp == 0) { startTimestamp = newTimestamp; }
-                            ActiveTime = newTimestamp - startTimestamp;
-
-                            if (Combatant.DBAttackIDs.Contains(attackID)) // Dark Blast Attacks
-                            { 
-                                source.DBDamage += hitDamage; source.DBAttacks.Add(new Attack(attackID, hitDamage, justAttack, critical)); 
-                            }
-                            else if (Combatant.LaconiumAttackIDs.Contains(attackID)) // Laconium Sword or Mana Cannons
-                            { 
-                                source.LswDamage += hitDamage; source.LswAttacks.Add(new Attack(attackID, hitDamage, justAttack, critical)); 
-                            }
-                            else if (Combatant.PhotonAttackIDs.Contains(attackID)) // Photon Weaponry
-                            { 
-                                source.PwpDamage += hitDamage; source.PwpAttacks.Add(new Attack(attackID, hitDamage, justAttack, critical)); 
-                            }
-                            else if (Combatant.AISAttackIDs.Contains(attackID)) // A.I.S. Attacks
-                            { 
-                                source.AisDamage += hitDamage; source.AisAttacks.Add(new Attack(attackID, hitDamage, justAttack, critical)); 
-                            }
-                            else if (Combatant.RideAttackIDs.Contains(attackID)) // Rideroid Attacks
-                            { 
-                                source.RideDamage += hitDamage; source.RideAttacks.Add(new Attack(attackID, hitDamage, justAttack, critical)); 
-                            } 
                             
-                            source.Attacks.Add(new Attack(attackID, hitDamage, justAttack, critical)); 
+                            newTimestamp = lineTimestamp;
+                            if (startTimestamp == 0) 
+                            { 
+                                startTimestamp = newTimestamp; 
+                            }
+
+                            source.Attacks.Add(new Attack(attackID, hitDamage, justAttack, critical, newTimestamp - startTimestamp)); 
 
                             running = true;
                         } 
@@ -439,6 +418,15 @@ namespace OverParse
                 if (startTimestamp != 0)
                 {
                     encounterData = "0:00:00 - ∞ DPS";
+                }
+
+                if (startTimestamp != 0 && newTimestamp != startTimestamp)
+                {
+                    foreach (Combatant x in combatants)
+                    {
+                        if (x.IsAlly || x.IsZanverse)
+                            x.ActiveTime = (newTimestamp - startTimestamp);
+                    }
                 }
             }
         }

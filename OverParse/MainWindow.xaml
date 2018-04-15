@@ -39,7 +39,6 @@
             </Style.Triggers>
         </Style>
 
-
         <Style TargetType="ListView">
             <Setter Property="Background" Value="#FF0A0A0A"/>
             <Setter Property="Foreground" Value="White"/>
@@ -202,6 +201,7 @@
                                 <Setter Property="Background" Value="Transparent" />
                                 <Setter Property="Foreground" Value="#FFFFFFFF" />
                                 <Setter Property="Padding" Value="0"/>
+                                <Setter Property="VerticalAlignment" Value="Center" />
                                 <Setter Property="IsHitTestVisible" Value="False" />
                             </Style>
                         </GridView.ColumnHeaderContainerStyle>
@@ -294,15 +294,15 @@
                     <ColumnDefinition x:Name="MdmgHC" Width="62"/>
                     <ColumnDefinition x:Name="AtkHC" Width="1.7*"/>
                 </Grid.ColumnDefinitions>
-                <Grid Grid.Column="0" VerticalAlignment="Center" x:Name="NameH" />
-                <Grid Grid.Column="1" VerticalAlignment="Center" x:Name="PercentH" />
-                <Grid Grid.Column="2" VerticalAlignment="Center" x:Name="DmgH" />
-                <Grid Grid.Column="3" VerticalAlignment="Center" x:Name="DmgdH" />
-                <Grid Grid.Column="4" VerticalAlignment="Center" x:Name="DPSH" />
-                <Grid Grid.Column="5" VerticalAlignment="Center" x:Name="JAH" />
-                <Grid Grid.Column="6" VerticalAlignment="Center" x:Name="CriH" />
-                <Grid Grid.Column="7" VerticalAlignment="Center" x:Name="MdmgH" />
-                <Grid Grid.Column="8" VerticalAlignment="Center" x:Name="AtkH" />
+                <Grid Grid.Column="0" x:Name="NameH" />
+                <Grid Grid.Column="1" x:Name="PercentH" />
+                <Grid Grid.Column="2" x:Name="DmgH" />
+                <Grid Grid.Column="3" x:Name="DmgdH" />
+                <Grid Grid.Column="4" x:Name="DPSH" />
+                <Grid Grid.Column="5" x:Name="JAH" />
+                <Grid Grid.Column="6" x:Name="CriH" />
+                <Grid Grid.Column="7" x:Name="MdmgH" />
+                <Grid Grid.Column="8" x:Name="AtkH" />
             </Grid>
 
             <Rectangle x:Name="EncounterIndicator" Grid.Row="2" Height="2" VerticalAlignment="Top"  Fill="White" IsHitTestVisible="False" />
