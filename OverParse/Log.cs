@@ -375,14 +375,37 @@ namespace OverParse
                             if (startTimestamp == 0) { startTimestamp = newTimestamp; }
                             ActiveTime = newTimestamp - startTimestamp;
 
-                            if (attackID == "2106601422") { source.ZvsDamage += hitDamage; source.ZvsAttacks.Add(new Attack(attackID, hitDamage, justAttack, critical)); }
-                            if (Combatant.FinishAttackIDs.Contains(attackID)) { source.HTFDamage += hitDamage; source.HTFAttacks.Add(new Attack(attackID, hitDamage, justAttack, critical)); }
-                            if (Combatant.DBAttackIDs.Contains(attackID)) { source.DBDamage += hitDamage; source.DBAttacks.Add(new Attack(attackID, hitDamage, justAttack, critical)); }
-                            if (Combatant.LaconiumAttackIDs.Contains(attackID)) { source.LswDamage += hitDamage; source.LswAttacks.Add(new Attack(attackID, hitDamage, justAttack, critical)); }
-                            if (Combatant.PhotonAttackIDs.Contains(attackID)) { source.PwpDamage += hitDamage; source.PwpAttacks.Add(new Attack(attackID, hitDamage, justAttack, critical)); }
-                            if (Combatant.AISAttackIDs.Contains(attackID)) { source.AisDamage += hitDamage; source.AisAttacks.Add(new Attack(attackID, hitDamage, justAttack, critical)); }
-                            if (Combatant.RideAttackIDs.Contains(attackID)) { source.RideDamage += hitDamage; source.RideAttacks.Add(new Attack(attackID, hitDamage, justAttack, critical)); }
-                            source.Attacks.Add(new Attack(attackID, hitDamage,  justAttack, critical));
+                            if (attackID == "2106601422") // Zanverse
+                            { 
+                                source.ZvsDamage += hitDamage; source.ZvsAttacks.Add(new Attack(attackID, hitDamage, justAttack, critical)); 
+                            }
+                            else if (Combatant.FinishAttackIDs.Contains(attackID)) // Hero Finish Attacks
+                            { 
+                                source.HTFDamage += hitDamage; source.HTFAttacks.Add(new Attack(attackID, hitDamage, justAttack, critical)); 
+                            }
+                            else if (Combatant.DBAttackIDs.Contains(attackID)) // Dark Blast Attacks
+                            { 
+                                source.DBDamage += hitDamage; source.DBAttacks.Add(new Attack(attackID, hitDamage, justAttack, critical)); 
+                            }
+                            else if (Combatant.LaconiumAttackIDs.Contains(attackID)) // Laconium Sword or Mana Cannons
+                            { 
+                                source.LswDamage += hitDamage; source.LswAttacks.Add(new Attack(attackID, hitDamage, justAttack, critical)); 
+                            }
+                            else if (Combatant.PhotonAttackIDs.Contains(attackID)) // Photon Weaponry
+                            { 
+                                source.PwpDamage += hitDamage; source.PwpAttacks.Add(new Attack(attackID, hitDamage, justAttack, critical)); 
+                            }
+                            else if (Combatant.AISAttackIDs.Contains(attackID)) // A.I.S. Attacks
+                            { 
+                                source.AisDamage += hitDamage; source.AisAttacks.Add(new Attack(attackID, hitDamage, justAttack, critical)); 
+                            }
+                            else if (Combatant.RideAttackIDs.Contains(attackID)) // Rideroid Attacks
+                            { 
+                                source.RideDamage += hitDamage; source.RideAttacks.Add(new Attack(attackID, hitDamage, justAttack, critical)); 
+                            } 
+                            
+                            source.Attacks.Add(new Attack(attackID, hitDamage, justAttack, critical)); 
+
                             running = true;
                         } 
                         else 

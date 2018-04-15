@@ -162,21 +162,23 @@ namespace OverParse
 
         /* Common GET Data Properties */
 
-        public int Damaged, ZvsDamage, HTFDamage, DBDamage, LswDamage, PwpDamage, AisDamage, RideDamage; // Remon's fixes
+        public int Damaged, DBDamage, LswDamage, PwpDamage, AisDamage, RideDamage; // Remon's fixes
+        public int ZvsDamage => GetZanverseDamage();  // Zanverse damage
+        public int HTFDamage => GetHTFAttackDamage(); // Hero Time Finish damage
 
-        public int Damage     => GetTotalDamageDealt();   // Total damage dealt
-        public int MaxHitNum  => MaxHitAttack.Damage;     // Max Hit damage
-        public int ReadDamage => GetGeneralDamageDealt(); // General damage dealt
+        public int Damage     => GetGeneralDamage();  // General damage dealt
+        public int MaxHitNum  => MaxHitAttack.Damage; // Max Hit damage
+        public int ReadDamage => GetReadingDamage();  // Filtered damage dealt
 
         public Attack MaxHitAttack => GetGeneralMaxHitAttack(); // General max hit damage number
 
-        public double DPS     => GetTotalDPS();   // Total DPS for MPA
-        public double ReadDPS => GetGeneralDPS(); // General DPS for each player
+        public double DPS     => GetGeneralDPS(); // General DPS
+        public double ReadDPS => GetReadingDPS(); // Filtered DPS
 
         public string DisplayName => GetDisplayName(); // Get player OR anon names
 
         public string DamageReadout => ReadDamage.ToString("N0"); // Damage dealt stringified
-        public string ReadDamaged   => Damaged.ToString("N0");   // Damage taken stringified
+        public string ReadDamaged   => Damaged.ToString("N0");    // Damage taken stringified
 
         public string StringDPS             => ReadDPS.ToString("N0"); // DPS numbers stringified
         public string PercentReadDPSReadout => GetPercentReadDPS();    // DPS numbers percentified
@@ -255,26 +257,26 @@ namespace OverParse
             return value.ToString("#,0");
         }
 
-        // Fetch the technique "Zanverse" ID
-        private IEnumerable<OverParse.Attack> GetZanverseID() 
+        // Fetch the technique "Zanverse" damage
+        private IEnumerable<OverParse.Attack> GetZanverseDamage() 
         {
-            return Attacks.Where(a => a.ID == "2106601422"); // Zanverse
+            return Attacks.Where(a => a.ID == "2106601422").Sum(x => x.Damage); // Zanverse
         }
 
-        // Returns the total damage dealt for MPA
-        private int GetTotalDamageDealt() 
+        // Fetch the all "Hero Time Finish" damage
+        private IEnumerable<OverParse.Attack> GetHTFAttackDamage() 
+        {
+            return Attacks.Where(a => FinishAttackIDs.Contains(a.ID)).Sum(x => x.Damage);
+        }
+
+        // Returns the general damage dealt
+        private int GetGeneralDamage() 
         { 
             return Attacks.Sum(x => x.Damage); 
         }
 
-        // Returns the total damage taken for MPA
-        private int GetTotalDamageTaken() 
-        { 
-            return Damaged;
-        }
-
-        // Returns the general damage dealt by players
-        private int GetGeneralDamageDealt()
+        // Returns the damage dealt that has been filtered
+        private int GetReadingDamage()
         {
             if (IsZanverse || IsFinish || IsAIS || IsPwp || IsDB || IsRide || IsLsw)
                 return Damage;
@@ -304,8 +306,8 @@ namespace OverParse
             return Attacks.FirstOrDefault();
         }
 
-        // Returns the total DPS of the MPA
-        private double GetTotalDPS() 
+        // Returns the general DPS
+        private double GetGeneralDPS() 
         { 
             if (OverParse.Log.ActiveTime == 0)
             {
@@ -317,8 +319,8 @@ namespace OverParse
             }
         }
 
-        // Returns the general DPS of the MPA
-        private double GetGeneralDPS() 
+        // Returns the DPS that has been filtered
+        private double GetReadingDPS() 
         { 
             if (OverParse.Log.ActiveTime == 0)
             {
