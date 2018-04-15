@@ -387,10 +387,13 @@ namespace OverParse
                         } 
                         else 
                         {
-                            // Damage Taken Process - Future work on detailing it better
+                            // Damage Taken Process
                             foreach (Combatant x in combatants)
                             {
-                                if (x.ID == targetID && x.isTemporary == "no") { index = combatants.IndexOf(x); }
+                                if (x.ID == targetID && (x.isTemporary == "no" || x.IsAIS || x.IsRide || x.IsDB || x.IsLsw)) 
+                                { 
+                                    index = combatants.IndexOf(x); 
+                                }
                             }
 
                             if (index == -1)
@@ -402,9 +405,9 @@ namespace OverParse
                             Combatant source = combatants[index];
 
                             newTimestamp = lineTimestamp;
+
                             if (startTimestamp == 0)
                             {
-                                // Console.WriteLine($"FIRST ATTACK RECORDED: {hitDamage} dmg from {sourceID} ({sourceName}) with {attackID}, to {targetID} ({targetName})");
                                 startTimestamp = newTimestamp;
                             }
 

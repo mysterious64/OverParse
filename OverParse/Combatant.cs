@@ -162,11 +162,11 @@ namespace OverParse
 
         /* Common GET Data Properties */
 
+        public int Damaged, ZvsDamage, HTFDamage, DBDamage, LswDamage, PwpDamage, AisDamage, RideDamage; // Remon's fixes
+
         public int Damage     => GetTotalDamageDealt();   // Total damage dealt
         public int MaxHitNum  => MaxHitAttack.Damage;     // Max Hit damage
         public int ReadDamage => GetGeneralDamageDealt(); // General damage dealt
-
-        public int Damaged, ZvsDamage, HTFDamage, DBDamage, LswDamage, PwpDamage, AisDamage, RideDamage; // Remon's fixes
 
         public Attack MaxHitAttack => GetGeneralMaxHitAttack(); // General max hit damage number
 

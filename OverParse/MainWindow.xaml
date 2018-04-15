@@ -206,7 +206,7 @@
                             </Style>
                         </GridView.ColumnHeaderContainerStyle>
 
-                                <GridViewColumn Header="Name" x:Name="NameColumn" Width="{Binding ElementName=NameH, Path=ActualWidth}">
+                                <GridViewColumn Header="Name" x:Name="NameColumn" Width="{Binding ElementName=NameH, Path=ActualWidth}" VerticalAlignment="Center">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <TextBlock Text="{Binding DisplayName}" TextAlignment="Left" Margin="-3,-1,-5,-1" Padding="0" />
@@ -214,7 +214,7 @@
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
 
-                                <GridViewColumn Header="%" x:Name="PercentColumn" Width="{Binding ElementName=PercentH, Path=ActualWidth}">
+                                <GridViewColumn Header="%" x:Name="PercentColumn" Width="{Binding ElementName=PercentH, Path=ActualWidth}" VerticalAlignment="Center">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <TextBlock Text="{Binding PercentReadDPSReadout}" TextAlignment="Right" Margin="-5,-1,-5,-1" Padding="0" />
@@ -222,7 +222,7 @@
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
 
-                                <GridViewColumn Header="Damage" x:Name="DamageColumn" Width="{Binding ElementName=DmgH, Path=ActualWidth}">
+                                <GridViewColumn Header="Damage" x:Name="DamageColumn" Width="{Binding ElementName=DmgH, Path=ActualWidth}" VerticalAlignment="Center">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <TextBlock Text="{Binding DamageReadout}" TextAlignment="Right" Margin="-5,-1,-5,-1" Padding="0" />
@@ -230,7 +230,7 @@
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
 
-                                <GridViewColumn Header="Taken" x:Name="DamagedColumn" Width="{Binding ElementName=DmgdH, Path=ActualWidth}">
+                                <GridViewColumn Header="Taken" x:Name="DamagedColumn" Width="{Binding ElementName=DmgdH, Path=ActualWidth}" VerticalAlignment="Center">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <TextBlock Text="{Binding ReadDamaged}" TextAlignment="Right" Margin="-5,-1,-5,-1" Padding="0" />
@@ -238,7 +238,7 @@
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
 
-                                <GridViewColumn Header="DPS" x:Name="DPSColumn" Width="{Binding ElementName=DPSH, Path=ActualWidth}">
+                                <GridViewColumn Header="DPS" x:Name="DPSColumn" Width="{Binding ElementName=DPSH, Path=ActualWidth}" VerticalAlignment="Center">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <TextBlock Text="{Binding FDPSReadout}" TextAlignment="Right" Margin="-5,-1,-5,-1" Padding="0" />
@@ -246,7 +246,7 @@
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
 
-                                <GridViewColumn Header="JA %" x:Name="JAColumn" Width="{Binding ElementName=JAH, Path=ActualWidth}">
+                                <GridViewColumn Header="JA %" x:Name="JAColumn" Width="{Binding ElementName=JAH, Path=ActualWidth}" VerticalAlignment="Center">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <TextBlock Text="{Binding JAPercent}" TextAlignment="Right" Margin="-5,-1,-5,-1" Padding="0" />
@@ -254,7 +254,7 @@
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
 
-                                <GridViewColumn Header="Crit %" x:Name="CriColumn" Width="{Binding ElementName=CriH, Path=ActualWidth}">
+                                <GridViewColumn Header="Crit %" x:Name="CriColumn" Width="{Binding ElementName=CriH, Path=ActualWidth}" VerticalAlignment="Center">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <TextBlock Text="{Binding CRIPercent}" TextAlignment="Right" Margin="-5,-1,-5,-1" Padding="0" />
@@ -262,7 +262,7 @@
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
 
-                                <GridViewColumn Header="Max Hit" x:Name="HColumn" Width="{Binding ElementName=MdmgH, Path=ActualWidth}">
+                                <GridViewColumn Header="Max Hit" x:Name="HColumn" Width="{Binding ElementName=MdmgH, Path=ActualWidth}" VerticalAlignment="Center">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <TextBlock Text="{Binding MaxHitdmg}" TextAlignment="Right" Margin="-5,-1,-5,-1" Padding="0" />
@@ -270,7 +270,7 @@
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
 
-                                <GridViewColumn Header="Attack Name" x:Name="MaxHitColumn" Width="{Binding ElementName=AtkH, Path=ActualWidth}">
+                                <GridViewColumn Header="Attack Name" x:Name="MaxHitColumn" Width="{Binding ElementName=AtkH, Path=ActualWidth}" VerticalAlignment="Center">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <TextBlock Text="{Binding MaxHit}" TextAlignment="Center" Margin="-5,-1,-5,-1" Padding="0" />
