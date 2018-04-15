@@ -185,7 +185,7 @@
             </Menu>
             <Label x:Name="Datetime" Foreground="#FFFFFFFF" Padding="0" Margin="230,0,0,0" FontSize="12" VerticalAlignment="Top" HorizontalAlignment="Left"/>
 
-            <Menu HorizontalAlignment="Right" VerticalAlignment="Stretch" FontSize="12">
+            <Menu HorizontalAlignment="Right" VerticalAlignment="Stretch" Padding="3,3,3,3" FontSize="12">
                 <MenuItem Header="____" Click="Minimize_Click" Style="{StaticResource topmenu}" />
                 <MenuItem Style="{StaticResource topmenu}" Header="Exit" Click="Exit_Click"/>
             </Menu>
@@ -306,7 +306,7 @@
             </Grid>
 
             <Rectangle x:Name="EncounterIndicator" Grid.Row="2" Height="2" VerticalAlignment="Top"  Fill="White" IsHitTestVisible="False" />
-            <Label x:Name="EncounterStatus" Grid.Row="2" Foreground="White" Padding="5,5,5,5" FontSize="12" FontFamily="Noto Sans CJK JP DemiLight" IsHitTestVisible="False" />
+            <Label x:Name="EncounterStatus" Grid.Row="2" Foreground="White" Padding="5,5,4,4" FontSize="12" FontFamily="Noto Sans CJK JP DemiLight" IsHitTestVisible="False" />
         </Grid>
     </Border>
 </Window>
