@@ -200,8 +200,7 @@
                             <Style TargetType="{x:Type GridViewColumnHeader}">
                                 <Setter Property="Background" Value="Transparent" />
                                 <Setter Property="Foreground" Value="#FFFFFFFF" />
-                                <Setter Property="Padding" Value="0"/>
-                                <Setter Property="VerticalAlignment" Value="Center" />
+                                <Setter Property="Padding" Value="0,2,0,0"/>
                                 <Setter Property="IsHitTestVisible" Value="False" />
                             </Style>
                         </GridView.ColumnHeaderContainerStyle>

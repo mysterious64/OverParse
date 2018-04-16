@@ -21,13 +21,13 @@ namespace OverParse
     {
         private Log encounterlog;
         private List<Combatant> lastCombatants = new List<Combatant>();
+        public DispatcherTimer damageTimer = new DispatcherTimer();
         public static Dictionary<string, string> skillDict = new Dictionary<string, string>();
         public static string[] ignoreskill;
         private List<string> sessionLogFilenames = new List<string>();
         private string lastStatus = "";
         private IntPtr hwndcontainer;
         List<Combatant> workingList = new List<Combatant>();
-        public DispatcherTimer damageTimer = new DispatcherTimer();
         Process thisProcess = Process.GetCurrentProcess();
 
         protected override void OnSourceInitialized(EventArgs e)
@@ -430,6 +430,8 @@ namespace OverParse
                 {
                     temp.Attacks.Add(new Attack(a.ID, a.Damage, a.JA, a.Cri, a.Timestamp)); 
                 }
+                temp.Damaged = c.Damaged;
+                temp.PercentReadDPS = c.PercentReadDPS;
                 temp.ActiveTime = c.ActiveTime;
                 workingList.Add(temp);
             }
