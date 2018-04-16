@@ -28,7 +28,7 @@ namespace OverParse
                 Combatant temp2 = new Combatant(c.ID, c.Name, c.isTemporary);
                 foreach (Attack a in c.Attacks)
                     temp2.Attacks.Add(new Attack(a.ID, a.Damage, a.JA, a.Cri, a.Timestamp));
-                temp2.ActiveTime = c.ActiveTime
+                temp2.ActiveTime = c.ActiveTime;
                 temp2.Damaged = c.Damaged;
                 temp2.PercentReadDPS = c.PercentReadDPS;
                 workingListCopy.Add(temp2);
