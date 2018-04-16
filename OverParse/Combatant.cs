@@ -88,7 +88,7 @@ namespace OverParse
                                                                   "2091027507"  , // Special,Diffusion Ray
                                                                   "4078260742"  , // Sharp Glide
                                                                   "2743062721" }; // Attack Advance (Loser) 
-        // Laconium Sword (& Cannons) Attack IDs
+        // Laconium Sword Attack IDs
         public static string[] LaconiumAttackIDs = new string[] { "2235773608"  , // Laconium Sword air second normal attack 
                                                                   "2235773610"  , // Laconium Sword air first normal attack 
                                                                   "2235773611"  , // Laconium Sword air third normal attack
