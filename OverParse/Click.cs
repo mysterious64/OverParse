@@ -69,7 +69,6 @@ namespace OverParse
         private void EndEncounterNoLog_Click(object sender, RoutedEventArgs e)
         {
             //Ending encounter (no log)
-            Log.ActiveTime = Log.backupTime;
             bool temp = Properties.Settings.Default.AutoEndEncounters;
             Properties.Settings.Default.AutoEndEncounters = false;
             UpdateForm(null, null);
