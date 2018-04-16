@@ -89,8 +89,7 @@ namespace OverParse
                                                                   "4078260742"  , // Sharp Glide
                                                                   "2743062721" }; // Attack Advance (Loser) 
         // Laconium Sword (& Cannons) Attack IDs
-        public static string[] LaconiumAttackIDs = new string[] { "1913897098"  , // Rapid-Fire Mana Gun
-                                                                  "2235773608"  , // Laconium Sword air second normal attack 
+        public static string[] LaconiumAttackIDs = new string[] { "2235773608"  , // Laconium Sword air second normal attack 
                                                                   "2235773610"  , // Laconium Sword air first normal attack 
                                                                   "2235773611"  , // Laconium Sword air third normal attack
                                                                   "2235773818"  , // Buster Divide (Laconium Sword uncharged)
@@ -98,7 +97,7 @@ namespace OverParse
                                                                   "2235773927"  , // Laconium Sword first normal attack
                                                                   "2235773944"  , // Laconium Sword third normal attack
                                                                   "2618804663"  , // Buster Divide (Laconium Sword charged)
-                                                                  "2619614461"  , // Laconium Sword Step Attack
+                                                                  "2619614461"  , // Laconium Sword step attack
                                                                   "3607718359" }; // Laconium Sword slash
         // List of the above attack IDs combined
         public static string[] NonAllyAttackIDs = PhotonAttackIDs.Concat(AISAttackIDs).Concat(RideAttackIDs).Concat(DBAttackIDs).Concat(LaconiumAttackIDs).ToArray();
