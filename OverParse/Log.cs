@@ -358,24 +358,8 @@ namespace OverParse
                         {
                             foreach (Combatant x in combatants)
                             {
-                                if (x.ID == targetID && x.isTemporary == "no") 
-                                {
-                                    index = combatants.IndexOf(x); 
-                                }
-                                else if (x.ID == targetID && x.isTemporary == "AIS") 
-                                {
-                                    index = combatants.IndexOf(x); 
-                                }
-                                else if (x.ID == targetID && x.isTemporary == "Ride") 
-                                {
-                                    index = combatants.IndexOf(x); 
-                                }
-                                else if (x.ID == targetID && x.isTemporary == "DB") 
-                                {
-                                    index = combatants.IndexOf(x); 
-                                }
-                                else if (x.ID == targetID && x.isTemporary == "Lsw") 
-                                {
+                                if (x.ID == sourceID && x.isTemporary == "no") 
+                                { 
                                     index = combatants.IndexOf(x); 
                                 }
                             }
@@ -404,22 +388,6 @@ namespace OverParse
                             foreach (Combatant x in combatants)
                             {
                                 if (x.ID == targetID && x.isTemporary == "no") 
-                                {
-                                    index = combatants.IndexOf(x); 
-                                }
-                                else if (x.ID == targetID && x.isTemporary == "AIS") 
-                                {
-                                    index = combatants.IndexOf(x); 
-                                }
-                                else if (x.ID == targetID && x.isTemporary == "Ride") 
-                                {
-                                    index = combatants.IndexOf(x); 
-                                }
-                                else if (x.ID == targetID && x.isTemporary == "DB") 
-                                {
-                                    index = combatants.IndexOf(x); 
-                                }
-                                else if (x.ID == targetID && x.isTemporary == "Lsw") 
                                 {
                                     index = combatants.IndexOf(x); 
                                 }
