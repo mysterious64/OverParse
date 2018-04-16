@@ -10,25 +10,25 @@
         Title="Select Columns" Height="270" Width="300">
     <Grid>
         <CheckBox x:Name="PlayerName" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,5,0,0" />
-        <Label Content="Name" VerticalAlignment="Top" HorizontalAlignment="Left" Padding="0" Margin="26,5,0,0" />
+        <Label Content="Player Name (Name)" VerticalAlignment="Top" HorizontalAlignment="Left" Padding="0" Margin="26,5,0,0" />
         <CheckBox x:Name="Percent" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,25,0,0" />
-        <Label Content="%" VerticalAlignment="Top" HorizontalAlignment="Left" Padding="0" Margin="26,25,0,0" />
+        <Label Content="Total Damage Contribution (%)" VerticalAlignment="Top" HorizontalAlignment="Left" Padding="0" Margin="26,25,0,0" />
         <CheckBox x:Name="Damage" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,45,0,0" />
-        <Label Content="Damage" VerticalAlignment="Top" HorizontalAlignment="Left" Padding="0" Margin="26,45,0,0" />
+        <Label Content="Damage Dealt (Damage)" VerticalAlignment="Top" HorizontalAlignment="Left" Padding="0" Margin="26,45,0,0" />
         <CheckBox x:Name="Damaged" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,65,0,0" />
-        <Label Content="Damaged" VerticalAlignment="Top" HorizontalAlignment="Left" Padding="0" Margin="26,65,0,0" />
+        <Label Content="Damage Taken (Taken)" VerticalAlignment="Top" HorizontalAlignment="Left" Padding="0" Margin="26,65,0,0" />
         <CheckBox x:Name="PlayerDPS" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,85,0,0" />
-        <Label Content="DPS" VerticalAlignment="Top" HorizontalAlignment="Left" Padding="0" Margin="26,85,0,0" />
+        <Label Content="Damage Per Second (DPS)" VerticalAlignment="Top" HorizontalAlignment="Left" Padding="0" Margin="26,85,0,0" />
         <CheckBox x:Name="PlayerJA" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,105,0,0" />
-        <Label Content="JA" VerticalAlignment="Top" HorizontalAlignment="Left" Padding="0" Margin="26,105,0,0" />
+        <Label Content="Just Attack Rate (JA %)" VerticalAlignment="Top" HorizontalAlignment="Left" Padding="0" Margin="26,105,0,0" />
         <CheckBox x:Name="Critical" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,125,0,0" />
-        <Label Content="Critical" VerticalAlignment="Top" HorizontalAlignment="Left" Padding="0" Margin="26,125,0,0" />
+        <Label Content="Critical Chance Rate (Crit %)" VerticalAlignment="Top" HorizontalAlignment="Left" Padding="0" Margin="26,125,0,0" />
         <CheckBox x:Name="MaxHit" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,145,0,0" />
-        <Label Content="MaxHit" VerticalAlignment="Top" HorizontalAlignment="Left" Padding="0" Margin="26,145,0,0" />
+        <Label Content="Maximun Attack Hit Amount (Max Hit)" VerticalAlignment="Top" HorizontalAlignment="Left" Padding="0" Margin="26,145,0,0" />
         <CheckBox x:Name="AtkName" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,165,0,0" />
-        <Label Content="Attack Name" VerticalAlignment="Top" HorizontalAlignment="Left" Padding="0" Margin="26,165,0,0" />
+        <Label Content="Maximun Attack Hit Name (Attack Name)" VerticalAlignment="Top" HorizontalAlignment="Left" Padding="0" Margin="26,165,0,0" />
         <CheckBox x:Name="Variable" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,185,0,0" />
-        <Label Content="Responsive Columns" VerticalAlignment="Top" HorizontalAlignment="Left" Padding="0" Margin="26,185,0,0" />
+        <Label Content="All Columns Are Responsive (For Resizing Smaller)" VerticalAlignment="Top" HorizontalAlignment="Left" Padding="0" Margin="26,185,0,0" />
 
         <Button Content="OK" Click="OK_Click" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,10,10,0" Width="50" Height="30"/>
     </Grid>
