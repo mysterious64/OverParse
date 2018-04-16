@@ -21,15 +21,14 @@ namespace OverParse
             UpdateForm(null, null); // I'M FUCKING STUPID
             Properties.Settings.Default.AutoEndEncounters = temp;
             encounterlog.backupCombatants = encounterlog.combatants;
-            Log.backupTime = Log.ActiveTime;
-
 
             List<Combatant> workingListCopy = new List<Combatant>();
             foreach (Combatant c in workingList)
             {
                 Combatant temp2 = new Combatant(c.ID, c.Name, c.isTemporary);
                 foreach (Attack a in c.Attacks)
-                    temp2.Attacks.Add(new Attack(a.ID, a.Damage, a.JA, a.Cri));
+                    temp2.Attacks.Add(new Attack(a.ID, a.Damage, a.JA, a.Cri, a.Timestamp));
+                temp2.ActiveTime = c.ActiveTime
                 temp2.Damaged = c.Damaged;
                 temp2.PercentReadDPS = c.PercentReadDPS;
                 workingListCopy.Add(temp2);
@@ -59,7 +58,6 @@ namespace OverParse
 
             encounterlog = new Log(Properties.Settings.Default.Path);
             UpdateForm(null, null);
-            Log.startTimestamp = 0;
         }
 
         public void EndEncounter_Key(object sender, EventArgs e)
@@ -79,7 +77,6 @@ namespace OverParse
             //Reinitializing log
             encounterlog = new Log(Properties.Settings.Default.Path);
             UpdateForm(null, null);
-            Log.startTimestamp = 0;
         }
 
         private void EndEncounterNoLog_Key(object sender, EventArgs e)
