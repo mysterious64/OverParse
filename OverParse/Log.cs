@@ -157,7 +157,7 @@ namespace OverParse
                 // Logging the total time occured through out the encounter
                 string totalDamage = combatants.Sum(x => x.Damage).ToString("N0");
                 string timer       = timespan.ToString(@"mm\:ss");
-                string log         = DateTime.Now.ToString("F") + " | " + timer + " | Total Damage : "  + totalDamage + " dmg" + Environment.NewLine + Environment.NewLine;
+                string log         = DateTime.Now.ToString("F") + " | " + timer + " | Total Damage: "  + totalDamage + " dmg" + Environment.NewLine + Environment.NewLine;
 
                 log += "[ Encounter Overview ]" + Environment.NewLine; // Title
 

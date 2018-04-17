@@ -597,7 +597,8 @@ namespace OverParse
             }
 
             // get group damage totals
-            int totalReadDamage = workingList.Where(c => (c.IsAlly)).Sum(x => x.ReadDamage);
+            int totalDamage = workingList.Sum(x => x.Damage);
+            int totalReadDamage = workingList.Sum(x => x.ReadDamage);
 
             // dps calcs!
             foreach (Combatant c in workingList)
@@ -667,10 +668,10 @@ namespace OverParse
                 string timer = timespan.ToString(@"h\:mm\:ss");
                 EncounterStatus.Content = $"{timer}";
 
-                float totalDPS = totalReadDamage / (float)elapsed;
+                float totalDPS = totalDamage / (float)elapsed;
 
                 if (totalDPS > 0)
-                    EncounterStatus.Content += $" - Total : {totalReadDamage.ToString("N0")}" + $" - {totalDPS.ToString("N0")} DPS";
+                    EncounterStatus.Content += $" - Total : {totalDamage.ToString("N0")}" + $" - {totalDPS.ToString("N0")} DPS";
 
                 if (!Properties.Settings.Default.SeparateZanverse)
                     EncounterStatus.Content += $" - Zanverse : {totalZanverse.ToString("N0")}";
