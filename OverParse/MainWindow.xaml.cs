@@ -263,7 +263,7 @@ namespace OverParse
                 return;
             }
 
-            FileInfo log = directory.GetFiles().Where(f => Regex.IsMatch(f.Name, @"\d+\.csv")).OrderByDescending(f => f.Name).First();
+            FileInfo log = directory.GetFiles().Where(f => Regex.IsMatch(f.Name, @"\d+\.csv")).OrderByDescending(f => f.Name).FirstOrDefault();
 
             if (log.Name != encounterlog.filename)
             {
