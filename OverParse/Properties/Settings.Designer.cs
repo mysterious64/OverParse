@@ -718,5 +718,17 @@ namespace OverParse.Properties {
                 this["Updateinv"] = value;
             }
         }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool QuestTime {
+            get {
+                return ((bool)(this["QuestTime"]));
+            }
+            set {
+                this["QuestTime"] = value;
+            }
+        }
     }
 }

@@ -19,16 +19,18 @@ namespace OverParse
         private const int pluginVersion = 5;
 
         // Logging Variables
-        public int startTimestamp = 0;
-        public int newTimestamp = 0;
+        public static int startTimestamp = 0;
+        public static int newTimestamp = 0;
+        public static int nowTimestamp = 0;
+        public static int diffTime = 0;
+        public static int ActiveTime = 0;
+        public static int backupTime = 0;
         public List<Combatant> combatants = new List<Combatant>();
         public List<Combatant> backupCombatants = new List<Combatant>();
 
         private string encounterData;
         private List<int> instances = new List<int>();
         private StreamReader logReader;
-
-        public string ManualattemptDirectory;
 
         // Constructor
         public Log(string attemptDirectory)
@@ -37,7 +39,6 @@ namespace OverParse
             notEmpty = false;
             running  = false;
             nagMe    = false;
-            ManualattemptDirectory = attemptDirectory;
 
             SetupWarning(); // Setup first time warning
 
@@ -151,7 +152,8 @@ namespace OverParse
         {
             if (combatants.Count != 0) // Players found
             {
-                int elapsed = newTimestamp - startTimestamp;
+                int elapsed = ActiveTime;
+                if (ActiveTime == 0) { ActiveTime = 1; }
                 TimeSpan timespan = TimeSpan.FromSeconds(elapsed);
 
                 // Logging the total time occured through out the encounter
@@ -356,6 +358,29 @@ namespace OverParse
 
                         if (10000000 < int.Parse(sourceID))
                         {
+                            newTimestamp = lineTimestamp;
+                            if (startTimestamp == 0)
+                            {
+                                startTimestamp = newTimestamp;
+                                nowTimestamp = newTimestamp;
+                            }
+
+
+                            if (newTimestamp - nowTimestamp >= 1)
+                            {
+                                diffTime = diffTime + 1;
+                                nowTimestamp = newTimestamp;
+                            }
+
+                            if (Properties.Settings.Default.QuestTime) 
+                            { 
+                                ActiveTime = diffTime; 
+                            }
+                            else 
+                            { 
+                                ActiveTime = newTimestamp - startTimestamp; 
+                            }
+
                             foreach (Combatant x in combatants)
                             {
                                 if (x.ID == sourceID && x.isTemporary == "no") 
@@ -372,47 +397,34 @@ namespace OverParse
 
                             Combatant source = combatants[index];
                             
-                            newTimestamp = lineTimestamp;
-                            if (startTimestamp == 0) 
-                            { 
-                                startTimestamp = newTimestamp; 
-                            }
-
-                            source.Attacks.Add(new Attack(attackID, hitDamage, justAttack, critical, newTimestamp - startTimestamp)); 
+                            source.Attacks.Add(new Attack(attackID, hitDamage, justAttack, critical)); 
 
                             running = true;
                         } 
                         else 
                         {
                             // Damage Taken Process
-                            foreach (Combatant x in combatants)
+                            if (10000000 < int.Parse(targetID))
                             {
-                                if (x.ID == targetID && x.isTemporary == "no") 
+                                foreach (Combatant x in combatants)
                                 {
-                                    index = combatants.IndexOf(x); 
+                                    if (x.ID == targetID && x.isTemporary == "no") 
+                                    {
+                                        index = combatants.IndexOf(x); 
+                                    }
                                 }
+
+                                if (index == -1)
+                                {
+                                    combatants.Add(new Combatant(targetID, targetName));
+                                    index = combatants.Count - 1;
+                                }
+
+                                Combatant source = combatants[index];
+                                source.Damaged += hitDamage;
+                                running = true;
                             }
-
-                            if (index == -1)
-                            {
-                                combatants.Add(new Combatant(targetID, targetName));
-                                index = combatants.Count - 1;
-                            }
-
-                            Combatant source = combatants[index];
-
-                            newTimestamp = lineTimestamp;
-
-                            if (startTimestamp == 0)
-                            {
-                                startTimestamp = newTimestamp;
-                            }
-
-                            source.Damaged += hitDamage;
-                            running = true;
-                            
                         }
-
                     }
                 }
 
@@ -421,15 +433,6 @@ namespace OverParse
                 if (startTimestamp != 0)
                 {
                     encounterData = "0:00:00 - ∞ DPS";
-                }
-
-                if (startTimestamp != 0 && newTimestamp != startTimestamp)
-                {
-                    foreach (Combatant x in combatants)
-                    {
-                        if (x.IsAlly || x.IsZanverse)
-                            x.ActiveTime = (newTimestamp - startTimestamp);
-                    }
                 }
             }
         }
@@ -530,7 +533,7 @@ namespace OverParse
             }
             else if (Properties.Settings.Default.LaunchMethod == "Manual")
             {
-                bool pluginsExist = File.Exists(ManualattemptDirectory + "\\pso2h.dll") && File.Exists(ManualattemptDirectory + "\\ddraw.dll") && File.Exists(ManualattemptDirectory + "\\plugins" + "\\PSO2DamageDump.dll");
+                bool pluginsExist = File.Exists(attemptDirectory + "\\pso2h.dll") && File.Exists(attemptDirectory + "\\ddraw.dll") && File.Exists(attemptDirectory + "\\plugins" + "\\PSO2DamageDump.dll");
                 if (!pluginsExist)
                     Properties.Settings.Default.InstalledPluginVersion = -1;
 
@@ -563,7 +566,7 @@ namespace OverParse
                     else if (selfdestructResult == MessageBoxResult.Yes)
                     {
                         // Accepted plugin install
-                        bool success = UpdatePlugin(ManualattemptDirectory);
+                        bool success = UpdatePlugin(attemptDirectory);
                         if (!pluginsExist && !success)
                             Environment.Exit(-1);
                     }

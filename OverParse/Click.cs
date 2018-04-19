@@ -21,14 +21,14 @@ namespace OverParse
             UpdateForm(null, null); // I'M FUCKING STUPID
             Properties.Settings.Default.AutoEndEncounters = temp;
             encounterlog.backupCombatants = encounterlog.combatants;
+            Log.backupTime = Log.ActiveTime;
 
             List<Combatant> workingListCopy = new List<Combatant>();
             foreach (Combatant c in workingList)
             {
                 Combatant temp2 = new Combatant(c.ID, c.Name, c.isTemporary);
                 foreach (Attack a in c.Attacks)
-                    temp2.Attacks.Add(new Attack(a.ID, a.Damage, a.JA, a.Cri, a.Timestamp));
-                temp2.ActiveTime = c.ActiveTime;
+                    temp2.Attacks.Add(new Attack(a.ID, a.Damage, a.JA, a.Cri));
                 temp2.Damaged = c.Damaged;
                 temp2.PercentReadDPS = c.PercentReadDPS;
                 workingListCopy.Add(temp2);
@@ -58,6 +58,7 @@ namespace OverParse
 
             encounterlog = new Log(Properties.Settings.Default.Path);
             UpdateForm(null, null);
+            Log.startTimestamp = 0;
         }
 
         public void EndEncounter_Key(object sender, EventArgs e)
@@ -69,6 +70,7 @@ namespace OverParse
         private void EndEncounterNoLog_Click(object sender, RoutedEventArgs e)
         {
             //Ending encounter (no log)
+            Log.ActiveTime = Log.backupTime;
             bool temp = Properties.Settings.Default.AutoEndEncounters;
             Properties.Settings.Default.AutoEndEncounters = false;
             UpdateForm(null, null);
@@ -76,6 +78,7 @@ namespace OverParse
             //Reinitializing log
             encounterlog = new Log(Properties.Settings.Default.Path);
             UpdateForm(null, null);
+            Log.startTimestamp = 0;
         }
 
         private void EndEncounterNoLog_Key(object sender, EventArgs e)
@@ -249,8 +252,9 @@ namespace OverParse
         private void ChangeInterval_Click(object sender, RoutedEventArgs e)
         {
             AlwaysOnTop.IsChecked = false;
-            Inputbox input = new Inputbox("OverParse", "Change .csv Read Interval... (ms)", Properties.Settings.Default.Updateinv.ToString()) { Owner = this };
+            Inputbox input = new Inputbox("OverParse", "Change damage reading interval... (ms)", Properties.Settings.Default.Updateinv.ToString()) { Owner = this };
             input.ShowDialog();
+            
             if (Int32.TryParse(input.ResultText, out int x))
             {
                 if (x > 49)
@@ -266,6 +270,20 @@ namespace OverParse
             }
 
             AlwaysOnTop.IsChecked = Properties.Settings.Default.AlwaysOnTop;
+        }
+
+        private void QuestTime_Click(object sender, RoutedEventArgs e)
+        {
+            Properties.Settings.Default.QuestTime = QuestTime.IsChecked;
+
+            if (Properties.Settings.Default.QuestTime)
+            {
+                Log.ActiveTime = Log.diffTime;
+            } 
+            else 
+            {
+                Log.ActiveTime = Log.newTimestamp - Log.startTimestamp;
+            }
         }
 
         private void DefaultWindowSize_Click(object sender, RoutedEventArgs e)

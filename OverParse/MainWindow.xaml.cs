@@ -131,6 +131,7 @@ namespace OverParse
             LogToClipboard.IsChecked = Properties.Settings.Default.LogToClipboard;
             AlwaysOnTop.IsChecked = Properties.Settings.Default.AlwaysOnTop;
             AutoHideWindow.IsChecked = Properties.Settings.Default.AutoHideWindow;
+            QuestTime.IsChecked = Properties.Settings.Default.QuestTime;
 
             ShowDamageGraph.IsChecked = Properties.Settings.Default.ShowDamageGraph; ShowDamageGraph_Click(null, null);
             AnonymizeNames.IsChecked = Properties.Settings.Default.AnonymizeNames; AnonymizeNames_Click(null, null);
@@ -231,7 +232,7 @@ namespace OverParse
             //Initializing logCheckTimer
             System.Windows.Threading.DispatcherTimer logCheckTimer = new System.Windows.Threading.DispatcherTimer();
             logCheckTimer.Tick += new EventHandler(CheckForNewLog);
-            logCheckTimer.Interval = new TimeSpan(0, 0, 10);
+            logCheckTimer.Interval = new TimeSpan(0, 0, 1);
             logCheckTimer.Start();
         }
 
@@ -428,11 +429,10 @@ namespace OverParse
                 Combatant temp = new Combatant(c.ID, c.Name, c.isTemporary);
                 foreach (Attack a in c.Attacks)
                 {
-                    temp.Attacks.Add(new Attack(a.ID, a.Damage, a.JA, a.Cri, a.Timestamp)); 
+                    temp.Attacks.Add(new Attack(a.ID, a.Damage, a.JA, a.Cri)); 
                 }
                 temp.Damaged = c.Damaged;
                 temp.PercentReadDPS = c.PercentReadDPS;
-                temp.ActiveTime = c.ActiveTime;
                 workingList.Add(temp);
             }
 
@@ -440,10 +440,7 @@ namespace OverParse
             CombatantData.Items.Clear();
 
             // for zanverse dummy and status bar because WHAT IS GOOD STRUCTURE
-            int elapsed = 0;
-
-            Combatant stealActiveTimeDummy = workingList.FirstOrDefault();
-            if (stealActiveTimeDummy != null) { elapsed = stealActiveTimeDummy.ActiveTime; }
+            int elapsed = Log.ActiveTime;
 
             // create and sort dummy AIS combatants
             if (Properties.Settings.Default.SeparateAIS)
@@ -460,7 +457,6 @@ namespace OverParse
                         List<Attack> targetAttacks = c.Attacks.Where(a => Combatant.AISAttackIDs.Contains(a.ID)).ToList();
                         c.Attacks = c.Attacks.Except(targetAttacks).ToList();
                         AISHolder.Attacks.AddRange(targetAttacks);
-                        AISHolder.ActiveTime = elapsed;
                         pendingCombatants.Add(AISHolder);
                     }
                 }
@@ -481,7 +477,6 @@ namespace OverParse
                         List<Attack> targetAttacks = c.Attacks.Where(a => Combatant.DBAttackIDs.Contains(a.ID)).ToList();
                         c.Attacks = c.Attacks.Except(targetAttacks).ToList();
                         DBHolder.Attacks.AddRange(targetAttacks);
-                        DBHolder.ActiveTime = elapsed;
                         pendingDBCombatants.Add(DBHolder);
                     }
                 }
@@ -502,7 +497,6 @@ namespace OverParse
                         List<Attack> targetAttacks = c.Attacks.Where(a => Combatant.RideAttackIDs.Contains(a.ID)).ToList();
                         c.Attacks = c.Attacks.Except(targetAttacks).ToList();
                         RideHolder.Attacks.AddRange(targetAttacks);
-                        RideHolder.ActiveTime = elapsed;
                         pendingRideCombatants.Add(RideHolder);
                     }
                 }
@@ -523,7 +517,6 @@ namespace OverParse
                         List<Attack> targetAttacks = c.Attacks.Where(a => Combatant.PhotonAttackIDs.Contains(a.ID)).ToList();
                         c.Attacks = c.Attacks.Except(targetAttacks).ToList();
                         PhotonHolder.Attacks.AddRange(targetAttacks);
-                        PhotonHolder.ActiveTime = elapsed;
                         pendingPwpCombatants.Add(PhotonHolder);
                     }
                 }
@@ -544,7 +537,6 @@ namespace OverParse
                         List<Attack> targetAttacks = c.Attacks.Where(a => Combatant.LaconiumAttackIDs.Contains(a.ID)).ToList();
                         c.Attacks = c.Attacks.Except(targetAttacks).ToList();
                         LswHolder.Attacks.AddRange(targetAttacks);
-                        LswHolder.ActiveTime = elapsed;
                         pendingLswCombatants.Add(LswHolder);
                     }
                 }
@@ -572,7 +564,6 @@ namespace OverParse
                             c.Attacks = c.Attacks.Except(targetAttacks).ToList();
                         }
                     }
-                    finishHolder.ActiveTime = elapsed;
                     workingList.Add(finishHolder);
                 }
             }
@@ -591,7 +582,6 @@ namespace OverParse
                             c.Attacks = c.Attacks.Except(targetAttacks).ToList();
                         }
                     }
-                    zanverseHolder.ActiveTime = elapsed;
                     workingList.Add(zanverseHolder);
                 }
             }

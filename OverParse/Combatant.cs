@@ -104,11 +104,10 @@ namespace OverParse
 
         // General Variables
         private const float maxBGopacity = 0.6f;
-        public List<Attack> Attacks, ZvsAttacks, HTFAttacks, DBAttacks, LswAttacks, PwpAttacks, AisAttacks, RideAttacks;
+        public List<Attack> Attacks;
         public string ID, isTemporary;
         public string Name { get; set; }
         public float PercentDPS, PercentReadDPS;
-        public int ActiveTime;
 
         // Constructor #1
         public Combatant(string id, string name)
@@ -119,7 +118,6 @@ namespace OverParse
             Attacks = new List<Attack>();
             isTemporary = "no";
             PercentReadDPS = 0;
-            ActiveTime = 0;
             Damaged = 0;
         }
 
@@ -132,7 +130,6 @@ namespace OverParse
             Attacks = new List<Attack>();
             isTemporary = temp;
             PercentReadDPS = 0;
-            ActiveTime = 0;
             Damaged = 0;
         }
 
@@ -249,6 +246,12 @@ namespace OverParse
         {
             return Attacks.Where(a => attackID.Contains(a.ID));
         }
+
+        // Returns the total damage taken for MPA
+        private int GetTotalDamageTaken() 
+        { 
+            return Damaged;
+        }
         
         // Fetch the total Damage Dealt value [ Use after (GetAttackID) function ]
         private int GetDamageDealt(IEnumerable<OverParse.Attack> attackID) 
@@ -296,26 +299,26 @@ namespace OverParse
         // Returns the general DPS
         private double GetGeneralDPS() 
         { 
-            if (ActiveTime == 0)
+            if (OverParse.Log.ActiveTime == 0)
             {
                 return Damage;
             }
             else
             {
-                return Damage / ActiveTime;
+                return Damage / OverParse.Log.ActiveTime;
             }
         }
 
         // Returns the DPS that has been filtered
         private double GetReadingDPS() 
         { 
-            if (ActiveTime == 0)
+            if (OverParse.Log.ActiveTime == 0)
             {
                 return ReadDamage;
             }
             else
             {
-                return Math.Round(ReadDamage / (double)ActiveTime); 
+                return Math.Round(ReadDamage / (double)OverParse.Log.ActiveTime); 
             }
         }
         
@@ -536,15 +539,14 @@ namespace OverParse
     public class Attack
     {
         public string ID;
-        public int Damage, JA, Cri, Timestamp;
+        public int Damage, JA, Cri;
 
-        public Attack(string initID, int initDamage, int justAttack, int critical, int initTimestamp)
+        public Attack(string initID, int initDamage, int justAttack, int critical)
         {
             ID = initID;
             Damage = initDamage;
             JA = justAttack;
             Cri = critical;
-            Timestamp = initTimestamp;
         }
     }
 }
