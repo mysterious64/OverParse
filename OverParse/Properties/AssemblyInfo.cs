@@ -8,11 +8,11 @@ using System.Windows;
 // アセンブリに関連付けられている情報を変更するには、
 // これらの属性値を変更してください。
 [assembly: AssemblyTitle("OverParse")]
-[assembly: AssemblyDescription("OverParse - View PSO2 Damage")]
+[assembly: AssemblyDescription("OverParse - Streamlined Damage Parser")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("OverParse")]
 [assembly: AssemblyProduct("OverParse")]
-[assembly: AssemblyCopyright("Remon_7L")]
+[assembly: AssemblyCopyright("mysterious64")]
 [assembly: AssemblyTrademark("OverParse")]
 [assembly: AssemblyCulture("")]
 

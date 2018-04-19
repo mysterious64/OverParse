@@ -675,7 +675,7 @@ namespace OverParse
                 if (Properties.Settings.Default.AutoEndEncounters)
                 {
                     int unixTimestamp = (int)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
-                    if ((unixTimestamp - encounterlog.newTimestamp) >= Properties.Settings.Default.EncounterTimeout)
+                    if ((unixTimestamp - Log.newTimestamp) >= Properties.Settings.Default.EncounterTimeout)
                     {
                         //Automatically ending an encounter
                         EndEncounter_Click(null, null);

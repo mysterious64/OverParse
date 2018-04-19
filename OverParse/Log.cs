@@ -40,9 +40,59 @@ namespace OverParse
             running  = false;
             nagMe    = false;
 
-            SetupWarning(); // Setup first time warning
+            // Setup first time warning
+            if (Properties.Settings.Default.BanWarning)
+            {
+                MessageBoxResult panicResult = MessageBox.Show("OverParse is a 3rd-party tool that breaks PSO2's Terms and Conditions."
+                                                             + "SEGA has confirmed in an official announcement that accounts found using parsing tools may be banned.\n\n"
+                                                             + "If account safety is your first priority, do NOT use OverParse. You use this tool entirely at your own risk.\n\n"
+                                                             + "Would you like to continue with setup?", "OverParse Setup", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                if (panicResult == MessageBoxResult.No)
+                {
+                    Environment.Exit(-1);
+                }
 
-            PromptBinDirectory(attemptDirectory); // Invalid pso2_bin directory, prompting for new one...
+                Properties.Settings.Default.BanWarning = false;
+            }
+
+            // Invalid pso2_bin directory, prompting for new one...
+            while (!File.Exists($"{attemptDirectory}\\pso2.exe"))
+            {
+                if (nagMe)
+                {
+                    MessageBox.Show("That doesn't appear to be a valid pso2_bin directory.\n\n" 
+                                  + "If you installed the game using default settings, it will probably be in C:\\PHANTASYSTARONLINE2\\pso2_bin\\. " 
+                                  + "Otherwise, find the location you installed to.", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Warning);
+                }
+                else
+                {
+                    MessageBox.Show("Please select your pso2_bin directory. OverParse uses this to read your damage logs.\n\n" 
+                                  + "If you picked a folder while setting up the Tweaker, choose that. " 
+                                  + "Otherwise, it will be in your PSO2 installation folder.", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Information);
+                    nagMe = true;
+                }
+
+                System.Windows.Forms.FolderBrowserDialog dialog = new System.Windows.Forms.FolderBrowserDialog
+                {
+                    Description = "Select your pso2_bin folder. This will be inside the folder you installed PSO2 to."
+                };
+
+                System.Windows.Forms.DialogResult picked = dialog.ShowDialog();
+                if (picked == System.Windows.Forms.DialogResult.OK)
+                {
+                    // Testing {attemptDirectory} as pso2_bin directory...
+                    attemptDirectory = dialog.SelectedPath;
+                    Properties.Settings.Default.Path = attemptDirectory;
+                }
+                else
+                {
+                    // Canceled out of directory picker
+                    MessageBox.Show("OverParse needs a valid PSO2 installation to function.\n" 
+                                  + "The application will now close.", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Information);
+                    Environment.Exit(-1); // ABORT ABORT ABORT
+                    break;
+                }
+            }
 
             if (!File.Exists($"{attemptDirectory}\\pso2.exe")) { return; } // If pso2_bin isn't selected, exiting ...
 
@@ -50,7 +100,77 @@ namespace OverParse
 
             logDirectory = new DirectoryInfo($"{attemptDirectory}\\damagelogs"); // Making sure pso2_bin\damagelogs exists
 
-            CheckLaunchMethod(logDirectory); // Check launch method
+            // Check launch method
+            if (Properties.Settings.Default.LaunchMethod == "Unknown")
+            {
+                MessageBoxResult tweakerResult = MessageBox.Show("Do you use the PSO2 Tweaker?", "OverParse Setup", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                Properties.Settings.Default.LaunchMethod = (tweakerResult == MessageBoxResult.Yes) ? "Tweaker" : "Manual";
+            }
+
+            // Tweaker method of launching... else manually
+            if (Properties.Settings.Default.LaunchMethod == "Tweaker")
+            {
+                bool warn = true;
+                if (logDirectory.Exists)
+                {
+                    if (logDirectory.GetFiles().Count() > 0)
+                    {
+                        warn = false;
+                    }
+                }
+
+                if (warn && Hacks.DontAsk)
+                {
+                    MessageBox.Show("Your PSO2 folder doesn't contain any damagelogs. This is not an error, just a reminder!\n\n" 
+                                  + "Please turn on the Damage Parser plugin in PSO2 Tweaker (orb menu > Plugins). OverParse needs this to function. " 
+                                  + "You may also want to update the plugins while you're there.", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Information);
+                    Hacks.DontAsk = true;
+                    Properties.Settings.Default.FirstRun = false;
+                    Properties.Settings.Default.Save();
+                    return;
+                }
+            }
+            else if (Properties.Settings.Default.LaunchMethod == "Manual")
+            {
+                bool pluginsExist = File.Exists(attemptDirectory + "\\pso2h.dll") && File.Exists(attemptDirectory + "\\ddraw.dll") && File.Exists(attemptDirectory + "\\plugins" + "\\PSO2DamageDump.dll");
+                if (!pluginsExist)
+                    Properties.Settings.Default.InstalledPluginVersion = -1;
+
+                if (Properties.Settings.Default.InstalledPluginVersion < pluginVersion)
+                {
+                    MessageBoxResult selfdestructResult;
+
+                    if (pluginsExist)
+                    {
+                        // Prompting for plugin update
+                        selfdestructResult = MessageBox.Show("This release of OverParse includes a new version of the parsing plugin. Would you like to update now?\n\n" 
+                                                           + "OverParse may behave unpredictably if you use a different version than it expects.", "OverParse Setup", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                    }
+                    else
+                    {
+                        // Prompting for initial plugin install
+                        selfdestructResult = MessageBox.Show("OverParse needs a Tweaker plugin to recieve its damage information.\n\n" 
+                                                           + "The plugin can be installed without the Tweaker, but it won't be automatically updated, and I can't provide support for this method.\n\n" 
+                                                           + "Do you want to try to manually install the Damage Parser plugin?", "OverParse Setup", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                    }
+
+                    if (selfdestructResult == MessageBoxResult.No && !pluginsExist)
+                    {
+                        // Denied plugin install
+                        MessageBox.Show("OverParse needs the Damage Parser plugin to function.\n\n" 
+                                      + "The application will now close.", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Information);
+                        Environment.Exit(-1);
+                        return;
+                    }
+                    else if (selfdestructResult == MessageBoxResult.Yes)
+                    {
+                        // Accepted plugin install
+                        bool success = UpdatePlugin(attemptDirectory);
+                        if (!pluginsExist && !success)
+                            Environment.Exit(-1);
+                    }
+                }
+            }
 
             Properties.Settings.Default.FirstRun = false; // Passed first time setup, skipping above on future launch
 
@@ -438,141 +558,6 @@ namespace OverParse
         }
 
         /* HELPER FUNCTIONS */ 
-
-        // First time warning setup
-        private void SetupWarning() 
-        {
-            if (Properties.Settings.Default.BanWarning)
-            {
-                MessageBoxResult panicResult = MessageBox.Show("OverParse is a 3rd-party tool that breaks PSO2's Terms and Conditions."
-                                                             + "SEGA has confirmed in an official announcement that accounts found using parsing tools may be banned.\n\n"
-                                                             + "If account safety is your first priority, do NOT use OverParse. You use this tool entirely at your own risk.\n\n"
-                                                             + "Would you like to continue with setup?", "OverParse Setup", MessageBoxButton.YesNo, MessageBoxImage.Question);
-                if (panicResult == MessageBoxResult.No)
-                {
-                    Environment.Exit(-1);
-                }
-
-                Properties.Settings.Default.BanWarning = false;
-            }
-        }
-
-        // Prompts user for pso2_bin directory
-        private void PromptBinDirectory(string attemptDirectory) 
-        {
-            while (!File.Exists($"{attemptDirectory}\\pso2.exe"))
-            {
-                if (nagMe)
-                {
-                    MessageBox.Show("That doesn't appear to be a valid pso2_bin directory.\n\n" 
-                                  + "If you installed the game using default settings, it will probably be in C:\\PHANTASYSTARONLINE2\\pso2_bin\\. " 
-                                  + "Otherwise, find the location you installed to.", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Warning);
-                }
-                else
-                {
-                    MessageBox.Show("Please select your pso2_bin directory. OverParse uses this to read your damage logs.\n\n" 
-                                  + "If you picked a folder while setting up the Tweaker, choose that. " 
-                                  + "Otherwise, it will be in your PSO2 installation folder.", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Information);
-                    nagMe = true;
-                }
-
-                System.Windows.Forms.FolderBrowserDialog dialog = new System.Windows.Forms.FolderBrowserDialog
-                {
-                    Description = "Select your pso2_bin folder. This will be inside the folder you installed PSO2 to."
-                };
-
-                System.Windows.Forms.DialogResult picked = dialog.ShowDialog();
-                if (picked == System.Windows.Forms.DialogResult.OK)
-                {
-                    // Testing {attemptDirectory} as pso2_bin directory...
-                    attemptDirectory = dialog.SelectedPath;
-                    Properties.Settings.Default.Path = attemptDirectory;
-                }
-                else
-                {
-                    // Canceled out of directory picker
-                    MessageBox.Show("OverParse needs a valid PSO2 installation to function.\n" 
-                                  + "The application will now close.", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Information);
-                    Environment.Exit(-1); // ABORT ABORT ABORT
-                    break;
-                }
-            }
-        }
-
-        // Checks user preferred launch method
-        private void CheckLaunchMethod(DirectoryInfo logDirectory)
-        {
-            if (Properties.Settings.Default.LaunchMethod == "Unknown")
-            {
-                MessageBoxResult tweakerResult = MessageBox.Show("Do you use the PSO2 Tweaker?", "OverParse Setup", MessageBoxButton.YesNo, MessageBoxImage.Question);
-                Properties.Settings.Default.LaunchMethod = (tweakerResult == MessageBoxResult.Yes) ? "Tweaker" : "Manual";
-            }
-
-            // Tweaker method of launching... else manually
-            if (Properties.Settings.Default.LaunchMethod == "Tweaker")
-            {
-                bool warn = true;
-                if (logDirectory.Exists)
-                {
-                    if (logDirectory.GetFiles().Count() > 0)
-                    {
-                        warn = false;
-                    }
-                }
-
-                if (warn && Hacks.DontAsk)
-                {
-                    MessageBox.Show("Your PSO2 folder doesn't contain any damagelogs. This is not an error, just a reminder!\n\n" 
-                                  + "Please turn on the Damage Parser plugin in PSO2 Tweaker (orb menu > Plugins). OverParse needs this to function. " 
-                                  + "You may also want to update the plugins while you're there.", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Information);
-                    Hacks.DontAsk = true;
-                    Properties.Settings.Default.FirstRun = false;
-                    Properties.Settings.Default.Save();
-                    return;
-                }
-            }
-            else if (Properties.Settings.Default.LaunchMethod == "Manual")
-            {
-                bool pluginsExist = File.Exists(attemptDirectory + "\\pso2h.dll") && File.Exists(attemptDirectory + "\\ddraw.dll") && File.Exists(attemptDirectory + "\\plugins" + "\\PSO2DamageDump.dll");
-                if (!pluginsExist)
-                    Properties.Settings.Default.InstalledPluginVersion = -1;
-
-                if (Properties.Settings.Default.InstalledPluginVersion < pluginVersion)
-                {
-                    MessageBoxResult selfdestructResult;
-
-                    if (pluginsExist)
-                    {
-                        // Prompting for plugin update
-                        selfdestructResult = MessageBox.Show("This release of OverParse includes a new version of the parsing plugin. Would you like to update now?\n\n" 
-                                                           + "OverParse may behave unpredictably if you use a different version than it expects.", "OverParse Setup", MessageBoxButton.YesNo, MessageBoxImage.Question);
-                    }
-                    else
-                    {
-                        // Prompting for initial plugin install
-                        selfdestructResult = MessageBox.Show("OverParse needs a Tweaker plugin to recieve its damage information.\n\n" 
-                                                           + "The plugin can be installed without the Tweaker, but it won't be automatically updated, and I can't provide support for this method.\n\n" 
-                                                           + "Do you want to try to manually install the Damage Parser plugin?", "OverParse Setup", MessageBoxButton.YesNo, MessageBoxImage.Question);
-                    }
-
-                    if (selfdestructResult == MessageBoxResult.No && !pluginsExist)
-                    {
-                        // Denied plugin install
-                        MessageBox.Show("OverParse needs the Damage Parser plugin to function.\n\n" 
-                                      + "The application will now close.", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Information);
-                        Environment.Exit(-1);
-                        return;
-                    }
-                    else if (selfdestructResult == MessageBoxResult.Yes)
-                    {
-                        // Accepted plugin install
-                        bool success = UpdatePlugin(attemptDirectory);
-                        if (!pluginsExist && !success)
-                            Environment.Exit(-1);
-                    }
-                }
-            }
-        }
 
         /* DEBUG MODE ONLY - Not used on production
 
