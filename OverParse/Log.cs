@@ -12,7 +12,7 @@ namespace OverParse
     public class Log
     {
         // File Setup Variables
-        public bool valid, notEmpty, running, nagMe;
+        public bool valid, notEmpty, running;
         public string filename;
         public DirectoryInfo logDirectory;
 
@@ -35,10 +35,10 @@ namespace OverParse
         // Constructor
         public Log(string attemptDirectory)
         {
-            valid    = false;
-            notEmpty = false;
-            running  = false;
-            nagMe    = false;
+            valid      = false;
+            notEmpty   = false;
+            running    = false;
+            bool nagMe = false;
 
             // Setup first time warning
             if (Properties.Settings.Default.BanWarning)
@@ -485,12 +485,13 @@ namespace OverParse
                                 nowTimestamp = newTimestamp;
                             }
 
-
                             if (newTimestamp - nowTimestamp >= 1)
                             {
                                 diffTime = diffTime + 1;
                                 nowTimestamp = newTimestamp;
                             }
+
+                            backupTime = newTimestamp - startTimestamp; 
 
                             if (Properties.Settings.Default.QuestTime) 
                             { 

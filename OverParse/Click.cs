@@ -282,7 +282,7 @@ namespace OverParse
             } 
             else 
             {
-                Log.ActiveTime = Log.newTimestamp - Log.startTimestamp;
+                Log.ActiveTime = Log.backupTime;
             }
         }
 
