@@ -193,11 +193,23 @@ namespace OverParse
                 }
             }
 
+            // ignoreskills.csv
+            try
+            {
+                WebClient client = new WebClient();
+                client.DownloadFile("https://raw.githubusercontent.com/mysterious64/OverParse/master/OverParse/Updates/ignoreskills.csv", "ignoreskills.csv");
+            }
+            catch
+            {
+                MessageBox.Show("Cannot update your local ignoreskills.csv please be warned that JA data might be wrong.\n\nA local copy will be used instead. If you'd like to try and update again, please use the 'Force Update Skills' option within the 'Other' menu.", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
 
-
-            try {
+            try 
+            {
                 ignoreskill = File.ReadAllLines("ignoreskills.csv");
-            } catch (Exception e) {
+            } 
+            catch (Exception e) 
+            {
                 MessageBox.Show(e.ToString());
                 ignoreskill = new string[] { "12345678900" }; // Placeholder Value
             }
