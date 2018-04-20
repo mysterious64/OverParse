@@ -177,7 +177,7 @@ namespace OverParse
                 }
                 client.Dispose();
                 stream.Dispose();
-                }
+            }
             catch (Exception ex)
             {
                 Console.WriteLine($"skills.csv update failed: {ex.ToString()}");
