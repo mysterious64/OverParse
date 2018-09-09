@@ -87,7 +87,30 @@ namespace OverParse
                                                                   "2191939386"  , // Counter Step
                                                                   "2091027507"  , // Special,Diffusion Ray
                                                                   "4078260742"  , // Sharp Glide
-                                                                  "2743062721" }; // Attack Advance (Loser) 
+                                                                  "2743062721"  , // Attack Advance (Loser) 
+                                                                  "3379639420"  , // Dark Blast (Apprentice) first hit
+                                                                  "3380458763"  , // Dark Blast (Apprentice) second hit
+                                                                  "3380192966"  , // Dark Blast (Apprentice) third hit
+                                                                  "3380628902"  , // Dark Blast (Apprentice) fourth hit
+                                                                  "3377229307"  , // Dark Blast (Apprentice) fifth hit
+                                                                  "3376960044"  , // Dark Blast (Apprentice) sixth hit
+                                                                  "3377051585"  , // Dark Blast (Apprentice) seventh hit
+                                                                  "3377849861"  , // Dark Blast (Apprentice) eighth hit
+                                                                  "855002982"   , // Dark Blast (Apprentice) lots'o'slashes - ninth attack
+                                                                  "2326333456"  , // Dark Blast (Apprentice) ninth hit final
+                                                                  "3725887474"  , // Dark Blast (Apprentice) Step Attack
+                                                                  "361825851"   , // Graceful Dance projectile
+                                                                  "3535795759"  , // Graceful Dance spin
+                                                                  "781100939"   , // Graceful Dance (Royal Scorpion) projectile
+                                                                  "793625150"   , // Royal Scorpion
+                                                                  "1764406382"  , // Servant Hornet
+                                                                  "3891439877"  , // Servant Hornet
+                                                                  "2295506478"  , // Fortissimo Kick
+                                                                  "1738105582"  , // Fortissimo Kick (AoE?)
+                                                                  "37504833"    , // Fortissimo Kick (Royal Scorpion)
+                                                                  "1891210633"  , // Black Queen Arrival
+                                                                  "3617357696"  , // Sensational Speed Attack
+                                                                  "452272060"  }; // Ravishing Step
         // Laconium Sword Attack IDs
         public static string[] LaconiumAttackIDs = new string[] { "2235773608"  , // Laconium Sword air second normal attack 
                                                                   "2235773610"  , // Laconium Sword air first normal attack 
