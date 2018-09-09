@@ -395,24 +395,48 @@ namespace OverParse
         // Returns the Just Attack Percentage
         private string GetJAPercent()
         {
-            try
+            IEnumerable<Attack> totalJA = Attacks.Where(a => !MainWindow.ignoreskill.Contains(a.ID));
+
+            if (totalJA.Any())
             {
+                Double averageJA = totalJA.Average(x => x.JA) * 100;
+
                 if (Properties.Settings.Default.Nodecimal)
                 {
-                    return ((Attacks.Where(a => !MainWindow.ignoreskill.Contains(a.ID)).Average(x => x.JA)) * 100).ToString("N0");
+                    return averageJA.ToString("N0");
                 } 
                 else 
                 {
-                    return ((Attacks.Where(a => !MainWindow.ignoreskill.Contains(a.ID)).Average(x => x.JA)) * 100).ToString("N2");
+                    return averageJA.ToString("N2");
                 }
             }
-            catch { return "Error"; }
+            else
+            {
+                if (Properties.Settings.Default.Nodecimal)
+                {
+                    return "0";
+                }
+                else
+                {
+                    return "0.00";
+                }
+            }
         }
 
         // Returns the Just Attack Percentage in "00.00"
         private string GetWJAPercent() 
-        { 
-            return ((Attacks.Where(a => !MainWindow.ignoreskill.Contains(a.ID)).Average(x => x.JA)) * 100).ToString("00.00"); 
+        {
+            IEnumerable<Attack> totalJA = Attacks.Where(a => !MainWindow.ignoreskill.Contains(a.ID));
+
+            if (totalJA.Any())
+            {
+                Double averageJA = totalJA.Average(x => x.JA) * 100;
+                return averageJA.ToString("00.00");
+            }
+            else
+            {
+                return "00.00";
+            }
         }
 
         // Returns the Critical Rate Percentange
