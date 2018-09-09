@@ -138,7 +138,6 @@
                     <MenuItem Style="{StaticResource submenu}" Header="Hide All Other Players" IsCheckable="True" IsChecked="False" x:Name="Onlyme" Click="Onlyme_Click" />
                     <MenuItem Style="{StaticResource submenu}" Header="Change DPS Format" IsCheckable="True" IsChecked="False" x:Name="DPSFormat" Click="DPSFormat_Click" />
                     <MenuItem Style="{StaticResource submenu}" Header="Round JA/Crit Percents" IsCheckable="True" IsChecked="False" x:Name="Nodecimal" Click="Nodecimal_Click" />
-                    <MenuItem Style="{StaticResource submenu}" Header="Remove Combat Downtime" IsCheckable="True" IsChecked="False" x:Name="QuestTime" Click="QuestTime_Click"/>
                     <MenuItem Style="{StaticResource submenu}" Header="Change Data Update interval" Click="ChangeInterval_Click" />
                 </MenuItem>
                 <MenuItem Style="{StaticResource topmenu}" Header="Window">
@@ -178,7 +177,7 @@
                     <MenuItem Header="Open github" Click="Github_Click" Style="{StaticResource submenu}" />
                     <Separator />
                     <MenuItem Style="{StaticResource submenu}" Header="Skip DLL Update" x:Name="Skipdll" Click="SkipPlugin_Click" />
-                    <MenuItem Style="{StaticResource submenu}" Header="Reselect pso2bin..." x:Name="ResetLogFolder" Click="ResetLogFolder_Click"/>
+                    <MenuItem Style="{StaticResource submenu}" Header="Reselect PSO2bin..." x:Name="ResetLogFolder" Click="ResetLogFolder_Click"/>
                     <MenuItem Style="{StaticResource submenu}" Header="Force Plugin Update..." x:Name="PluginUpdate" Click="UpdatePlugin_Click"/>
                     <MenuItem Style="{StaticResource submenu}" Header="Reset OverParse..." x:Name="Reset" Click="ResetOverParse"/>
                 </MenuItem>
@@ -306,7 +305,7 @@
             </Grid>
 
             <Rectangle x:Name="EncounterIndicator" Grid.Row="2" Height="2" VerticalAlignment="Top"  Fill="White" IsHitTestVisible="False" />
-            <Label x:Name="EncounterStatus" Grid.Row="2" Foreground="White" Padding="5,5,5,2" FontSize="12" IsHitTestVisible="False" />
+            <Label x:Name="EncounterStatus" Grid.Row="2" Foreground="White" Padding="5,3,5,2" FontSize="12" IsHitTestVisible="False" />
         </Grid>
     </Border>
 </Window>

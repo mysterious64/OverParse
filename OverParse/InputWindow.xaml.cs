@@ -2,11 +2,11 @@
 
 namespace OverParse
 {
-    public partial class Inputbox : Window
+    public partial class InputWindow : Window
     {
         public string ResultText = "";
 
-        public Inputbox(string title ="", string text="", string defalutvalue = "")
+        public InputWindow(string title ="", string text="", string defalutvalue = "")
         {
             InitializeComponent();
 
@@ -22,7 +22,7 @@ namespace OverParse
             Close();
         }
 
-        private void InputBox_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        private void InputWindow_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
             if(e.Key == System.Windows.Input.Key.Enter)
             {
