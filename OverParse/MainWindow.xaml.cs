@@ -131,7 +131,6 @@ namespace OverParse
             LogToClipboard.IsChecked = Properties.Settings.Default.LogToClipboard;
             AlwaysOnTop.IsChecked = Properties.Settings.Default.AlwaysOnTop;
             AutoHideWindow.IsChecked = Properties.Settings.Default.AutoHideWindow;
-            QuestTime.IsChecked = Properties.Settings.Default.QuestTime;
 
             ShowDamageGraph.IsChecked = Properties.Settings.Default.ShowDamageGraph; ShowDamageGraph_Click(null, null);
             AnonymizeNames.IsChecked = Properties.Settings.Default.AnonymizeNames; AnonymizeNames_Click(null, null);

@@ -119,8 +119,8 @@
     <Compile Include="Detalis.xaml.cs">
       <DependentUpon>Detalis.xaml</DependentUpon>
     </Compile>
-    <Compile Include="inputbox.xaml.cs">
-      <DependentUpon>inputbox.xaml</DependentUpon>
+    <Compile Include="InputWindow.xaml.cs">
+      <DependentUpon>InputWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="SelectColumn.xaml.cs">
       <DependentUpon>SelectColumn.xaml</DependentUpon>
@@ -130,7 +130,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="inputbox.xaml">
+    <Page Include="InputWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

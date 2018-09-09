@@ -96,7 +96,7 @@ namespace OverParse
         private void SetEncounterTimeout_Click(object sender, RoutedEventArgs e)
         {
             AlwaysOnTop.IsChecked = false;
-            Inputbox input = new Inputbox("Encounter Timeout", "Encounter Duration?", Properties.Settings.Default.EncounterTimeout.ToString()) { Owner = this };
+            InputWindow input = new InputWindow("Encounter Timeout", "Encounter Duration?", Properties.Settings.Default.EncounterTimeout.ToString()) { Owner = this };
             input.ShowDialog();
             if (Int32.TryParse(input.ResultText, out int x))
             {
@@ -252,7 +252,7 @@ namespace OverParse
         private void ChangeInterval_Click(object sender, RoutedEventArgs e)
         {
             AlwaysOnTop.IsChecked = false;
-            Inputbox input = new Inputbox("OverParse", "Change damage reading interval... (ms)", Properties.Settings.Default.Updateinv.ToString()) { Owner = this };
+            InputWindow input = new InputWindow("OverParse", "Changes the damage reading interval (ms) ...\nRecommended to leave this at default 1000!", Properties.Settings.Default.Updateinv.ToString()) { Owner = this };
             input.ShowDialog();
             
             if (Int32.TryParse(input.ResultText, out int x))
@@ -270,20 +270,6 @@ namespace OverParse
             }
 
             AlwaysOnTop.IsChecked = Properties.Settings.Default.AlwaysOnTop;
-        }
-
-        private void QuestTime_Click(object sender, RoutedEventArgs e)
-        {
-            Properties.Settings.Default.QuestTime = QuestTime.IsChecked;
-
-            if (Properties.Settings.Default.QuestTime)
-            {
-                Log.ActiveTime = Log.diffTime;
-            } 
-            else 
-            {
-                Log.ActiveTime = Log.backupTime;
-            }
         }
 
         private void DefaultWindowSize_Click(object sender, RoutedEventArgs e)
@@ -450,7 +436,7 @@ namespace OverParse
         private void About_Click(object sender, RoutedEventArgs e)
         {
             var version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
-            MessageBox.Show($"OverParse v{version} EN\n簡易的な自己監視ツール。\n\nShoutouts to WaifuDfnseForce.\nAdditional shoutouts to Variant, AIDA, and everyone else who makes the Tweaker plugin possible.\n\nOptimized and Recoded by Mysty, Rushia, and Kiyazasu. \n\nRetranslated by Mysty, Rushia, and Frostless.\nPlease use damage information responsibly.", "OverParse");
+            MessageBox.Show($"OverParse v{version} EN\n簡易的な自己監視ツール。\n\nShoutouts to WaifuDfnseForce.\nAdditional shoutouts to Variant, AIDA and everyone else who makes the Tweaker plugin possible.\n\nOptimized and Recoded by Mysty, Rushia and Kiyazasu. \n\nRetranslated by Mysty, Rushia and Frostless.\nPlease use damage information responsibly.", "OverParse");
         }
 
         private void LowResources_Click(object sender, RoutedEventArgs e)

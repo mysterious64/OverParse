@@ -22,7 +22,6 @@ namespace OverParse
         public static int startTimestamp = 0;
         public static int newTimestamp = 0;
         public static int nowTimestamp = 0;
-        public static int diffTime = 0;
         public static int ActiveTime = 0;
         public static int backupTime = 0;
         public List<Combatant> combatants = new List<Combatant>();
@@ -487,20 +486,11 @@ namespace OverParse
 
                             if (newTimestamp - nowTimestamp >= 1)
                             {
-                                diffTime = diffTime + 1;
                                 nowTimestamp = newTimestamp;
                             }
 
                             backupTime = newTimestamp - startTimestamp; 
-
-                            if (Properties.Settings.Default.QuestTime) 
-                            { 
-                                ActiveTime = diffTime; 
-                            }
-                            else 
-                            { 
-                                ActiveTime = newTimestamp - startTimestamp; 
-                            }
+                            ActiveTime = newTimestamp - startTimestamp; 
 
                             foreach (Combatant x in combatants)
                             {
