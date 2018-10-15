@@ -110,7 +110,22 @@ namespace OverParse
                                                                   "37504833"    , // Fortissimo Kick (Royal Scorpion)
                                                                   "1891210633"  , // Black Queen Arrival
                                                                   "3617357696"  , // Sensational Speed Attack
-                                                                  "452272060"  }; // Ravishing Step
+                                                                  "452272060"   , // Ravishing Step
+                                                                  "2002943320"  , // Dark Blast (Double) first hit 
+                                                                  "2000047869"  , // Dark Blast (Double) second hit
+                                                                  "2002496834"  , // Dark Blast (Double) third hit
+                                                                  "1957174279"  , // Dark Blast (Double) fourth hit
+                                                                  "1955884339"  , // Dark Blast (Double) fifth hit
+                                                                  "4134333680"  , // Dark Blast (Double) Step Attack
+                                                                  "4271466373"  , // Surprise Hammer
+                                                                  "305729398"   , // Surprise Hammer second hit
+                                                                  "682884756"   , // Waku Waku Go-Kart physical hit
+                                                                  "4271465479"  , // Waku Waku Go-Kart physical hit "2-wheelie mode"
+                                                                  "3983075073"  , // Waku Waku Go-Kart projectile
+                                                                  "4271465542"  , // Happy Bazooka
+                                                                  "3593316716"  , // Flower Carnival attacks
+                                                                  "483639921"   , // Flower Carnival finish
+                                                                  "472092093"  }; // Clutch Step
         // Laconium Sword Attack IDs
         public static string[] LaconiumAttackIDs = new string[] { "2235773608"  , // Laconium Sword air second normal attack 
                                                                   "2235773610"  , // Laconium Sword air first normal attack 
@@ -442,24 +457,48 @@ namespace OverParse
         // Returns the Critical Rate Percentange
         private string GetCRIPercent()
         {
-            try
+            IEnumerable<Attack> totalCri = Attacks;
+
+            if (totalCri.Any())
+            {
+                Double averageCri = totalCri.Average(x => x.Cri) * 100;
+
+                if (Properties.Settings.Default.Nodecimal)
+                {
+                    return averageCri.ToString("N0");
+                }
+                else
+                {
+                    return averageCri.ToString("N2");
+                }
+            }
+            else
             {
                 if (Properties.Settings.Default.Nodecimal)
                 {
-                    return ((Attacks.Average(a => a.Cri)) * 100).ToString("N0");
-                } 
-                else 
+                    return "0";
+                }
+                else
                 {
-                    return ((Attacks.Average(a => a.Cri)) * 100).ToString("N2");
+                    return "0.00";
                 }
             }
-            catch { return "Error"; }
         }
 
         // Returns the Critical Rate Percentage in "00.00"
         private string GetWCRIPercent() 
-        { 
-            return ((Attacks.Average(a => a.Cri)) * 100).ToString("00.00"); 
+        {
+            IEnumerable<Attack> totalCri = Attacks;
+
+            if (totalCri.Any())
+            {
+                Double averageCri = totalCri.Average(x => x.Cri) * 100;
+                return averageCri.ToString("00.00");
+            }
+            else
+            {
+                return "00.00";
+            }
         }
 
         // Checks if this is the user
