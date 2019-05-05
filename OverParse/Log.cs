@@ -285,7 +285,7 @@ namespace OverParse
                 {
                     if (c.IsAlly || c.IsZanverse || c.IsFinish)
                     {
-                        log += Environment.NewLine + $"# {c.Name}"+ Environment.NewLine + $"# Contrib: {c.PercentReadDPSReadout}% | Dealt: {c.ReadDamage.ToString("N0")} dmg | Taken: {c.Damaged.ToString("N0")} dmgd | {c.DPS.ToString("N0")} DPS | JA: {c.WJAPercent}% | Critical: {c.WCRIPercent}% | Max: {c.MaxHit}" + Environment.NewLine;
+                        log += Environment.NewLine + $"# {c.Name}"+ Environment.NewLine + $"# Contrib: {c.PercentReadDPSReadout}% | Dealt: {c.ReadDamage.ToString("N0")} dmg | Taken: {c.Damaged.ToString("N0")} dmgd | {c.DPS.ToString("N0")} DPS | JA: {c.WJAPercent}% | Critical: {c.WCRIPercent}% | Max: {c.MaxHitdmg} ({c.MaxHit})" + Environment.NewLine;
                     }
                 }
 

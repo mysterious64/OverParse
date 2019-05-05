@@ -210,9 +210,9 @@ namespace OverParse
         public string FDPSReadout           => GetDPSReadout();        // Formated DPS numbers
         public string DPSReadout            => PercentReadDPSReadout;  // Formated DPS (Percent)
 
-        public string MaxHit    => GetMaxHit();                        // Max hit numbers
-        public string MaxHitID  => MaxHitAttack.ID;                    // Max hit attack ID
-        public string MaxHitdmg => MaxHitAttack.Damage.ToString("N0"); // Max hit numbers stringified 
+        public string MaxHit    => GetMaxHit();    // Max hit name
+        public string MaxHitID  => GetMaxHitID();  // Max hit attack ID
+        public string MaxHitdmg => GetMaxHitdmg(); // Max hit numbers stringified 
         
         public string JAPercent  => GetJAPercent();  // Just Attack % in decimal point of 0|2
         public string WJAPercent => GetWJAPercent(); // Just Attack % in format of 00.00
@@ -413,7 +413,26 @@ namespace OverParse
             {
                 attack = MainWindow.skillDict[MaxHitID];
             }
-            return MaxHitAttack.Damage.ToString("N0") + $" ({attack})";
+            return attack;
+        }
+
+        // Returns the nax hit attack ID
+        private string GetMaxHitID()
+        {
+            return MaxHitAttack.ID;
+        }
+        
+        // Returns the max hit damage number
+        private string GetMaxHitdmg()
+        {
+            if (MaxHitAttack == null)
+            {
+                return "N/A";
+            }
+            else
+            {
+                return MaxHitAttack.Damage.ToString("N0");
+            }
         }
 
         // Returns the Just Attack Percentage
