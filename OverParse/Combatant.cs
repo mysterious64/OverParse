@@ -22,9 +22,11 @@ namespace OverParse
                                                                   "1233722348"  , // Hero Time Talis slashes while switched to TMG
                                                                   "3480338695" }; // Hero Time TMG burst
         // Photon Weaponry Attack IDs
-        public static string[] PhotonAttackIDs   = new string[] { "2414748436"  , // Facility Cannon
+        public static string[] PhotonAttackIDs   = new string[] { "1913897098"  , // Rapid-Fire Mana Gun
+                                                                  "2414748436"  , // Facility Cannon
                                                                   "1954812953"  , // Photon Cannon (Uncharged)
-                                                                  "2822784832"  , // Photon Cannon (Charged)
+                                                                  "1954812934"  , // Photon Cannon (Charged lv.1)
+                                                                  "2822784832"  , // Photon Cannon (Charged lv.2)
                                                                   "3339644659"  , // Photon Particle Turret
                                                                   "2676260123"  , // Photon Laser Cannon
                                                                   "224805109"  }; // Photon Punisher
@@ -124,7 +126,11 @@ namespace OverParse
                                                                   "3983075073"  , // Waku Waku Go-Kart projectile
                                                                   "4271465542"  , // Happy Bazooka
                                                                   "3593316716"  , // Flower Carnival attacks
+                                                                  "3113171853"  , // Flower Carnival attacks (2nd time) 
+                                                                  "3660851541"  , // Flower Carnival attacks (3rd time)
                                                                   "483639921"   , // Flower Carnival finish
+                                                                  "2157431709"  , // Flower Carnival finish (2nd time)
+                                                                  "3721426675"  , // Flower Carnival finish (3rd time) 
                                                                   "472092093"  }; // Clutch Step
         // Laconium Sword Attack IDs
         public static string[] LaconiumAttackIDs = new string[] { "2235773608"  , // Laconium Sword air second normal attack 
@@ -146,6 +152,7 @@ namespace OverParse
         public string ID, isTemporary;
         public string Name { get; set; }
         public float PercentDPS, PercentReadDPS;
+        public int ActiveTime;
 
         // Constructor #1
         public Combatant(string id, string name)
@@ -156,6 +163,7 @@ namespace OverParse
             Attacks = new List<Attack>();
             isTemporary = "no";
             PercentReadDPS = 0;
+            ActiveTime = 0;
             Damaged = 0;
         }
 
@@ -168,6 +176,7 @@ namespace OverParse
             Attacks = new List<Attack>();
             isTemporary = temp;
             PercentReadDPS = 0;
+            ActiveTime = 0;
             Damaged = 0;
         }
 
@@ -186,7 +195,7 @@ namespace OverParse
         public int MaxHitNum  => MaxHitAttack.Damage; // Max Hit damage
         public int ReadDamage => GetReadingDamage();  // Filtered damage dealt
 
-        public Attack MaxHitAttack => GetGeneralMaxHitAttack(); // General max hit damage number
+        public Attack MaxHitAttack => GetMaxHitAttack(); // General max hit damage number
 
         public double DPS     => GetGeneralDPS(); // General DPS
         public double ReadDPS => GetReadingDPS(); // Filtered DPS
@@ -201,7 +210,7 @@ namespace OverParse
         public string FDPSReadout           => GetDPSReadout();        // Formated DPS numbers
         public string DPSReadout            => PercentReadDPSReadout;  // Formated DPS (Percent)
 
-        public string MaxHit    => GetGeneralMaxHit();                 // Max hit numbers
+        public string MaxHit    => GetMaxHit();                        // Max hit numbers
         public string MaxHitID  => MaxHitAttack.ID;                    // Max hit attack ID
         public string MaxHitdmg => MaxHitAttack.Damage.ToString("N0"); // Max hit numbers stringified 
         
@@ -328,7 +337,7 @@ namespace OverParse
         }
 
         // Returns the max damage hit done
-        private Attack GetGeneralMaxHitAttack()
+        private Attack GetMaxHitAttack()
         {
             Attacks.Sort((x, y) => y.Damage.CompareTo(x.Damage));
             return Attacks.FirstOrDefault();
@@ -337,26 +346,26 @@ namespace OverParse
         // Returns the general DPS
         private double GetGeneralDPS() 
         { 
-            if (OverParse.Log.ActiveTime == 0)
+            if (ActiveTime == 0)
             {
                 return Damage;
             }
             else
             {
-                return Damage / OverParse.Log.ActiveTime;
+                return Damage / ActiveTime;
             }
         }
 
         // Returns the DPS that has been filtered
         private double GetReadingDPS() 
         { 
-            if (OverParse.Log.ActiveTime == 0)
+            if (ActiveTime == 0)
             {
                 return ReadDamage;
             }
             else
             {
-                return Math.Round(ReadDamage / (double)OverParse.Log.ActiveTime); 
+                return Math.Round(ReadDamage / (double)ActiveTime); 
             }
         }
         
@@ -371,9 +380,9 @@ namespace OverParse
         // Percentifies the DPS numbers
         private string GetPercentReadDPS()
         {
-            if (PercentReadDPS < -.5)
+            if (PercentReadDPS < -.5 || float.IsNaN(PercentReadDPS))
             {
-                return "--";
+                return "N/A ";
             }
             else
             {
@@ -395,7 +404,7 @@ namespace OverParse
         }
 
         // Returns the attack name that achieved max damage hit
-        private string GetGeneralMaxHit()
+        private string GetMaxHit()
         {
             if (MaxHitAttack == null)
                 return "--";
@@ -404,7 +413,7 @@ namespace OverParse
             {
                 attack = MainWindow.skillDict[MaxHitID];
             }
-            return MaxHitAttack.Damage.ToString(attack);
+            return MaxHitAttack.Damage.ToString("N0") + $" ({attack})";
         }
 
         // Returns the Just Attack Percentage

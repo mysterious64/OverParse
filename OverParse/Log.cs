@@ -21,9 +21,7 @@ namespace OverParse
         // Logging Variables
         public static int startTimestamp = 0;
         public static int newTimestamp = 0;
-        public static int nowTimestamp = 0;
-        public static int ActiveTime = 0;
-        public static int backupTime = 0;
+
         public List<Combatant> combatants = new List<Combatant>();
         public List<Combatant> backupCombatants = new List<Combatant>();
 
@@ -156,7 +154,7 @@ namespace OverParse
                     if (selfdestructResult == MessageBoxResult.No && !pluginsExist)
                     {
                         // Denied plugin install
-                        MessageBox.Show("OverParse needs the Damage Parser plugin to function.\n\n" 
+                        MessageBox.Show("OverParse needs the Damage Dump plugin to function.\n\n" 
                                       + "The application will now close.", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Information);
                         Environment.Exit(-1);
                         return;
@@ -180,7 +178,7 @@ namespace OverParse
 
             notEmpty = true; // Log directory is not empty!
 
-            FileInfo log = logDirectory.GetFiles().Where(f => Regex.IsMatch(f.Name, @"\d+\.csv")).OrderByDescending(f => f.Name).First();
+            FileInfo log = logDirectory.GetFiles().Where(f => Regex.IsMatch(f.Name, @"\d+\.")).OrderByDescending(f => f.Name).First();
             filename = log.Name; // Reading from {log.DirectoryName}\{log.Name}")
 
             FileStream fileStream = File.Open(log.DirectoryName + "\\" + log.Name, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
@@ -271,14 +269,15 @@ namespace OverParse
         {
             if (combatants.Count != 0) // Players found
             {
-                int elapsed = ActiveTime;
-                if (ActiveTime == 0) { ActiveTime = 1; }
+                int elapsed = newTimestamp - startTimestamp;
                 TimeSpan timespan = TimeSpan.FromSeconds(elapsed);
 
                 // Logging the total time occured through out the encounter
-                string totalDamage = combatants.Sum(x => x.Damage).ToString("N0");
+                int totalDamage = combatants.Where(c => c.IsAlly || c.IsZanverse || c.IsFinish).Sum(x => x.Damage);
+                double totalDPS = combatants.Where(c => c.IsAlly || c.IsZanverse || c.IsFinish).Sum(x => x.DPS);
+
                 string timer       = timespan.ToString(@"mm\:ss");
-                string log         = DateTime.Now.ToString("F") + " | " + timer + " | Total Damage: "  + totalDamage + " dmg" + Environment.NewLine + Environment.NewLine;
+                string log         = DateTime.Now.ToString("F") + " | " + timer + " | Total Damage: "  + totalDamage.ToString("N0") + " dmg" + " | " + "Total DPS: " + totalDPS.ToString("N0") + Environment.NewLine + Environment.NewLine;
 
                 log += "[ Encounter Overview ]" + Environment.NewLine; // Title
 
@@ -286,7 +285,7 @@ namespace OverParse
                 {
                     if (c.IsAlly || c.IsZanverse || c.IsFinish)
                     {
-                        log += Environment.NewLine + $"# {c.Name}"+ Environment.NewLine + $"# Contrib: {c.PercentReadDPSReadout}% | Dealt: {c.ReadDamage.ToString("N0")} dmg | Taken: {c.Damaged} dmgd | {c.DPS} DPS | JA: {c.WJAPercent}% | Critical: {c.WCRIPercent}% | Max: {c.MaxHitdmg} ({c.MaxHit})" + Environment.NewLine;
+                        log += Environment.NewLine + $"# {c.Name}"+ Environment.NewLine + $"# Contrib: {c.PercentReadDPSReadout}% | Dealt: {c.ReadDamage.ToString("N0")} dmg | Taken: {c.Damaged.ToString("N0")} dmgd | {c.DPS.ToString("N0")} DPS | JA: {c.WJAPercent}% | Critical: {c.WCRIPercent}% | Max: {c.MaxHit}" + Environment.NewLine;
                     }
                 }
 
@@ -365,22 +364,31 @@ namespace OverParse
 
                         foreach (var i in attackData)
                         {
-                            double percent = i.Item2.Sum() * 100d / c.ReadDamage;
+                            if (i.Item1 != "Taken")
+                            { 
+                                double percent = i.Item2.Sum() * 100d / c.ReadDamage;
 
-                            string spacer        = (percent >= 9) ? "" : " ";
-                            string paddedPercent = percent.ToString("00.00");
+                                string spacer        = (percent >= 9) ? "" : " ";
+                                string paddedPercent = percent.ToString("00.00");
 
-                            string hits = i.Item2.Count().ToString("N0");
-                            string sum  = i.Item2.Sum().ToString("N0");
-                            string min  = i.Item2.Min().ToString("N0");
-                            string max  = i.Item2.Max().ToString("N0");
-                            string avg  = i.Item2.Average().ToString("N0");
-                            string ja   = (i.Item3.Average() * 100).ToString("N2") ?? "null";
-                            string cri  = (i.Item4.Average() * 100).ToString("N2") ?? "null" ;
+                                string hits = i.Item2.Count().ToString("N0");
+                                string sum  = i.Item2.Sum().ToString("N0");
+                                string min  = i.Item2.Min().ToString("N0");
+                                string max  = i.Item2.Max().ToString("N0");
+                                string avg  = i.Item2.Average().ToString("N0");
+                                string ja   = (i.Item3.Average() * 100).ToString("N2") ?? "null";
+                                string cri  = (i.Item4.Average() * 100).ToString("N2") ?? "null" ;
 
-                            log += $"{paddedPercent}% | {i.Item1} ({sum} dmg)" + Environment.NewLine;
-                            log += $"       |   JA : {ja}% - Critical : {cri}%" + Environment.NewLine;
-                            log += $"       |   {hits} hits - {min} min, {avg} avg, {max} max" + Environment.NewLine;
+                                log += $"{paddedPercent}% | {i.Item1} ({sum} dmg)" + Environment.NewLine;
+                                log += $"       |   JA : {ja}% - Critical : {cri}%" + Environment.NewLine;
+                                log += $"       |   {hits} hits - {min} min, {avg} avg, {max} max" + Environment.NewLine;
+                            }
+                            else
+                            {
+                                string hits = i.Item2.Count().ToString("N0");
+
+                                log += "Number of hits taken: " + hits + Environment.NewLine;
+                            }
                         }
 
                         log += Environment.NewLine;
@@ -465,7 +473,7 @@ namespace OverParse
                             continue;
                         }
 
-                        if (sourceID != Hacks.currentPlayerID && Properties.Settings.Default.Onlyme){ continue; }
+                        if (sourceID != Hacks.currentPlayerID && Properties.Settings.Default.Onlyme) { continue; }
 
                         if (!instances.Contains(instanceID)) { instances.Add(instanceID); }
 
@@ -476,22 +484,7 @@ namespace OverParse
                         // Process start
 
                         if (10000000 < int.Parse(sourceID))
-                        {
-                            newTimestamp = lineTimestamp;
-                            if (startTimestamp == 0)
-                            {
-                                startTimestamp = newTimestamp;
-                                nowTimestamp = newTimestamp;
-                            }
-
-                            if (newTimestamp - nowTimestamp >= 1)
-                            {
-                                nowTimestamp = newTimestamp;
-                            }
-
-                            backupTime = newTimestamp - startTimestamp; 
-                            ActiveTime = newTimestamp - startTimestamp; 
-
+                        { 
                             foreach (Combatant x in combatants)
                             {
                                 if (x.ID == sourceID && x.isTemporary == "no") 
@@ -507,43 +500,51 @@ namespace OverParse
                             }
 
                             Combatant source = combatants[index];
-                            
-                            source.Attacks.Add(new Attack(attackID, hitDamage, justAttack, critical)); 
 
+                            newTimestamp = lineTimestamp;
+                            if (startTimestamp == 0) { startTimestamp = newTimestamp; }
+
+                            source.Attacks.Add(new Attack(attackID, hitDamage, justAttack, critical)); 
                             running = true;
                         } 
                         else 
                         {
-                            // Damage Taken Process
-                            if (10000000 < int.Parse(targetID))
+                            foreach (Combatant x in combatants)
                             {
-                                foreach (Combatant x in combatants)
+                                if (x.ID == targetID && x.isTemporary == "no")
                                 {
-                                    if (x.ID == targetID && x.isTemporary == "no") 
-                                    {
-                                        index = combatants.IndexOf(x); 
-                                    }
+                                    index = combatants.IndexOf(x);
                                 }
-
-                                if (index == -1)
-                                {
-                                    combatants.Add(new Combatant(targetID, targetName));
-                                    index = combatants.Count - 1;
-                                }
-
-                                Combatant source = combatants[index];
-                                source.Damaged += hitDamage;
-                                running = true;
                             }
+                                
+                            if (index == -1)
+                            {
+                                combatants.Add(new Combatant(targetID, targetName));
+                                index = combatants.Count - 1;
+                            }
+
+                            Combatant source = combatants[index];
+
+                            newTimestamp = lineTimestamp;
+
+                            if (startTimestamp == 0) { startTimestamp = newTimestamp; }
+
+                            source.Damaged += hitDamage;
+                            running = true;
                         }
                     }
                 }
 
                 combatants.Sort((x, y) => y.ReadDamage.CompareTo(x.ReadDamage));
 
-                if (startTimestamp != 0)
+                if (startTimestamp != 0) { encounterData = "0:00:00 - ∞ DPS"; }
+
+                if (startTimestamp != 0 && newTimestamp != startTimestamp)
                 {
-                    encounterData = "0:00:00 - ∞ DPS";
+                    foreach (Combatant x in combatants)
+                    {
+                        if (x.IsAlly || x.IsZanverse) { x.ActiveTime = (newTimestamp - startTimestamp); }
+                    }
                 }
             }
         }

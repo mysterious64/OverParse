@@ -163,7 +163,7 @@ namespace OverParse
 
             // skills.csv
             Console.WriteLine("Updating skills.csv");
-            string[] tmp;
+            string[] tmp_skills;
             try
             {
                 WebClient client = new WebClient();
@@ -171,7 +171,7 @@ namespace OverParse
                 using (StreamReader webreader = new StreamReader(stream))
                 {
                     String content = webreader.ReadToEnd();
-                    tmp = content.Split('\n');
+                    tmp_skills = content.Split('\n');
                     File.WriteAllText("skills.csv", content);
                 }
                 client.Dispose();
@@ -183,45 +183,65 @@ namespace OverParse
                 if (File.Exists("skills.csv"))
                 {
                     MessageBox.Show("OverParse failed to update its skill mappings. This usually means your connection hiccuped for a moment.\n\nA local copy will be used instead. If you'd like to try and update again, just relaunch OverParse.", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Information);
-                    tmp = File.ReadAllLines("skills.csv");
+                    tmp_skills = File.ReadAllLines("skills.csv");
                 }
                 else
                 {
                     MessageBox.Show("OverParse failed to update its skill mappings. This usually means your connection hiccuped for a moment.\n\nSince you have no skill mappings downloaded, all attacks will be marked as \"Unknown\". If you'd like to try and update again, please relaunch OverParse.", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Information);
-                    tmp = new string[0];
+                    tmp_skills = new string[0];
                 }
             }
 
             // ignoreskills.csv
+            Console.WriteLine("Updating ignoreskills.csv");
+            string[] tmp_ignore;
             try
             {
                 WebClient client = new WebClient();
-                client.DownloadFile("https://raw.githubusercontent.com/mysterious64/OverParse/master/OverParse/Updates/ignoreskills.csv", "ignoreskills.csv");
+                Stream stream = client.OpenRead("https://raw.githubusercontent.com/mysterious64/OverParse/master/OverParse/Updates/ignoreskills.csv");
+                using (StreamReader webreader = new StreamReader(stream))
+                {
+                    String content = webreader.ReadToEnd();
+                    tmp_ignore = content.Split('\n');
+                    File.WriteAllText("ignoreskills.csv", content);
+                }
+                client.Dispose();
+                stream.Dispose();
             }
-            catch
+            catch (Exception ex)
             {
-                MessageBox.Show("Cannot update your local ignoreskills.csv please be warned that JA data might be wrong.\n\nA local copy will be used instead. If you'd like to try and update again, please use the 'Force Update Skills' option within the 'Other' menu.", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Information);
-            }
-
-            try 
-            {
-                ignoreskill = File.ReadAllLines("ignoreskills.csv");
-            } 
-            catch (Exception e) 
-            {
-                MessageBox.Show(e.ToString());
-                ignoreskill = new string[] { "12345678900" }; // Placeholder Value
+                Console.WriteLine($"ignoreskills.csv update failed: {ex.ToString()}");
+                if (File.Exists("ignoreskills.csv"))
+                {
+                    MessageBox.Show("OverParse failed to update its ignore-skills mappings. This usually means your connection hiccuped for a moment.\n\nA local copy will be used instead. If you'd like to try and update again, just relaunch OverParse.", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Information);
+                    tmp_ignore = File.ReadAllLines("ignoreskills.csv");
+                }
+                else
+                {
+                    MessageBox.Show("OverParse failed to update its ignore-skills mappings. This usually means your connection hiccuped for a moment.\n\nSince you have no skill mappings downloaded, all attacks will be marked as \"Unknown\". If you'd like to try and update again, please relaunch OverParse.", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Information);
+                    tmp_ignore = new string[0];
+                }
             }
 
             Console.WriteLine("Parsing skills.csv");
-            
-            foreach (string s in tmp)
+            foreach (string s in tmp_skills)
             {
                 string[] split = s.Split(',');
                 if (split.Length > 1)
                 {
                     skillDict.Add(split[1], split[0]);
                 }
+            }
+
+            Console.WriteLine("Parsing ignoreskills.csv");
+            try
+            {
+                ignoreskill = File.ReadAllLines("ignoreskills.csv");
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.ToString());
+                ignoreskill = new string[] { "12345678900" }; // Placeholder Value
             }
 
             //Initializing default log
@@ -444,6 +464,7 @@ namespace OverParse
                 }
                 temp.Damaged = c.Damaged;
                 temp.PercentReadDPS = c.PercentReadDPS;
+                temp.ActiveTime = c.ActiveTime;
                 workingList.Add(temp);
             }
 
@@ -451,7 +472,9 @@ namespace OverParse
             CombatantData.Items.Clear();
 
             // for zanverse dummy and status bar because WHAT IS GOOD STRUCTURE
-            int elapsed = Log.ActiveTime;
+            int elapsed = 0;
+            Combatant stealActiveTimeDummy = workingList.FirstOrDefault();
+            if (stealActiveTimeDummy != null) { elapsed = stealActiveTimeDummy.ActiveTime; }
 
             // create and sort dummy AIS combatants
             if (Properties.Settings.Default.SeparateAIS)
@@ -468,6 +491,7 @@ namespace OverParse
                         List<Attack> targetAttacks = c.Attacks.Where(a => Combatant.AISAttackIDs.Contains(a.ID)).ToList();
                         c.Attacks = c.Attacks.Except(targetAttacks).ToList();
                         AISHolder.Attacks.AddRange(targetAttacks);
+                        AISHolder.ActiveTime = elapsed;
                         pendingCombatants.Add(AISHolder);
                     }
                 }
@@ -488,6 +512,7 @@ namespace OverParse
                         List<Attack> targetAttacks = c.Attacks.Where(a => Combatant.DBAttackIDs.Contains(a.ID)).ToList();
                         c.Attacks = c.Attacks.Except(targetAttacks).ToList();
                         DBHolder.Attacks.AddRange(targetAttacks);
+                        DBHolder.ActiveTime = elapsed;
                         pendingDBCombatants.Add(DBHolder);
                     }
                 }
@@ -508,6 +533,7 @@ namespace OverParse
                         List<Attack> targetAttacks = c.Attacks.Where(a => Combatant.RideAttackIDs.Contains(a.ID)).ToList();
                         c.Attacks = c.Attacks.Except(targetAttacks).ToList();
                         RideHolder.Attacks.AddRange(targetAttacks);
+                        RideHolder.ActiveTime = elapsed;
                         pendingRideCombatants.Add(RideHolder);
                     }
                 }
@@ -528,6 +554,7 @@ namespace OverParse
                         List<Attack> targetAttacks = c.Attacks.Where(a => Combatant.PhotonAttackIDs.Contains(a.ID)).ToList();
                         c.Attacks = c.Attacks.Except(targetAttacks).ToList();
                         PhotonHolder.Attacks.AddRange(targetAttacks);
+                        PhotonHolder.ActiveTime = elapsed;
                         pendingPwpCombatants.Add(PhotonHolder);
                     }
                 }
@@ -548,6 +575,7 @@ namespace OverParse
                         List<Attack> targetAttacks = c.Attacks.Where(a => Combatant.LaconiumAttackIDs.Contains(a.ID)).ToList();
                         c.Attacks = c.Attacks.Except(targetAttacks).ToList();
                         LswHolder.Attacks.AddRange(targetAttacks);
+                        LswHolder.ActiveTime = elapsed;
                         pendingLswCombatants.Add(LswHolder);
                     }
                 }
@@ -575,6 +603,7 @@ namespace OverParse
                             c.Attacks = c.Attacks.Except(targetAttacks).ToList();
                         }
                     }
+                    finishHolder.ActiveTime = elapsed;
                     workingList.Add(finishHolder);
                 }
             }
@@ -593,13 +622,14 @@ namespace OverParse
                             c.Attacks = c.Attacks.Except(targetAttacks).ToList();
                         }
                     }
+                    zanverseHolder.ActiveTime = elapsed;
                     workingList.Add(zanverseHolder);
                 }
             }
 
             // get group damage totals
             int totalDamage = workingList.Sum(x => x.Damage);
-            int totalReadDamage = workingList.Sum(x => x.ReadDamage);
+            int totalReadDamage = workingList.Where(c => c.IsAlly || c.IsZanverse || c.IsFinish).Sum(x => x.Damage);
 
             // dps calcs!
             foreach (Combatant c in workingList)
