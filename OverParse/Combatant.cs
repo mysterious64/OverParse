@@ -41,7 +41,16 @@ namespace OverParse
                                                                   "1460054769"  , // A.I.S cannon (Photon Blaster)
                                                                   "4081218683"  , // A.I.S mob freezing attack (Photon Blizzard)
                                                                   "3298256598"  , // A.I.S Weak Bullet
-                                                                  "2826401717" }; // A.I.S Area Heal
+                                                                  "2826401717"  , // A.I.S Area Heal
+                                                                  "1164312683"  , // A.I.S. Vega Solid Vulcan
+                                                                  "858127000"   , // A.I.S. Vega Blade Rush first
+                                                                  "503978418"   , // A.I.S. Vega Blade Rush second
+                                                                  "3724116814"  , // A.I.S. Vega Blade Rush third
+                                                                  "2655531208"  , // A.I.S. Vega Step Attack
+                                                                  "383210274"   , // A.I.S. Vega Multi-Lock Missiles 
+                                                                  "2640906853"  , // A.I.S. Vega Counter Shield
+                                                                  "3968047485"  , // A.I.S. Vega Counter Shield big
+                                                                  "1628689645" }; // A.I.S. Vega Photon Blaster
         // Rideroid Weapon Attack IDs
         public static string[] RideAttackIDs     = new string[] { "3491866260"  , // Rideroid throw
                                                                   "2056025809"  , // Rideroid hit forward slow
