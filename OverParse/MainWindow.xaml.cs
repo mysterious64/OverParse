@@ -46,13 +46,13 @@ namespace OverParse
             LowResources.IsChecked = Properties.Settings.Default.LowResources;
             CPUdraw.IsChecked = Properties.Settings.Default.CPUdraw;
             if (Properties.Settings.Default.LowResources) { thisProcess.PriorityClass = ProcessPriorityClass.Idle; }
-            if (Properties.Settings.Default.CPUdraw) 
-            { 
-                RenderOptions.ProcessRenderMode = RenderMode.SoftwareOnly; 
-            }
-            else 
+            if (Properties.Settings.Default.CPUdraw)
             {
-                RenderOptions.ProcessRenderMode = RenderMode.Default; 
+                RenderOptions.ProcessRenderMode = RenderMode.SoftwareOnly;
+            }
+            else
+            {
+                RenderOptions.ProcessRenderMode = RenderMode.Default;
             }
 
             try { Directory.CreateDirectory("Logs"); }
@@ -157,13 +157,16 @@ namespace OverParse
                 HotkeyManager.Current.AddOrReplace("End Encounter (No log)", Key.R, ModifierKeys.Control | ModifierKeys.Shift, EndEncounterNoLog_Key);
                 HotkeyManager.Current.AddOrReplace("Default Window Size", Key.D, ModifierKeys.Control | ModifierKeys.Shift, DefaultWindowSize_Key);
                 HotkeyManager.Current.AddOrReplace("Always On Top", Key.A, ModifierKeys.Control | ModifierKeys.Shift, AlwaysOnTop_Key);
-            } catch {
+            }
+            catch
+            {
                 MessageBox.Show("Hot keys are currently not working for this instance of Overparse. \n\nPlease check that you are not running multiple instances of Overparse", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Information);
             }
 
-            // skills.csv
-            Console.WriteLine("Updating skills.csv");
-            string[] tmp_skills;
+            string[] tmp_skills = new string[0];
+
+            // skills_en.csv
+            Console.WriteLine("Updating skills_en.csv");
             try
             {
                 WebClient client = new WebClient();
@@ -171,19 +174,104 @@ namespace OverParse
                 using (StreamReader webreader = new StreamReader(stream))
                 {
                     String content = webreader.ReadToEnd();
-                    tmp_skills = content.Split('\n');
-                    File.WriteAllText("skills.csv", content);
+                    File.WriteAllText("skills_en.csv", content);
+                    if (Properties.Settings.Default.skills_en == "True")
+                    {
+                        tmp_skills = content.Split('\n');
+                        English.IsChecked = true;
+                    }
                 }
                 client.Dispose();
                 stream.Dispose();
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"skills.csv update failed: {ex.ToString()}");
-                if (File.Exists("skills.csv"))
+                Console.WriteLine($"skills_en.csv update failed: {ex.ToString()}");
+                if (File.Exists("skills_en.csv"))
                 {
                     MessageBox.Show("OverParse failed to update its skill mappings. This usually means your connection hiccuped for a moment.\n\nA local copy will be used instead. If you'd like to try and update again, just relaunch OverParse.", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Information);
-                    tmp_skills = File.ReadAllLines("skills.csv");
+                    if (Properties.Settings.Default.skills_en == "True")
+                    {
+                        tmp_skills = File.ReadAllLines("skills_en.csv");
+                        English.IsChecked = true;
+                    }
+
+                }
+                else
+                {
+                    MessageBox.Show("OverParse failed to update its skill mappings. This usually means your connection hiccuped for a moment.\n\nSince you have no skill mappings downloaded, all attacks will be marked as \"Unknown\". If you'd like to try and update again, please relaunch OverParse.", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Information);
+                    tmp_skills = new string[0];
+                }
+            }
+
+            // skills_tw_hk.csv
+            Console.WriteLine("Updating skills_tw.csv");
+            try
+            {
+                WebClient client = new WebClient();
+                Stream stream = client.OpenRead("https://wilsonltl.github.io/img/skill_tw_hk.csv");
+                using (StreamReader webreader = new StreamReader(stream))
+                {
+                    String content = webreader.ReadToEnd();
+                    File.WriteAllText("skills_tw_hk.csv", content);
+                    if (Properties.Settings.Default.skills_tw_hk == "True")
+                    {
+                        tmp_skills = content.Split('\n');
+                        TransitionalChinese.IsChecked = true;
+                    }
+                }
+                client.Dispose();
+                stream.Dispose();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"skills_tw_hk.csv update failed: {ex.ToString()}");
+                if (File.Exists("skills_tw_hk.csv"))
+                {
+                    MessageBox.Show("OverParse failed to update its skill mappings. This usually means your connection hiccuped for a moment.\n\nA local copy will be used instead. If you'd like to try and update again, just relaunch OverParse.", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Information);
+                    if (Properties.Settings.Default.skills_tw_hk == "True")
+                    {
+                        tmp_skills = File.ReadAllLines("skills_tw_hk.csv");
+                        TransitionalChinese.IsChecked = true;
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("OverParse failed to update its skill mappings. This usually means your connection hiccuped for a moment.\n\nSince you have no skill mappings downloaded, all attacks will be marked as \"Unknown\". If you'd like to try and update again, please relaunch OverParse.", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Information);
+                    tmp_skills = new string[0];
+                }
+            }
+
+            // skills_ja.csv
+            Console.WriteLine("Updating skills_ja.csv");
+            try
+            {
+                WebClient client = new WebClient();
+                Stream stream = client.OpenRead("https://wilsonltl.github.io/img/skills_ja.csv");
+                using (StreamReader webreader = new StreamReader(stream))
+                {
+                    String content = webreader.ReadToEnd();
+                    File.WriteAllText("skills_ja.csv", content);
+                    if (Properties.Settings.Default.skills_ja == "True")
+                    {
+                        tmp_skills = content.Split('\n');
+                        Japanese.IsChecked = true;
+                    }
+                }
+                client.Dispose();
+                stream.Dispose();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"skills_ja.csv update failed: {ex.ToString()}");
+                if (File.Exists("skills_ja.csv"))
+                {
+                    MessageBox.Show("OverParse failed to update its skill mappings. This usually means your connection hiccuped for a moment.\n\nA local copy will be used instead. If you'd like to try and update again, just relaunch OverParse.", "OverParse Setup", MessageBoxButton.OK, MessageBoxImage.Information);
+                    if (Properties.Settings.Default.skills_ja == "True")
+                    {
+                        tmp_skills = File.ReadAllLines("skills_ja.csv");
+                        Japanese.IsChecked = true;
+                    }
                 }
                 else
                 {
@@ -278,7 +366,9 @@ namespace OverParse
             if (!relevant.Contains(title))
             {
                 Opacity = 0;
-            } else {
+            }
+            else
+            {
                 HandleWindowOpacity();
             }
         }
@@ -455,12 +545,12 @@ namespace OverParse
             // get a copy of the right combatants
             List<Combatant> targetList = (encounterlog.running ? encounterlog.combatants : lastCombatants);
             workingList.Clear();
-            foreach (Combatant c in targetList) 
-            { 
+            foreach (Combatant c in targetList)
+            {
                 Combatant temp = new Combatant(c.ID, c.Name, c.isTemporary);
                 foreach (Attack a in c.Attacks)
                 {
-                    temp.Attacks.Add(new Attack(a.ID, a.Damage, a.JA, a.Cri)); 
+                    temp.Attacks.Add(new Attack(a.ID, a.Damage, a.JA, a.Cri));
                 }
                 temp.Damaged = c.Damaged;
                 temp.PercentReadDPS = c.PercentReadDPS;
@@ -674,7 +764,7 @@ namespace OverParse
                 {
                     CombatantData.Items.Add(c);
                 }
- 
+
             }
 
             // status pane updates

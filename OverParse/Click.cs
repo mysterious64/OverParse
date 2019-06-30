@@ -247,7 +247,7 @@ namespace OverParse
             AlwaysOnTop.IsChecked = false;
             InputWindow input = new InputWindow("OverParse", "Changes the damage reading interval (ms) ...\nRecommended to leave this at default 1000!", Properties.Settings.Default.Updateinv.ToString()) { Owner = this };
             input.ShowDialog();
-            
+
             if (Int32.TryParse(input.ResultText, out int x))
             {
                 if (x > 49)
@@ -438,8 +438,10 @@ namespace OverParse
             if (Properties.Settings.Default.LowResources)
             {
                 thisProcess.PriorityClass = ProcessPriorityClass.Idle;
-                MessageBox.Show("Sets process priority to low. \nUse this if your computer encounters slow downs while running OverParse.","OverParse");
-            } else {
+                MessageBox.Show("Sets process priority to low. \nUse this if your computer encounters slow downs while running OverParse.", "OverParse");
+            }
+            else
+            {
                 thisProcess.PriorityClass = ProcessPriorityClass.Normal;
             }
         }
@@ -451,7 +453,9 @@ namespace OverParse
             {
                 RenderOptions.ProcessRenderMode = RenderMode.SoftwareOnly;
                 MessageBox.Show("Delegates graphic rendering to CPU. \nIs effective on low end graphics cards.", "OverParse");
-            } else {
+            }
+            else
+            {
                 RenderOptions.ProcessRenderMode = RenderMode.Default;
             }
         }
@@ -499,6 +503,39 @@ namespace OverParse
 
             Process.Start(Application.ResourceAssembly.Location);
             Application.Current.Shutdown();
+        }
+
+        private void SelectEnglish(object sender, RoutedEventArgs e)
+        {
+            Properties.Settings.Default.skills_en = "True";
+            Properties.Settings.Default.skills_tw_hk = "False";
+            Properties.Settings.Default.skills_ja = "False";
+            English.IsChecked = true;
+            TransitionalChinese.IsChecked = false;
+            Japanese.IsChecked = false;
+            MessageBox.Show("Please restart OverParse to reset your language.", "Message");
+        }
+
+        private void SelectTransitionalChinese(object sender, RoutedEventArgs e)
+        {
+            Properties.Settings.Default.skills_tw_hk = "True";
+            Properties.Settings.Default.skills_en = "False";
+            Properties.Settings.Default.skills_ja = "False";
+            English.IsChecked = false;
+            TransitionalChinese.IsChecked = true;
+            Japanese.IsChecked = false;
+            MessageBox.Show("Please restart OverParse to reset your language.", "Message");
+        }
+
+        private void SelectJapanese(object sender, RoutedEventArgs e)
+        {
+            Properties.Settings.Default.skills_ja = "True";
+            Properties.Settings.Default.skills_en = "False";
+            Properties.Settings.Default.skills_tw_hk = "False";
+            English.IsChecked = false;
+            TransitionalChinese.IsChecked = false;
+            Japanese.IsChecked = true;
+            MessageBox.Show("Please restart OverParse to reset your language.", "Message");
         }
 
     }
