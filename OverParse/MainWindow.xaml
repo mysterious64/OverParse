@@ -117,6 +117,7 @@
                     <MenuItem Style="{StaticResource submenu}" Header="Hide Enemies/NPCs" IsCheckable="True" IsChecked="True" x:Name="FilterPlayers" Click="FilterPlayers_Click"/>
                     <MenuItem Style="{StaticResource submenu}" Header="Damage Separation">
                         <MenuItem Style="{StaticResource submenu}" Header="Separate Zanverse" x:Name="SeparateZanverse" IsCheckable="True" IsChecked="False" Click="SeparateZanverse_Click"/>
+                        <MenuItem Style="{StaticResource submenu}" Header="Separate Status Ailment" x:Name="SeparateStatus" IsCheckable="True" IsChecked="False" Click="SeparateStatus_Click"/>
                         <MenuItem Style="{StaticResource submenu}" Header="Separate Hero Time Finish" x:Name="SeparateFinish" IsCheckable="True" IsChecked="False" Click="SeparateFinish_Click"/>
                     </MenuItem>
                     <MenuItem Style="{StaticResource submenu}" Header="Attack Mode Separation">

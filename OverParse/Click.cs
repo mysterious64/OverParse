@@ -124,7 +124,11 @@ namespace OverParse
             Properties.Settings.Default.SeparateZanverse = SeparateZanverse.IsChecked;
             UpdateForm(null, null);
         }
-
+        private void SeparateStatus_Click(object sender, RoutedEventArgs e)
+        {
+            Properties.Settings.Default.SeparateStatus = SeparateStatus.IsChecked;
+            UpdateForm(null, null);
+        }
         private void SeparateFinish_Click(object sender, RoutedEventArgs e)
         {
             Properties.Settings.Default.SeparateFinish = SeparateFinish.IsChecked;

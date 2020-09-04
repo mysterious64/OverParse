@@ -152,6 +152,19 @@ namespace OverParse
                                                                   "2618804663"  , // Buster Divide (Laconium Sword charged)
                                                                   "2619614461"  , // Laconium Sword step attack
                                                                   "3607718359" }; // Laconium Sword slash
+        
+        // Status Ailment IDs
+        public static string[] StatusAttackIDs   = new string[] { "2505928570"  , // Burn lvl1
+                                                                  "2505928505"  , // Burn lvl2
+                                                                  "2505928696"  , // Burn lvl3
+                                                                  "2505928584"  , // Burn lvl4
+                                                                  "2505927753"  , // Burn lvl5
+                                                                  "1739789695"  , // Poison lvl1
+                                                                  "1739789694"  , // Poison lvl2
+                                                                  "1739789665"  , // Poison lvl3
+                                                                  "1739789664"  , // Poison lvl4
+                                                                  "1739789667" }; // Poison lvl5
+
         // List of the above attack IDs combined
         public static string[] NonAllyAttackIDs = PhotonAttackIDs.Concat(AISAttackIDs).Concat(RideAttackIDs).Concat(DBAttackIDs).Concat(LaconiumAttackIDs).ToArray();
 
@@ -193,6 +206,7 @@ namespace OverParse
 
         public int Damaged;   // Remon's fixes
         public int ZvsDamage  => GetDamageDealt(GetZanverseID());                // Zanverse total damage
+        public int DotDamage  => GetDamageDealt(GetAttackID(StatusAttackIDs));   // Status ailment total damage
         public int HTFDamage  => GetDamageDealt(GetAttackID(FinishAttackIDs));   // Hero Time Finish total damage
         public int PwpDamage  => GetDamageDealt(GetAttackID(PhotonAttackIDs));   // PwP Total Damage
         public int AisDamage  => GetDamageDealt(GetAttackID(AISAttackIDs));      // AIS Total Damage
@@ -232,6 +246,7 @@ namespace OverParse
         public bool IsYou      => CheckIsYou();               // Player-chan running
         public bool IsAlly     => CheckIsAlly();              // Other players running
         public bool IsZanverse => CheckIsType("Zanverse");    // Zanverse being cast
+        public bool IsStatus   => CheckIsType("Status Ailment");      // status occuring
         public bool IsPwp      => CheckIsType("Pwp");         // Photon weapons using
         public bool IsAIS      => CheckIsType("AIS");         // A.I.S. mode running
         public bool IsRide     => CheckIsType("Ride");        // Rideroid mode running
@@ -324,12 +339,14 @@ namespace OverParse
         // Returns the damage dealt that has been filtered
         private int GetReadingDamage()
         {
-            if (IsZanverse || IsFinish || IsAIS || IsPwp || IsDB || IsRide || IsLsw)
+            if (IsZanverse || IsStatus || IsFinish || IsAIS || IsPwp || IsDB || IsRide || IsLsw)
                 return Damage;
 
             int temp = Damage;
             if (Properties.Settings.Default.SeparateZanverse)
                 temp -= ZvsDamage;
+            if (Properties.Settings.Default.SeparateStatus)
+                temp -= DotDamage;
             if (Properties.Settings.Default.SeparateFinish)
                 temp -= HTFDamage;
             if (Properties.Settings.Default.SeparatePwp)

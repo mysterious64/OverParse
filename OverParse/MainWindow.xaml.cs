@@ -109,6 +109,7 @@ namespace OverParse
             AutoEndEncounters.IsChecked = Properties.Settings.Default.AutoEndEncounters;
             SetEncounterTimeout.IsEnabled = AutoEndEncounters.IsChecked;
             SeparateZanverse.IsChecked = Properties.Settings.Default.SeparateZanverse;
+            SeparateStatus.IsChecked = Properties.Settings.Default.SeparateStatus;
             SeparateFinish.IsChecked = Properties.Settings.Default.SeparateFinish;
             SeparateAIS.IsChecked = Properties.Settings.Default.SeparateAIS;
             SeparateDB.IsChecked = Properties.Settings.Default.SeparateDB;
@@ -678,7 +679,7 @@ namespace OverParse
             // make dummy zanverse combatant if necessary
             int totalZanverse = workingList.Where(c => c.IsAlly == true).Sum(x => x.ZvsDamage);
             int totalFinish = workingList.Where(c => c.IsAlly == true).Sum(x => x.HTFDamage);
-
+            int totalStatus = workingList.Where(c => c.IsAlly == true).Sum(x => x.DotDamage);
             if (Properties.Settings.Default.SeparateFinish)
             {
                 if (totalFinish > 0)
@@ -717,9 +718,28 @@ namespace OverParse
                 }
             }
 
+            if(Properties.Settings.Default.SeparateStatus)
+            {
+                if (totalStatus > 0)
+                {
+                    Combatant statusHolder = new Combatant("99999999", "Status Ailment", "Status Ailment");
+                    foreach (Combatant c in workingList)
+                    {
+                        if (c.IsAlly)
+                        {
+                            List<Attack> targetAttacks = c.Attacks.Where(a => Combatant.StatusAttackIDs.Contains(a.ID)).ToList();
+                            statusHolder.Attacks.AddRange(targetAttacks);
+                            c.Attacks = c.Attacks.Except(targetAttacks).ToList();
+                        }
+                    }
+                    statusHolder.ActiveTime = elapsed;
+                    workingList.Add(statusHolder);
+                }
+            }
+
             // get group damage totals
             int totalDamage = workingList.Sum(x => x.Damage);
-            int totalReadDamage = workingList.Where(c => c.IsAlly || c.IsZanverse || c.IsFinish).Sum(x => x.Damage);
+            int totalReadDamage = workingList.Where(c => c.IsAlly || c.IsZanverse || c.IsStatus || c.IsFinish).Sum(x => x.Damage);
 
             // dps calcs!
             foreach (Combatant c in workingList)
@@ -735,7 +755,11 @@ namespace OverParse
                     Combatant.maxShare = c.ReadDamage;
 
                 bool filtered = true;
-                if (Properties.Settings.Default.SeparateAIS || Properties.Settings.Default.SeparateDB || Properties.Settings.Default.SeparateRide || Properties.Settings.Default.SeparatePwp || Properties.Settings.Default.SeparateLsw)
+                if (Properties.Settings.Default.SeparateAIS || 
+                    Properties.Settings.Default.SeparateDB || 
+                    Properties.Settings.Default.SeparateRide || 
+                    Properties.Settings.Default.SeparatePwp || 
+                    Properties.Settings.Default.SeparateLsw)
                 {
                     if (c.IsAlly && c.isTemporary == "no" && !HidePlayers.IsChecked)
                         filtered = false;
@@ -751,12 +775,14 @@ namespace OverParse
                         filtered = false;
                     if (c.IsZanverse)
                         filtered = false;
+                    if (c.IsStatus)
+                        filtered = false;
                     if (c.IsFinish)
                         filtered = false;
                 }
                 else
                 {
-                    if ((c.IsAlly || c.IsZanverse || c.IsFinish || !FilterPlayers.IsChecked) && (c.Damage > 0))
+                    if ((c.IsAlly || c.IsZanverse || c.IsStatus || c.IsFinish || !FilterPlayers.IsChecked) && (c.Damage > 0))
                         filtered = false;
                 }
 
