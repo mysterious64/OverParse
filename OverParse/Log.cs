@@ -273,8 +273,8 @@ namespace OverParse
                 TimeSpan timespan = TimeSpan.FromSeconds(elapsed);
 
                 // Logging the total time occured through out the encounter
-                int totalDamage = combatants.Where(c => c.IsAlly || c.IsZanverse || c.IsFinish).Sum(x => x.Damage);
-                double totalDPS = combatants.Where(c => c.IsAlly || c.IsZanverse || c.IsFinish).Sum(x => x.DPS);
+                int totalDamage = combatants.Where(c => c.IsAlly || c.IsStatus || c.IsZanverse || c.IsFinish).Sum(x => x.Damage);
+                double totalDPS = combatants.Where(c => c.IsAlly || c.IsStatus || c.IsZanverse || c.IsFinish).Sum(x => x.DPS);
 
                 string timer       = timespan.ToString(@"mm\:ss");
                 string log         = DateTime.Now.ToString("F") + " | " + timer + " | Total Damage: "  + totalDamage.ToString("N0") + " dmg" + " | " + "Total DPS: " + totalDPS.ToString("N0") + Environment.NewLine + Environment.NewLine;
@@ -283,7 +283,7 @@ namespace OverParse
 
                 foreach (Combatant c in combatants)
                 {
-                    if (c.IsAlly || c.IsZanverse || c.IsFinish)
+                    if (c.IsAlly || c.IsStatus || c.IsZanverse || c.IsFinish)
                     {
                         log += Environment.NewLine + $"# {c.Name}"+ Environment.NewLine + $"# Contrib: {c.PercentReadDPSReadout}% | Dealt: {c.ReadDamage.ToString("N0")} dmg | Taken: {c.Damaged.ToString("N0")} dmgd | {c.DPS.ToString("N0")} DPS | JA: {c.WJAPercent}% | Critical: {c.WCRIPercent}% | Max: {c.MaxHitdmg} ({c.MaxHit})" + Environment.NewLine;
                     }
@@ -293,13 +293,15 @@ namespace OverParse
 
                 foreach (Combatant c in combatants)
                 {
-                    if (c.IsAlly || c.IsZanverse || c.IsFinish)
+                    if (c.IsAlly || c.IsStatus || c.IsZanverse || c.IsFinish)
                     {
                         string header = $"[ {c.Name} - {c.PercentReadDPSReadout}% - {c.ReadDamage.ToString("N0")} dmg ]";
                         log += header + Environment.NewLine + Environment.NewLine;
 
                         List<string> attackNames = new List<string>();
                         List<string> finishNames = new List<string>();
+                        List<string> statusNames = new List<string>();
+
                         List<Tuple<string, List<int>, List<int>, List<int>>> attackData = new List<Tuple<string, List<int>, List<int>, List<int>>>();
 
                         if (c.IsZanverse && Properties.Settings.Default.SeparateZanverse)
@@ -338,11 +340,31 @@ namespace OverParse
                             }
 
                         }
+                        else if (c.IsStatus && Properties.Settings.Default.SeparateStatus)
+                        {
+                            foreach (Combatant c4 in backupCombatants)
+                            {
+                                if (c4.DotDamage > 0)
+                                    statusNames.Add(c4.ID);
+                            }
+
+                            foreach (string dot in statusNames)
+                            {
+                                Combatant tCombatant       = backupCombatants.First(x => x.ID == dot);
+                                List<int> matchingAttacks  = tCombatant.Attacks.Where(a => Combatant.StatusAttackIDs.Contains(a.ID)).Select(a => a.Damage).ToList();
+                                List<int> jaPercents       = c.Attacks.Where(a => Combatant.StatusAttackIDs.Contains(a.ID)).Select(a => a.JA).ToList();
+                                List<int> criPercents      = c.Attacks.Where(a => Combatant.StatusAttackIDs.Contains(a.ID)).Select(a => a.Cri).ToList();
+                                attackData.Add(new Tuple<string, List<int>, List<int>, List<int>>(tCombatant.Name, matchingAttacks, jaPercents, criPercents));
+                            }
+
+                        }
                         else
                         {
                             foreach (Attack a in c.Attacks)
                             {
-                                if ((a.ID == "2106601422" && Properties.Settings.Default.SeparateZanverse) || (Combatant.FinishAttackIDs.Contains(a.ID) && Properties.Settings.Default.SeparateFinish))
+                                if ((a.ID == "2106601422" && Properties.Settings.Default.SeparateZanverse) || 
+                                    (Combatant.FinishAttackIDs.Contains(a.ID) && Properties.Settings.Default.SeparateFinish) ||
+                                    (Combatant.StatusAttackIDs.Contains(a.ID) && Properties.Settings.Default.SeparateStatus))
                                     continue; // Don't do anything
                                 if (MainWindow.skillDict.ContainsKey(a.ID))
                                     a.ID = MainWindow.skillDict[a.ID]; // these are getting disposed anyway, no 1 cur
