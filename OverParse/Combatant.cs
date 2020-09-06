@@ -564,7 +564,7 @@ namespace OverParse
         // Checks if this is a player
         private bool CheckIsAlly()
         {
-            if (int.Parse(ID) >= 10000000 && !IsZanverse && !IsFinish)
+            if (int.Parse(ID) >= 10000000 && !IsZanverse && !IsFinish && !IsStatus)
             {
                 return true;
             } 
@@ -601,7 +601,7 @@ namespace OverParse
         // Generates the damage bar graph for other players
         private Brush GetBrushSecondary()
         {
-            if (Properties.Settings.Default.ShowDamageGraph && (IsAlly && !IsZanverse))
+            if (Properties.Settings.Default.ShowDamageGraph && (IsAlly && !IsZanverse && !IsStatus))
             {
                 return GenerateBarBrush(Color.FromArgb(128, 0, 64, 64), Color.FromArgb(0, 0, 0, 0));
             } 
