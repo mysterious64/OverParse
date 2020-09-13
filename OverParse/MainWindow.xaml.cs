@@ -555,6 +555,8 @@ namespace OverParse
                     temp.Attacks.Add(new Attack(a.ID, a.Damage, a.JA, a.Cri));
                 }
                 temp.Damaged = c.Damaged;
+                temp.Damage = c.Damage;
+                temp.MaxHitAttack = c.MaxHitAttack;
                 temp.PercentReadDPS = c.PercentReadDPS;
                 temp.ActiveTime = c.ActiveTime;
                 workingList.Add(temp);

@@ -12,6 +12,7 @@ namespace OverParse
         public static float maxShare = 0;
         public static string Log;
 
+        public static string ZenverseAttackID = "2106601422";
         // Hero Finish Attack IDs
         public static string[] FinishAttackIDs   = new string[] { "2268332858"  , // Hero Time Sword slashes
                                                                   "170999070"   , // Hero Time Sword finish
@@ -175,8 +176,16 @@ namespace OverParse
         public string Name { get; set; }
         public float PercentDPS, PercentReadDPS;
         public int ActiveTime;
-        public int totalAttack;
-        public Attack maximumAttack;
+        public int Damage;
+        public Attack MaxHitAttack;
+        public int ZvsDamage;   // Zanverse total damage
+        public int DotDamage;   // Status ailment total damage
+        public int HTFDamage;   // Hero Time Finish total damage
+        public int PwpDamage;   // PwP Total Damage
+        public int AisDamage;   // AIS Total Damage
+        public int RideDamage;  // Ride Total Damage
+        public int DBDamage;    // DaB Total Damage
+        public int LswDamage;   // LwS Total Damage
 
         // Constructor
         public Combatant(string id, string name, string temp = "no")
@@ -189,27 +198,19 @@ namespace OverParse
             PercentReadDPS = 0;
             ActiveTime = 0;
             Damaged = 0;
-            totalAttack = 0;
-            maximumAttack = null;
+            Damage = 0;
+            MaxHitAttack = new Attack(null, 0, 0, 0);
         }
 
         /* Common GET Data Properties */
 
         public int Damaged;   // Remon's fixes
-        public int ZvsDamage  => GetDamageDealt(GetZanverseID());                // Zanverse total damage
-        public int DotDamage  => GetDamageDealt(GetAttackID(StatusAttackIDs));   // Status ailment total damage
-        public int HTFDamage  => GetDamageDealt(GetAttackID(FinishAttackIDs));   // Hero Time Finish total damage
-        public int PwpDamage  => GetDamageDealt(GetAttackID(PhotonAttackIDs));   // PwP Total Damage
-        public int AisDamage  => GetDamageDealt(GetAttackID(AISAttackIDs));      // AIS Total Damage
-        public int RideDamage => GetDamageDealt(GetAttackID(RideAttackIDs));     // Ride Total Damage
-        public int DBDamage   => GetDamageDealt(GetAttackID(DBAttackIDs));       // DaB Total Damage
-        public int LswDamage  => GetDamageDealt(GetAttackID(LaconiumAttackIDs)); // LwS Total Damage
 
-        public int Damage     => GetGeneralDamage();  // General damage dealt
+        //public int Damage     => GetGeneralDamage();  // General damage dealt
         public int MaxHitNum  => MaxHitAttack.Damage; // Max Hit damage
         public int ReadDamage => GetReadingDamage();  // Filtered damage dealt
 
-        public Attack MaxHitAttack => GetMaxHitAttack(); // General max hit damage number
+        //public Attack MaxHitAttack => GetMaxHitAttack(); // General max hit damage number
 
         public double DPS     => GetGeneralDPS(); // General DPS
         public double ReadDPS => GetReadingDPS(); // Filtered DPS
@@ -252,9 +253,44 @@ namespace OverParse
         {
             Attack attack = new Attack(attackID, hitDamage, justAttack, critical);
             this.Attacks.Add(attack);
-            this.totalAttack += hitDamage;
-            this.maximumAttack = attack;
-        }
+            this.Damage += hitDamage;
+            if (MaxHitNum < hitDamage)
+            {
+                this.MaxHitAttack = attack;
+            }
+            if (attackID == ZenverseAttackID)
+            {
+                ZvsDamage += hitDamage;
+            }
+            else if (StatusAttackIDs.Contains(attackID))
+            {
+                DotDamage += hitDamage;
+            }
+            else if (FinishAttackIDs.Contains(attackID))
+            {
+                HTFDamage += hitDamage;
+            }
+            else if (PhotonAttackIDs.Contains(attackID))
+            {
+                PwpDamage += hitDamage;
+            }
+            else if (AISAttackIDs.Contains(attackID))
+            {
+                AisDamage += hitDamage;
+            }
+            else if (RideAttackIDs.Contains(attackID))
+            {
+                RideDamage += hitDamage;
+            }
+            else if (DBAttackIDs.Contains(attackID))
+            {
+                DBDamage += hitDamage;
+            }
+            else if (LaconiumAttackIDs.Contains(attackID))
+            {
+                LswDamage += hitDamage;
+            }
+    }
         /* HELPER FUNCTIONS */
 
         // Censors other players' name except the user
