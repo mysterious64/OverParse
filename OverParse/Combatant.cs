@@ -175,22 +175,11 @@ namespace OverParse
         public string Name { get; set; }
         public float PercentDPS, PercentReadDPS;
         public int ActiveTime;
+        public int totalAttack;
+        public Attack maximumAttack;
 
-        // Constructor #1
-        public Combatant(string id, string name)
-        {
-            ID = id;
-            Name = name;
-            PercentDPS = -1;
-            Attacks = new List<Attack>();
-            isTemporary = "no";
-            PercentReadDPS = 0;
-            ActiveTime = 0;
-            Damaged = 0;
-        }
-
-        // Constructor #2
-        public Combatant(string id, string name, string temp)
+        // Constructor
+        public Combatant(string id, string name, string temp = "no")
         {
             ID = id;
             Name = name;
@@ -200,6 +189,8 @@ namespace OverParse
             PercentReadDPS = 0;
             ActiveTime = 0;
             Damaged = 0;
+            totalAttack = 0;
+            maximumAttack = null;
         }
 
         /* Common GET Data Properties */
@@ -257,6 +248,13 @@ namespace OverParse
         public Brush Brush  => GetBrushPrimary();   // Player-chan damage graph
         public Brush Brush2 => GetBrushSecondary(); // Other players damage graph
 
+        public void AddAttack(string attackID, int hitDamage, int justAttack, int critical)
+        {
+            Attack attack = new Attack(attackID, hitDamage, justAttack, critical);
+            this.Attacks.Add(attack);
+            this.totalAttack += hitDamage;
+            this.maximumAttack = attack;
+        }
         /* HELPER FUNCTIONS */
 
         // Censors other players' name except the user

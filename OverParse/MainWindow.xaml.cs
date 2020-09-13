@@ -21,7 +21,7 @@ namespace OverParse
     {
         private Log encounterlog;
         private List<Combatant> lastCombatants = new List<Combatant>();
-        public DispatcherTimer damageTimer = new DispatcherTimer();
+        DispatcherTimer updateTimer = new DispatcherTimer(DispatcherPriority.Render);
         public static Dictionary<string, string> skillDict = new Dictionary<string, string>();
         public static string[] ignoreskill;
         private List<string> sessionLogFilenames = new List<string>();
@@ -338,19 +338,19 @@ namespace OverParse
             encounterlog = new Log(Properties.Settings.Default.Path);
             UpdateForm(null, null);
 
-            //Initializing damageTimer
-            damageTimer.Tick += new EventHandler(UpdateForm);
-            damageTimer.Interval = new TimeSpan(0, 0, 0, 0, Properties.Settings.Default.Updateinv);
-            damageTimer.Start();
+            //Initializing updateTimer
+            updateTimer.Tick += new EventHandler(UpdateForm);
+            updateTimer.Interval = TimeSpan.FromMilliseconds(Properties.Settings.Default.Updateinv);
+            updateTimer.Start();
 
             //Initializing inactiveTimer
-            System.Windows.Threading.DispatcherTimer inactiveTimer = new System.Windows.Threading.DispatcherTimer();
+            DispatcherTimer inactiveTimer = new DispatcherTimer(DispatcherPriority.Render);
             inactiveTimer.Tick += new EventHandler(HideIfInactive);
             inactiveTimer.Interval = TimeSpan.FromMilliseconds(200);
             inactiveTimer.Start();
 
             //Initializing logCheckTimer
-            System.Windows.Threading.DispatcherTimer logCheckTimer = new System.Windows.Threading.DispatcherTimer();
+            DispatcherTimer logCheckTimer = new DispatcherTimer(DispatcherPriority.Input);
             logCheckTimer.Tick += new EventHandler(CheckForNewLog);
             logCheckTimer.Interval = new TimeSpan(0, 0, 1);
             logCheckTimer.Start();
@@ -391,6 +391,7 @@ namespace OverParse
             if (log.Name != encounterlog.filename)
             {
                 //Console.WriteLine($"Found a new log file ({log.Name}), switching...");
+                encounterlog.done = true;
                 encounterlog = new Log(Properties.Settings.Default.Path);
             }
         }

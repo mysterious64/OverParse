@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
+using System.Threading.Tasks;
 
 namespace OverParse
 {
@@ -28,6 +29,7 @@ namespace OverParse
         private string encounterData;
         private List<int> instances = new List<int>();
         private StreamReader logReader;
+        public Boolean done;
 
         // Constructor
         public Log(string attemptDirectory)
@@ -36,6 +38,7 @@ namespace OverParse
             notEmpty   = false;
             running    = false;
             bool nagMe = false;
+            done = false;
 
             // Setup first time warning
             if (Properties.Settings.Default.BanWarning)
@@ -197,6 +200,7 @@ namespace OverParse
                     Hacks.currentPlayerID = parts[2]; // Found existing active player ID
                 }
             }
+            this.StartReading();
         }
 
         /* CLASS FUNCTIONS */ 
@@ -460,117 +464,123 @@ namespace OverParse
         {
             if (!valid || !notEmpty) { return; }
 
-            string newLines = logReader.ReadToEnd();
+            combatants.Sort((x, y) => y.ReadDamage.CompareTo(x.ReadDamage));
 
-            if (newLines != "")
+            if (startTimestamp != 0) { encounterData = "0:00:00 - ∞ DPS"; }
+
+            if (startTimestamp != 0 && newTimestamp != startTimestamp)
             {
-                string[] result = newLines.Split('\n');
-                foreach (string str in result)
+                foreach (Combatant x in combatants)
                 {
-                    if (str != "")
+                    if (x.IsAlly || x.IsZanverse) { x.ActiveTime = (newTimestamp - startTimestamp); }
+                }
+            }
+            
+        }
+
+        public async void StartReading()
+        {
+            string newLine = null;
+            while (!this.done)
+            {
+                newLine = await logReader.ReadLineAsync();
+                if (newLine != null)
+                {
+                    string[] parts = newLine.Split(',');
+
+                    string sourceID = parts[2];
+                    string sourceName = parts[3];
+                    string targetID = parts[4];
+                    string targetName = parts[5];
+                    string attackID = parts[6];
+
+                    // string isMultiHit = parts[10];
+                    // string isMisc = parts[11];
+                    // string isMisc2 = parts[12];
+
+                    int lineTimestamp = int.Parse(parts[0]);
+                    int instanceID = int.Parse(parts[1]);
+                    int hitDamage = int.Parse(parts[7]);
+                    int justAttack = int.Parse(parts[8]);
+                    int critical = int.Parse(parts[9]);
+
+                    int index = -1;
+
+                    if (lineTimestamp == 0 && parts[3] == "YOU")
                     {
-                        string[] parts = str.Split(',');
+                        Hacks.currentPlayerID = parts[2];
+                        continue;
+                    }
 
-                        string sourceID   = parts[2];
-                        string sourceName = parts[3];
-                        string targetID   = parts[4];
-                        string targetName = parts[5];
-                        string attackID   = parts[6];
+                    if (sourceID != Hacks.currentPlayerID && Properties.Settings.Default.Onlyme) { continue; }
 
-                        // string isMultiHit = parts[10];
-                        // string isMisc = parts[11];
-                        // string isMisc2 = parts[12];
+                    if (!instances.Contains(instanceID)) { instances.Add(instanceID); }
 
-                        int lineTimestamp = int.Parse(parts[0]);
-                        int instanceID    = int.Parse(parts[1]);
-                        int hitDamage     = int.Parse(parts[7]);
-                        int justAttack    = int.Parse(parts[8]);
-                        int critical      = int.Parse(parts[9]);
+                    if (hitDamage < 1) { continue; }
 
-                        int index = -1;
-                        
-                        if (lineTimestamp == 0 && parts[3] == "YOU")
+                    if (sourceID == "0" || attackID == "0") { continue; }
+
+                    // Process start
+
+                    if (10000000 < int.Parse(sourceID))
+                    {
+                        // player hit enemy
+                        foreach (Combatant x in combatants)
                         {
-                            Hacks.currentPlayerID = parts[2];
-                            continue;
+                            if (x.ID == sourceID && x.isTemporary == "no")
+                            {
+                                index = combatants.IndexOf(x);
+                            }
                         }
 
-                        if (sourceID != Hacks.currentPlayerID && Properties.Settings.Default.Onlyme) { continue; }
-
-                        if (!instances.Contains(instanceID)) { instances.Add(instanceID); }
-
-                        if (hitDamage < 1) { continue; }
-
-                        if (sourceID == "0" || attackID == "0") { continue; }
-
-                        // Process start
-
-                        if (10000000 < int.Parse(sourceID))
-                        { 
-                            foreach (Combatant x in combatants)
-                            {
-                                if (x.ID == sourceID && x.isTemporary == "no") 
-                                { 
-                                    index = combatants.IndexOf(x); 
-                                }
-                            }
-
-                            if (index == -1)
-                            {
-                                combatants.Add(new Combatant(sourceID, sourceName));
-                                index = combatants.Count - 1;
-                            }
-
-                            Combatant source = combatants[index];
-
-                            newTimestamp = lineTimestamp;
-                            if (startTimestamp == 0) { startTimestamp = newTimestamp; }
-
-                            source.Attacks.Add(new Attack(attackID, hitDamage, justAttack, critical)); 
-                            running = true;
-                        } 
-                        else 
+                        if (index == -1)
                         {
-                            foreach (Combatant x in combatants)
-                            {
-                                if (x.ID == targetID && x.isTemporary == "no")
-                                {
-                                    index = combatants.IndexOf(x);
-                                }
-                            }
-                                
-                            if (index == -1)
-                            {
-                                combatants.Add(new Combatant(targetID, targetName));
-                                index = combatants.Count - 1;
-                            }
-
-                            Combatant source = combatants[index];
-
-                            newTimestamp = lineTimestamp;
-
-                            if (startTimestamp == 0) { startTimestamp = newTimestamp; }
-
-                            source.Damaged += hitDamage;
-                            running = true;
+                            combatants.Add(new Combatant(sourceID, sourceName));
+                            index = combatants.Count - 1;
                         }
+
+                        Combatant source = combatants[index];
+
+                        newTimestamp = lineTimestamp;
+                        if (startTimestamp == 0) { startTimestamp = newTimestamp; }
+
+                        source.AddAttack(attackID, hitDamage, justAttack, critical);
+                        running = true;
+                    }
+                    else
+                    {
+                        // player got hit
+                        foreach (Combatant x in combatants)
+                        {
+                            if (x.ID == targetID && x.isTemporary == "no")
+                            {
+                                index = combatants.IndexOf(x);
+                            }
+                        }
+
+                        if (index == -1)
+                        {
+                            combatants.Add(new Combatant(targetID, targetName));
+                            index = combatants.Count - 1;
+                        }
+
+                        Combatant source = combatants[index];
+
+                        newTimestamp = lineTimestamp;
+
+                        if (startTimestamp == 0) { startTimestamp = newTimestamp; }
+
+                        source.Damaged += hitDamage;
+                        running = true;
                     }
                 }
-
-                combatants.Sort((x, y) => y.ReadDamage.CompareTo(x.ReadDamage));
-
-                if (startTimestamp != 0) { encounterData = "0:00:00 - ∞ DPS"; }
-
-                if (startTimestamp != 0 && newTimestamp != startTimestamp)
+                else
                 {
-                    foreach (Combatant x in combatants)
-                    {
-                        if (x.IsAlly || x.IsZanverse) { x.ActiveTime = (newTimestamp - startTimestamp); }
-                    }
+                    // end of file ... check again in 500ms
+                    await Task.Delay(500);
                 }
             }
         }
-
         /* HELPER FUNCTIONS */ 
 
         /* DEBUG MODE ONLY - Not used on production

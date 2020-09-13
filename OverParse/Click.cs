@@ -56,6 +56,7 @@ namespace OverParse
                 encounterlog.WriteClipboard();
             }
 
+            encounterlog.done = true;
             encounterlog = new Log(Properties.Settings.Default.Path);
             UpdateForm(null, null);
             Log.startTimestamp = 0;
@@ -69,6 +70,7 @@ namespace OverParse
             UpdateForm(null, null);
             Properties.Settings.Default.AutoEndEncounters = temp;
             //Reinitializing log
+            encounterlog.done = true;
             encounterlog = new Log(Properties.Settings.Default.Path);
             UpdateForm(null, null);
             Log.startTimestamp = 0;
@@ -256,7 +258,7 @@ namespace OverParse
             {
                 if (x > 49)
                 {
-                    damageTimer.Interval = new TimeSpan(0, 0, 0, 0, x);
+                    updateTimer.Interval = new TimeSpan(0, 0, 0, 0, x);
                     Properties.Settings.Default.Updateinv = x;
                 }
                 else { MessageBox.Show("Error"); }
